@@ -27,7 +27,7 @@ public:
 	void setMoney(int m);
 	void setNumOfCity(int c);
 	void setNumOfPowerPlant(int p);
-	void setNumOfPoweredCities(int );
+	void setNumOfPoweredCities(int pc);
 	void setCoalNum(int c);
 	void setOilNum(int o);
 	void setGarbageNum(int g);
@@ -38,7 +38,8 @@ public:
 	//get methods
 	int getMoney(void);
 	int getNumOfCity(void);
-	int getNumOgPowerPlant(void);
+	int getNumOfPowerPlant(void);
+	int getNumOfPoweredCities();
 	int getCoalNum(void);
 	int getOilNum(void);
 	int getGarbageNum(void);

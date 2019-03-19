@@ -6,7 +6,7 @@ private:
     Player* player;    //player array
     int numOfPlayer;    //the size of player
     int payment [];     //payment corresponding to the number of powered cities
-    int numOfPoweredCities  //the number of cities the player wants to power
+    int numOfPoweredCities;  //the number of cities the player wants to power
 
 
 public:
