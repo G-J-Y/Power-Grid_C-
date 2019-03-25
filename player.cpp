@@ -157,7 +157,6 @@ void Player::buyResources(Resources *res) {
 	std::cout << "[INFO] Here is the Resource Market:" << std::endl;
 
 	for (int i = 0; i < 12; i++) {
-		std::cout << std::endl;
 		std::cout << res[i].toString() << std::endl;
 	}
 
@@ -502,13 +501,33 @@ void Player::buyResources(Resources *res) {
 }
 
 
-void Player::building(Graph* myGameMap, int step) {
+void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 
 	std::cout << std::endl;
 	printGraph(myGameMap);
 	std::cout << "[INFO]" << name << ", it's your turn!"<<std::endl;
 
 	while (true) {
+		//check the step
+		if (numOfPlayer ==2){
+			if (numOfCity ==10){
+				step =2;
+				std::cout <<"[INFO] It is STEP 2 now!!" <<std::endl;
+			}
+		}
+		if (numOfPlayer==3||numOfPlayer==4||numOfPlayer==5){
+			if(numOfCity==7){
+				step =2;
+				std::cout <<"[INFO] It is STEP 2 now!!" <<std::endl;
+			}
+		}
+		if (numOfPlayer==6){
+			if(numOfCity==6){
+				step =2;
+				std::cout <<"[INFO] It is STEP 2 now!!" <<std::endl;
+			}
+		}
+
 		std::cout << "[PROMOPT]" << "Please enter the ID of the city that you want to build.(Enter -1 to skip)" << std::endl;
 		std::cout << "[ENTER] ";
 		int inputNum;
@@ -521,7 +540,8 @@ void Player::building(Graph* myGameMap, int step) {
 
 		vector<string> owners = myGameMap->getArr()[inputNum].getBase()->getOwners();
 		int size = owners.size();
-		
+
+
 		//check if the city is on the map
 		if (myGameMap->getArr()[inputNum].getHead() == NULL) {
 			cout << "[WARNING] This city is not on the map. Please try another city!!\n";
@@ -547,15 +567,19 @@ void Player::building(Graph* myGameMap, int step) {
 		
 		//check if player has enough money
 		int price = myGameMap->getArr()[inputNum].getBase()->getPrice(size);
-
+		//add network price
+		price += myGameMap->lowestPathPrice(inputNum,name);
 		if (money < price){
 			std::cout << "[WARNING] You do not have enough money. Please try another city!" << std::endl;
 			continue;
 		}
 
 		myGameMap->getArr()[inputNum].getBase()->addOwner(name);
-		std::cout << "[SUCCESS] You have built a house in "<< myGameMap->getArr()[inputNum].getBase()->getName() << " successfully." << std::endl;
 		money -= price;
+		numOfCity++;
+		std::cout << "[SUCCESS] You have built a house in "<< myGameMap->getArr()[inputNum].getBase()->getName() << " successfully." << std::endl;
+		std::cout << "[SUCCESS] It cost you  "<< price <<" Elektro. Now you have "<< money<< " Elektro." << std::endl;
+
 
 	}
 	

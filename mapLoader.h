@@ -24,6 +24,7 @@ public:
 	
 	int getID() { return ID; }
 	string getName() { return name; }
+	int getDistance() { return distance; }
 	CityNode* getNext() { return next; }
 	vector<string> getOwners() {
 		return vector<string>(owners);
@@ -118,6 +119,13 @@ public:
 	AdjList* getArr() { return arr; };
 
 	set<int> findAdjCities(int baseID) const;
+
+	vector<int> shortestPath(int startID);
+	//return a vector that stores all the shortest path distances to all cities from city #startID
+
+	int lowestPathPrice(int cityID, string pName);
+	//If player pName wants to buy city #cityID
+	//returns the money player should pay for path between city #cityID and the player's nearest city
 
 	friend void printGraph(Graph* graph);
 	friend void addEdge(Graph *graph, string srcName, string destName, int distance, const map<string, int> myMap);
