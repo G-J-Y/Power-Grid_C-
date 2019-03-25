@@ -1,6 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <list>
+#include <queue>
+#include <vector>
+#include <algorithm>
 #include "mapLoader.h"
 
 using std::cout;
@@ -9,6 +13,10 @@ using std::cin;
 using std::ifstream;
 using std::to_string;
 using std::pair;
+using std::priority_queue;
+
+# define INF 0x3f3f3f3f
+typedef pair<int, int> iPair;
 
 CityNode::CityNode() {
 	next = NULL;
@@ -158,6 +166,101 @@ set<int> Graph::findAdjCities(int baseID) const
 	return adjCityID;
 }
 
+vector<int> Graph::shortestPath(int startID)
+{
+
+	//priority_queue< iPair, vector <iPair>, greater<iPair> > pq;
+	priority_queue<iPair> pq;
+
+	// Create a vector to store shortest path distances
+	// initialize all  distances as infinite (INF)
+	// For example, dist[0] the shortest path distance to NodeCity with ID 0
+	vector<int> shortest(size, INF); //create V integers with value INF
+
+
+	// Insert source itself in priority queue and initialize
+	// its distance as 0.
+	pq.push(std::make_pair(0, startID));
+	shortest[startID] = 0;
+
+	/* Looping till priority queue becomes empty (or all
+	  distances are not finalized) */
+	while (!pq.empty())
+	{
+		// The first vertex in pair is the minimum distance
+		// vertex, extract it from priority queue.
+		// vertex label is stored in second of pair (it
+		// has to be done this way to keep the vertices
+		// sorted distance (distance must be first item
+		// in pair)
+		//in pq, the second half of first pair, which is the node number
+		int u = pq.top().second; //second is src in first looping
+		pq.pop();
+
+		// 'i' is used to get all adjacent vertices of a vertex
+		//list< pair<int, int> >::iterator i;
+		//root is used to get all adjacent node of a AdjList
+		CityNode* root = arr[u].head;
+		while (root != NULL) {
+			int v = root->getID();
+			int weight = root->getDistance();
+
+			if (shortest[v] > shortest[u] + weight)
+			{
+				// Updating distance of v
+				shortest[v] = shortest[u] + weight;
+				pq.push(std::make_pair(shortest[v], v));
+			}
+			root = root->next;
+		}
+
+	}
+
+	// Print shortest distances stored in dist[]
+	//cout << "Start from city #" << startID << ":\n";
+	//cout << "City ID\t   Distance from Source\n";
+	//for (int i = 0; i < size; ++i)
+	//cout << i << "\t" << shortest[i] << endl;
+
+	return shortest;
+}
+
+int Graph::lowestPathPrice(int cityID, string pName) {
+
+	vector<int> pathsToAll (shortestPath(cityID));
+	//stores the shortest path distances from city #cityID to all cities in the graph
+
+
+	vector<int> pathsToOwned;
+	//will store the shortest path distances from city #cityID to cities owned by pName
+
+
+	for (int i = 0; i < pathsToAll.size(); i++) {
+		vector<string> v(arr[i].base->owners); //stores owners' names of city#i
+		if (std::find(v.begin(), v.end(), pName) != v.end()) //if we find city#i is owned by pName
+		{
+			//cout << "found city #" << arr[i].base->getID() << "owned by " << pName << endl;
+			pathsToOwned.push_back(pathsToAll[i]); //stores the distance to city#i in pathsToOwned
+		}
+
+	}
+
+	//find the MINIMUM value in pathsToOwned.
+	//then we can get the shortest path from city #cityID to a NEAREST city owned by pName
+
+	if (pathsToOwned.size() == 0) //if pName does not own any city
+		return 0;
+
+	int min = pathsToOwned[0];
+
+	for (int i = 1; i < pathsToOwned.size(); i++) {
+		if (pathsToOwned[i] < min)
+			min = pathsToOwned[i];
+	}
+
+	return min;
+
+}
 
 void createBaseCity(Graph *graph, map<string, int> myMap) { //map cannot be const
 	CityNode *nptr;

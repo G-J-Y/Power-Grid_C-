@@ -70,7 +70,7 @@ public:
 	//print information
 	string toString();
 	void buyResources(Resources *res);
-	void building(Graph* graph, int step);
+	void building(Graph* graph, int &step,int numOfPlayer);
 
 };
 
