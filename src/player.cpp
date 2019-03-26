@@ -23,7 +23,6 @@ Player::Player() {
 	bought = false;
 }
 
-
 //set method: change value
 void Player::setMoney(int m) {
 	money = m;
@@ -67,10 +66,6 @@ void Player::setRoundStatus(bool b) {
 //set method: change value
 void Player::setBought(bool b) {
 	bought = b;
-}
-//set method: change value
-void Player::setPrice(int p) {
-	auction = p;
 }
 //set method: change value
 void Player::setPowerPlant(PowerPlant p,int n) {
@@ -200,7 +195,7 @@ void Player::buyResources(Resources *res) {
 			}
 			//Check if Player's inventory is full
 			if (inputNum > coalMax + hybridMax - coalNum + ((oilMax - oilNum) < 0 ? (oilMax - oilNum) : 0)) {
-				std::cout << "[WARNING] You do not have enough space! Please enter a smaller numeber."<<std::endl;
+				std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber."<<std::endl;
 				continue;
 			}
 
@@ -227,11 +222,11 @@ void Player::buyResources(Resources *res) {
 			}
 
 			if (tempAmount < inputNum) {
-				std::cout << "[WARNING] Coal is out of stock. Please enter a smaller number!" << std::endl;
+				std::cout << "[ERROR] Coal is out of stock. Please enter a smaller number!" << std::endl;
 				continue;
 			}
 			if (cost > money) {
-				std::cout << "[WARNING] You do not have enough money. Please enter a smaller number!" << std::endl;
+				std::cout << "[ERROR] You do not have enough money. Please enter a smaller number!" << std::endl;
 				continue;
 			}
 
@@ -278,7 +273,7 @@ void Player::buyResources(Resources *res) {
 			//Check if Player's inventory is vaild
 
 			if (inputNum > oilMax + hybridMax - oilNum + ((coalMax - coalNum) < 0 ? (coalMax - coalNum) : 0)) {
-				std::cout << "[WARNING] You do not have enough space! Please enter a smaller numeber.";
+				std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber.";
 				continue;
 			}
 
@@ -306,11 +301,11 @@ void Player::buyResources(Resources *res) {
 			}
 
 			if (tempAmount < inputNum) {
-				std::cout << "[WARNING] Oil is out of stock. Please enter a smaller number!" << std::endl;
+				std::cout << "[ERROR] Oil is out of stock. Please enter a smaller number!" << std::endl;
 				continue;
 			}
 			if (cost > money) {
-				std::cout << "[WARNING] You do not have enough money. Please enter a smaller number!" << std::endl;
+				std::cout << "[ERROR] You do not have enough money. Please enter a smaller number!" << std::endl;
 				continue;
 			}
 
@@ -356,7 +351,7 @@ void Player::buyResources(Resources *res) {
 			//Check if Player's inventory is vaild
 
 			if (inputNum > garbageMax ) {
-				std::cout << "[WARNING] You do not have enough space! Please enter a smaller numeber.";
+				std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber.";
 				continue;
 			}
 
@@ -384,11 +379,11 @@ void Player::buyResources(Resources *res) {
 			}
 
 			if (tempAmount < inputNum) {
-				std::cout << "[WARNING] Garbage is out of stock. Please enter a smaller number!" << std::endl;
+				std::cout << "[ERROR] Garbage is out of stock. Please enter a smaller number!" << std::endl;
 				continue;
 			}
 			if (cost > money) {
-				std::cout << "[WARNING] You do not have enough money. Please enter a smaller number!" << std::endl;
+				std::cout << "[ERROR] You do not have enough money. Please enter a smaller number!" << std::endl;
 				continue;
 			}
 
@@ -434,7 +429,7 @@ void Player::buyResources(Resources *res) {
 			//Check if Player's inventory is vaild
 
 			if (inputNum > uraniumMax) {
-				std::cout << "[WARNING] You do not have enough space! Please enter a smaller numeber.";
+				std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber.";
 				continue;
 			}
 
@@ -462,11 +457,11 @@ void Player::buyResources(Resources *res) {
 			}
 
 			if (tempAmount < inputNum) {
-				std::cout << "[WARNING] Uranium is out of stock. Please enter a smaller number!" << std::endl;
+				std::cout << "[ERROR] Uranium is out of stock. Please enter a smaller number!" << std::endl;
 				continue;
 			}
 			if (cost > money) {
-				std::cout << "[WARNING] You do not have enough money. Please enter a smaller number!" << std::endl;
+				std::cout << "[ERROR] You do not have enough money. Please enter a smaller number!" << std::endl;
 				continue;
 			}
 
@@ -528,7 +523,7 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 			}
 		}
 
-		std::cout << "[PROMOPT]" << "Please enter the ID of the city that you want to build.(Enter -1 to skip)" << std::endl;
+		std::cout << "[PROMPT]" << "Please enter the ID of the city that you want to build.(Enter -1 to skip)" << std::endl;
 		std::cout << "[ENTER] ";
 		int inputNum;
 		std::cin >> inputNum;
@@ -544,7 +539,7 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 
 		//check if the city is on the map
 		if (myGameMap->getArr()[inputNum].getHead() == NULL) {
-			cout << "[WARNING] This city is not on the map. Please try another city!!\n";
+			cout << "[ERROR] This city is not on the map. Please try another city!!\n";
 			continue;
 		}
 
@@ -552,7 +547,7 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 		bool isBuilt = false;
 		for (int i = 0; i < size; i++) {
 			if (name == owners[i]) {
-				cout << "[WARNING] You have owned this city. Please try another city!!\n";
+				cout << "[ERROR] You have owned this city. Please try another city!!\n";
 				isBuilt = true;
 				continue;
 			}
@@ -561,7 +556,7 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 
 		//check if there is enough space 
 		if (size >= step) {
-			std::cout << "[WARNING] You can not build plant in this city because there is no more space!" << std::endl;
+			std::cout << "[ERROR] You can not build plant in this city because there is no more space!" << std::endl;
 			continue;
 		}
 		
@@ -570,7 +565,7 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 		//add network price
 		price += myGameMap->lowestPathPrice(inputNum,name);
 		if (money < price){
-			std::cout << "[WARNING] You do not have enough money. Please try another city!" << std::endl;
+			std::cout << "[ERROR] You do not have enough money. Please try another city!" << std::endl;
 			continue;
 		}
 
@@ -579,7 +574,6 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 		numOfCity++;
 		std::cout << "[SUCCESS] You have built a house in "<< myGameMap->getArr()[inputNum].getBase()->getName() << " successfully." << std::endl;
 		std::cout << "[SUCCESS] It cost you  "<< price <<" Elektro. Now you have "<< money<< " Elektro." << std::endl;
-
 
 	}
 	
