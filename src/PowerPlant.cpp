@@ -70,28 +70,10 @@ string PowerPlant::getTypeName() {
 			return "Unknown";
 	}
 }
-//change the order of power plant cards
-void PowerPlant::shuffle(PowerPlant array[], int length) {
-	int value;
-	PowerPlant temp;
-
-	if (array == NULL || length == 0)
-		return;
-	//change the random number
-	srand((unsigned)time(NULL));
-	for (int i = 0; i < length; i++) {
-	//create a random number
-		value = rand() % length;
-		//shuffle
-		temp = array[i];
-		array[i] = array[value];
-		array[value] = temp;
-	}
-	
-}
 
 
-void PowerPlant::shuffle(vector<PowerPlant> pp) {
+//shuffle method: change the order of cards
+void PowerPlant::shuffle(vector<PowerPlant>& pp) {
 	int value;
 	PowerPlant temp;
 
@@ -109,8 +91,22 @@ void PowerPlant::shuffle(vector<PowerPlant> pp) {
 	}
 
 }
-//output the information
 
+//rearrange the power plants in ascending order in the market
+void PowerPlant::setMarketOrder(vector<PowerPlant>& pp) {
+	PowerPlant temp;
+	for (int i = 1; i <= 8; i++) {
+		for (int j = 7; j > i - 1; j--) {
+			if (pp[j].getNumber() < pp[j - 1].getNumber()) {
+				temp = pp[j];
+				pp[j] = pp[j - 1];
+				pp[j - 1] = temp;
+			}
+		}
+	}
+}
+
+//output the information
 string PowerPlant::toString() {
 	string print = "Card "+to_string(number) + "\t| " + "Need "+ to_string(need) + " | " + this->getTypeName() +" | "+"Supply "+ to_string(supplyCity)+" city/cities";
 	return print;

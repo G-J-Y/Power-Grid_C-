@@ -34,9 +34,9 @@ public:
 	string toString();
 	
 	//shuffle method: change the order of cards
-	void shuffle(PowerPlant a[], int);
-	static void shuffle(vector<PowerPlant> pp);
-
+	static void shuffle(vector<PowerPlant>&);
+	//rearrange the power plants in ascending order in the market
+	static void setMarketOrder(vector<PowerPlant>&);
 };
 
 
