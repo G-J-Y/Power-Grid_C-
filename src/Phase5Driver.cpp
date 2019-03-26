@@ -127,6 +127,15 @@ int main() {
         powerPlants.erase(powerPlants.begin());
     }
 
+    PowerPlant ecoCard = powerPlants[2];
+    cout<<ecoCard.toString()<<endl;
+    powerPlants.erase(powerPlants.begin()+2);
+    PowerPlant step3Card = powerPlants.back();
+    powerPlants.pop_back();
+    PowerPlant::shuffle(powerPlants);
+    powerPlants.insert(powerPlants.begin(),ecoCard);
+    powerPlants.push_back(step3Card);
+
 
 
     //phase 5 begins
@@ -160,9 +169,11 @@ int main() {
 
     /**/
 
+
     //update the power plant market
+
     phase5.updateMarket(powerPlants, market);
-    //PowerPlant::shuffle(powerPlants, 8);
+
 
     //print the power plant market and the draw stack
     cout << "-------------------------------" << endl;
@@ -173,6 +184,8 @@ int main() {
     for (int i = 0; i < 35; i++) {
         cout << powerPlants[i].toString() << endl;
     }
+
+
 
     /**/
 
