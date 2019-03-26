@@ -46,13 +46,13 @@ int main1() {
 	array_resource[2] = Resources(3, 1, 0, 0, 3);
 	array_resource[3] = Resources(3, 3, 0, 0, 4);
 	array_resource[4] = Resources(3, 3, 0, 0, 5);
-	array_resource[5] = Resources(0, 3, 0, 0, 6);
+	array_resource[5] = Resources(0, 3, 2, 0, 6);
 	array_resource[6] = Resources(0, 3, 2, 0, 7);
 	array_resource[7] = Resources(0, 3, 3, 0, 8);
 	array_resource[8] = Resources(0, 0, 0, 0, 10);
-	array_resource[9] = Resources(0, 0, 0, 0, 12);
-	array_resource[10] = Resources(0, 0, 0, 0, 14);
-	array_resource[11] = Resources(6, 0, 0, 0, 16);
+	array_resource[9] = Resources(0, 0, 0, 1, 12);
+	array_resource[10] = Resources(0, 0, 0, 1, 14);
+	array_resource[11] = Resources(6, 0, 0, 1, 16);
 
 
 	//create 43 powerPlants cards
@@ -118,7 +118,7 @@ int main1() {
 	players[1].setNumOfPowerPlant(3);
 	players[1].setMoney(100);
 
-	//Initialization finshed!
+	//Initialization finished!
 
 
 	//======================================================================
@@ -139,8 +139,10 @@ int main1() {
 		players[i].building(&myGameMap,step,6);
 	}
 
+    //======================================================================
+    std::cout << "[INFO] Print info of all the players:" << std::endl;
 	for(int i = 0; i<numOfPlayer;i++){
-		players[i].toString();
+		std::cout<< players[i].toString() <<std::endl;
 	}
 
 	delete[] array_resource;

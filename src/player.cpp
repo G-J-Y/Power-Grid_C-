@@ -127,6 +127,7 @@ PowerPlant Player::getPowerPlant(int n) {
 string Player::toString() {
 	string print = "Player Name: " + name + "\n->Money: " + to_string(money) + " | city: " + to_string(numOfCity) + " | ";
 	print += "coal: " + to_string(coalNum) + " | oil: " + to_string(oilNum) + "  | garbage: " + to_string(garbageNum) + " | uranium: " + to_string(uraniumNum) + "\n";
+	print += "->Num of City: " + to_string(numOfCity) + " | Num Of PoweredCity: " + to_string(numOfPoweredCities)+ "\n";
 	print += "->Cards:\n";
 	for (int i = 0; i < numOfPowerPlant; i++) {
 		print += "  " + powerPlant[i].toString()+"\n";
