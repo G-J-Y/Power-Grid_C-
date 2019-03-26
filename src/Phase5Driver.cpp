@@ -128,7 +128,7 @@ int main() {
     }
 
     PowerPlant ecoCard = powerPlants[2];
-    cout<<ecoCard.toString()<<endl;
+    //cout<<ecoCard.toString()<<endl;
     powerPlants.erase(powerPlants.begin()+2);
     PowerPlant step3Card = powerPlants.back();
     powerPlants.pop_back();
@@ -177,14 +177,31 @@ int main() {
 
     //print the power plant market and the draw stack
     cout << "-------------------------------" << endl;
-    for(int i=0; i<8; i++){
+    for(size_t i = 0; i < market.size(); i++){
         cout << market[i].toString() << endl;
     }
     cout << "-------------------------------" << endl;
-    for (int i = 0; i < 35; i++) {
+    for (size_t i = 0; i < powerPlants.size(); i++) {
         cout << powerPlants[i].toString() << endl;
     }
 
+
+
+
+	//just for testing in step 3
+	powerPlants.pop_back();
+	powerPlants.insert(powerPlants.begin(), PowerPlant(0, 0, PowerPlant::step3, 0));
+	phase5.updateMarket(powerPlants, market);
+
+	//print the power plant market and the draw stack
+	cout << "-------------------------------" << endl;
+	for (size_t i = 0; i < market.size(); i++) {
+		cout << market[i].toString() << endl;
+	}
+	cout << "-------------------------------" << endl;
+	for (size_t i = 0; i < powerPlants.size(); i++) {
+		cout << powerPlants[i].toString() << endl;
+	}
 
 
     /**/

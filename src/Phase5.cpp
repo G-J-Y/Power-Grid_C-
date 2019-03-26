@@ -1,4 +1,4 @@
-
+﻿
 #include "Phase5.h"
 #include "Player.h"
 #include "Money.h"
@@ -380,11 +380,23 @@ void Phase5::reSupplyResource(Resources *array_resource) {
 
 //Place the highest numbered power plant from the future market face down under the draw stack and draw a new one to replace it
 void Phase5::updateMarket(std::vector<PowerPlant> &powerPlants, std::vector<PowerPlant> &market) {
-    PowerPlant theHighest = market.back();
-    market.pop_back();
-    powerPlants.push_back(theHighest);
-    market.push_back(powerPlants.front());
-    powerPlants.erase(powerPlants.begin());
+	//If the »Step 3« card is drawn in phase 5 (Bureaucracy),
+	//remove this card and the lowest numbered power plant from the game and do not draw replacements
+	PowerPlant theFirstInDrawStack = powerPlants.front();
+	if (theFirstInDrawStack.getTypeName() == "step3") {
+		market.erase(market.begin());
+		PowerPlant::setMarketOrder(market);
+		powerPlants.erase(powerPlants.begin());
+		step = 3;
+		PowerPlant::shuffle(powerPlants);
+	}
+	else {
+		PowerPlant theHighest = market.back();
+		market.pop_back();
+		market.push_back(powerPlants.front());
+		powerPlants.push_back(theHighest);
+		powerPlants.erase(powerPlants.begin());
+	}
 }
 
 

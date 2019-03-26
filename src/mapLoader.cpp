@@ -235,7 +235,7 @@ int Graph::lowestPathPrice(int cityID, string pName) {
 	//will store the shortest path distances from city #cityID to cities owned by pName
 
 
-	for (int i = 0; i < pathsToAll.size(); i++) {
+	for (size_t i = 0; i < pathsToAll.size(); i++) {
 		vector<string> v(arr[i].base->owners); //stores owners' names of city#i
 		if (std::find(v.begin(), v.end(), pName) != v.end()) //if we find city#i is owned by pName
 		{
@@ -253,7 +253,7 @@ int Graph::lowestPathPrice(int cityID, string pName) {
 
 	int min = pathsToOwned[0];
 
-	for (int i = 1; i < pathsToOwned.size(); i++) {
+	for (size_t i = 1; i < pathsToOwned.size(); i++) {
 		if (pathsToOwned[i] < min)
 			min = pathsToOwned[i];
 	}
@@ -338,7 +338,7 @@ void printGraph(Graph* graph) {
 			<< " (" << base->region
 			<< ") Owned by :";
 			
-		for (int j = 0; j < graph->arr[i].base->owners.size(); j++) {
+		for (size_t j = 0; j < graph->arr[i].base->owners.size(); j++) {
 			cout << graph->arr[i].base->owners[j] << "  ";
 		}
 		cout << endl;

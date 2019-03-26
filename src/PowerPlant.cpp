@@ -81,7 +81,7 @@ void PowerPlant::shuffle(vector<PowerPlant>& pp) {
 		return;
 	//change the random number
 	srand((unsigned)time(NULL));
-	for (int i = 0; i < pp.size(); i++) {
+	for (size_t i = 0; i < pp.size(); i++) {
 		//create a random number
 		value = rand() % pp.size();
 		//shuffle
@@ -93,14 +93,14 @@ void PowerPlant::shuffle(vector<PowerPlant>& pp) {
 }
 
 //rearrange the power plants in ascending order in the market
-void PowerPlant::setMarketOrder(vector<PowerPlant>& pp) {
+void PowerPlant::setMarketOrder(vector<PowerPlant>& market) {
 	PowerPlant temp;
-	for (int i = 1; i <= 8; i++) {
-		for (int j = 7; j > i - 1; j--) {
-			if (pp[j].getNumber() < pp[j - 1].getNumber()) {
-				temp = pp[j];
-				pp[j] = pp[j - 1];
-				pp[j - 1] = temp;
+	for (size_t i = 1; i <= market.size(); i++) {
+		for (size_t j = market.size()-1; j > i - 1; j--) {
+			if (market[j].getNumber() < market[j - 1].getNumber()) {
+				temp = market[j];
+				market[j] = market[j - 1];
+				market[j - 1] = temp;
 			}
 		}
 	}
