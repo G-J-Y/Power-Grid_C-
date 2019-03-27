@@ -16,11 +16,13 @@ private:
 	int numOfPowerPlant;
 	int numOfPoweredCities;
 	PowerPlant powerPlant[3];
+
 	//Resources
 	int coalNum;
 	int oilNum;
 	int garbageNum;
 	int uraniumNum;
+
 	//status of auction
     bool roundStatus;
     bool auction;
@@ -29,46 +31,52 @@ private:
 
 public:
 	Player();
+
 	//set methods
-	void setMoney(int m);
-	void setNumOfCity(int c);
-	void setNumOfPowerPlant(int p);
-	void setNumOfPoweredCities(int pc);
-	void setCoalNum(int c);
-	void setOilNum(int o);
-	void setGarbageNum(int g);
-	void setUraniumNum(int u);
+	void setMoney(int);
+	void setNumOfCity(int);
+	void setNumOfPowerPlant(int);
+	void setNumOfPoweredCities(int);
+	void setCoalNum(int);
+	void setOilNum(int);
+	void setGarbageNum(int);
+	void setUraniumNum(int);
 	void setAuction(bool);
 	void setName(string);
     void setRoundStatus(bool);
     void setBought(bool);
-    void setPowerPlant(PowerPlant p,int n);
+    void setPowerPlant(PowerPlant,int);
+
 	//get methods
-	int getMoney(void);
-	int getNumOfCity(void);
-	int getNumOfPowerPlant(void);
+	int getMoney();
+	int getNumOfCity();
+	int getNumOfPowerPlant();
 	int getNumOfPoweredCities();
-	int getCoalNum(void);
-	int getOilNum(void);
-	int getGarbageNum(void);
-	int getUraniumNum(void);
+	int getCoalNum();
+	int getOilNum();
+	int getGarbageNum();
+	int getUraniumNum();
 	bool getAuction();
 	int getPrice();
 	string getName() const;
     bool getRoundStatus();
     bool getBought();
-	PowerPlant getPowerPlant(int n);
+	PowerPlant getPowerPlant(int);
+
+	//add methods
+	void addNumOfPoweredCities(int);
 
 	//decrease methods
-	void deCoalNum(int c);
-	void deOilNum(int o);
-	void deGarbageNum(int g);
-	void deUraniumNum(int u);
-
+	void deCoalNum(int);
+	void deOilNum(int);
+	void deGarbageNum(int);
+	void deUraniumNum(int);
 
 	//print information
 	string toString();
-	void buyResources(Resources *res);
+	static void printPlayerPossession(Player*, int);
+
+	void buyResources(Resources*res);
 	void building(Graph* graph, int &step,int numOfPlayer);
 
 };
