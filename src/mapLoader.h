@@ -15,22 +15,25 @@ class Graph;
 class AdjList;
 class CityNode {
 public:
-	CityNode();
+	CityNode(); //default constructor
 	CityNode(int theID);
 	//creates a CityNode with its ID theID
-	//does not assign city's name
-	CityNode(const CityNode &cn);
+	
+	CityNode(const CityNode &cn); //copy constructor
 	CityNode* operator=(const CityNode *cn);
 	
 	int getID() { return ID; }
 	string getName() { return name; }
 	int getDistance() { return distance; }
+	vector<string> getOwners() { return owners; }
 	CityNode* getNext() { return next; }
-	vector<string> getOwners() {
-		return vector<string>(owners);
+	int getPrice(int i) {
+		return price[i];
 	}
-	
 
+	void addOwner(string name) {
+		owners.push_back(name);
+	}
 
 	void setName(string theName) {
 		name = theName;
@@ -40,15 +43,11 @@ public:
 	void setDistance(int theDistance) {
 		distance = theDistance;
 	}
+	const int price[3] = { 10, 15, 20 };
 
-	int getPrice(int i) {
-		return price[i];
+	void setOwners(string owner1) {
+		owners.push_back(owner1);
 	}
-
-	void addOwner(string name) {
-		owners.push_back(name);
-	}
-
 
 	//must have forward declaration "class Graph;" to let the following work
 	//the follow contain "Graph", which has not been declared yet without forward declaration
@@ -63,17 +62,17 @@ public:
 private:
 	string name;
 	int ID;
-	string region;
+	string region;	
 	int distance; //distance away from a base city
 	vector<string> owners;
 	CityNode *next;
-	const int price[3] = { 10, 15, 20 };
+
 };
 
 class AdjList {
 public:
 	AdjList(); //default constructor
-	AdjList(const AdjList &al);
+	AdjList(const AdjList &al); //copy constructor
 	AdjList& operator = (const AdjList &al);
 	
 	CityNode* getHead() { return head; }
@@ -93,7 +92,6 @@ private:
 	//point to NULL at beginning, and will point to a base node in graph
 	//This base node is a city, indicating what city is a base city of its adjacent cities
 
-
 	CityNode* head;
 	//pointer to head node of a node list
 	//this node list stores all the adjacent cities of base city. 
@@ -102,14 +100,14 @@ private:
 
 class Graph {
 public:
-	Graph();
+	Graph(); //default constructor
 	Graph(int theSize);
 	//creates a graph
 	//in this graph, arr is pointing to a dynamic array of size theSize
 	//each elements of arr is an AdjList
 	//in each AdjList(arr[0], arr[1],...,arr[theSize-1]), its base and head point to NULL
 
-	Graph(const Graph &g);
+	Graph(const Graph &g); //copy constructor
 	//copy constructor
 
 	~Graph(); //destructor
@@ -119,7 +117,7 @@ public:
 	AdjList* getArr() { return arr; };
 
 	set<int> findAdjCities(int baseID) const;
-
+	
 	vector<int> shortestPath(int startID);
 	//return a vector that stores all the shortest path distances to all cities from city #startID
 
@@ -142,7 +140,9 @@ private:
 
 class mapLoader {
 public:
-	void Load();
+	int Load();
+	//load map from text file 
+	//returns number of players
 };
 
 void createBaseCity(Graph*, map<string, int>);

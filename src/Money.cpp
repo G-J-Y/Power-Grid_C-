@@ -8,5 +8,5 @@ Money::Money() {};
 Money::Money(const int &value): m_value(value){};
 
 void Money::printInfo(){
-    std::cout<<"This is "<< m_value<<" Elektro"<< std::endl;
+    std::cout<<"Money of value "<< m_value<<" Elektro(s) has been loaded."<< std::endl;
 }
