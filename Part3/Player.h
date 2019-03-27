@@ -84,11 +84,11 @@ public:
 	static void printPlayerPossession(Player*, int);
 
 	void buyResources(Resources*res);
-	void building(Graph* graph, int &step,int numOfPlayer, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants);
+	bool building(Graph* graph, int &step,int numOfPlayer, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants);
 
 };
 
-void adjustMarket(int &step, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants);
+bool adjustMarket(int &step, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants);
 #endif // !PLAYER_H__H_
 #pragma once
 

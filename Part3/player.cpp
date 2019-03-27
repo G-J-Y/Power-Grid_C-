@@ -505,33 +505,36 @@ void Player::buyResources(Resources *res) {
 }
 
 
-void Player::building(Graph* myGameMap, int &step, int numOfPlayer, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants) {
+bool Player::building(Graph* myGameMap, int &step, int numOfPlayer, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants) {
 
 	std::cout << std::endl;
 	printGraph(myGameMap);
 	std::cout << "[INFO]" << name << ", it's your turn!"<<std::endl;
-
+	bool goToStep3 = false;
 	while (true) {
 		//check the step
-		if (numOfPlayer ==2){
+		if (numOfPlayer == 2){
 			if (numOfCity ==10){
-				step =2;
-			
-				adjustMarket(step, market, powerPlants);
+				if (step == 1) {
+					step = 2;
+					goToStep3 = adjustMarket(step, market, powerPlants);
+				}
 			}
 		}
 		if (numOfPlayer==3||numOfPlayer==4||numOfPlayer==5){
 			if(numOfCity==7){
-				step =2;
-		
-				adjustMarket(step,market, powerPlants);
+				if (step == 1) {
+					step = 2;
+					goToStep3 = adjustMarket(step, market, powerPlants);
+				}
 			}
 		}
 		if (numOfPlayer==6){
 			if(numOfCity==6){
-				step =2;
-	
-				adjustMarket(step,market, powerPlants);
+				if (step == 1) {
+					step = 2;
+					goToStep3 = adjustMarket(step, market, powerPlants);
+				}
 			}
 		}
 
@@ -590,6 +593,7 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer, vector<Power
 	}
 	
 	printGraph(myGameMap);
+	return goToStep3;
 }
 
 
@@ -614,16 +618,18 @@ void Player::deUraniumNum(int u){
 	uraniumNum -= u;
 }
 
-void adjustMarket(int &step, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants) {
+bool adjustMarket(int &step, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants) {
+	bool goToStep3 = false;
 	std::cout << "[INFO] It is STEP 2 now!!" << std::endl;
 	std::cout << "[INFO] Remove first card in the market!" << std::endl;
 	market.erase(market.begin());						//remove first card in market
 	std::cout << "[INFO] Add a new card to the market!" << std::endl;
 	if (powerPlants[0].getType() == PowerPlant::step3) {
 		std::cout << "[INFO] Find STEP 3 Card. Shuffle the deck." << std::endl;
-		powerPlants.erase(powerPlants.begin());				//remove step 3
+		std::cout << "[INFO] STEP 3 starts in phase 5!!" << std::endl;
+		powerPlants.erase(powerPlants.begin());
 		PowerPlant::shuffle(powerPlants);
-		step = 3;
+		bool goToStep3 = true;
 	}
 	else {
 		market.push_back(powerPlants[0]);
@@ -632,5 +638,5 @@ void adjustMarket(int &step, vector<PowerPlant> &market, vector<PowerPlant> &pow
 	
 	std::cout << "[INFO] Reorder the cards in the market!" << std::endl;
 	PowerPlant::setMarketOrder(market);					//reorder
-
+	return goToStep3;
 }

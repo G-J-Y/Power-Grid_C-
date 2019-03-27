@@ -128,7 +128,7 @@ int main() {
 	//Assume Player 3 has 100 Elektro PowerPlants 20,21,26
 	players[2].setPowerPlant(powerPlants[31], 0);
 	players[2].setPowerPlant(powerPlants[39], 1);
-	players[2].setPowerPlant(powerPlants[26], 2);
+	players[2].setPowerPlant(powerPlants[16], 2);
 	players[2].setNumOfPowerPlant(3);
 	players[2].setMoney(500);
 
@@ -151,17 +151,23 @@ int main() {
 
 	//======================================================================
 	std::cout << "[INFO] PHASE4: Building" << std::endl;
-
-	//build city
-
 	int step = 1;
-	for (int i = numOfPlayer-1; i >= 0; i--) {
-		players[i].building(&myGameMap,step,6,market,powerPlants);
+	/*
+		bool goToStep3 = false;
+		for (int i = numOfPlayer - 1; i >= 0; i--) {
+		bool result = players[i].building(&myGameMap, step, 6, market, powerPlants);
+		if (!goToStep3) {
+			goToStep3 = result;
+		}
 	}
 
+	//======================================================================
 	//just for testing in step 3
+	/**/
+	
 	cout << "-----------------------------------------------" << endl;
-	cout << "test for step 3" << endl;
+	cout << "Test case for step 3" << endl;
+
 	for (size_t i = 0; i < powerPlants.size(); i++) {
 		if (powerPlants[i].getTypeName() == "step3") {
 			PowerPlant temp2;
@@ -170,15 +176,29 @@ int main() {
 			powerPlants[0] = temp2;
 		}
 	}
-	players[2].building(&myGameMap, step, 6, market, powerPlants);
+	cout << powerPlants[0].toString() << endl;
+	cout << "[INFO] Now the STEP 3 card is on the top of the remaining power plants!" << endl;
+	bool goToStep3 = false;
+	for (int i = numOfPlayer - 1; i >= 0; i--) {
+		bool result = players[i].building(&myGameMap, step, 6, market, powerPlants);
+		if (!goToStep3) {
+			goToStep3 = result;
+		}
+	}
+
+	/**/
+	if (step != 3) {
+		if (goToStep3) {
+			step = 3;
+		}
+	}
+	
 
     //======================================================================
     std::cout << "[INFO] Print info of all the players:" << std::endl;
 	for(int i = 0; i<numOfPlayer;i++){
 		std::cout<< players[i].toString() <<std::endl;
 	}
-
-
 	delete[] array_resource;
 	system("pause");
 	return 0;
