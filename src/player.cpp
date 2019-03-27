@@ -123,6 +123,16 @@ int Player::getPrice() {
 PowerPlant Player::getPowerPlant(int n) {
 	return powerPlant[n];
 }
+
+
+void Player::setName(string n) {
+	name = n;
+}
+
+string Player::getName() const{
+	return name;
+}
+
 // print the data of players
 string Player::toString() {
 	string print = "Player Name: " + name + "\n->Money: " + to_string(money) + " | city: " + to_string(numOfCity) + " | ";
@@ -136,12 +146,10 @@ string Player::toString() {
 	return print;
 }
 
-void Player::setName(string n) {
-	name = n;
-}
-
-string Player::getName() const{
-	return name;
+void Player::printPlayerPossession(Player* players, int n){
+	for(int i = 0; i<n;i++){
+    cout << players[i].toString() << endl;
+	}
 }
 
 void Player::buyResources(Resources *res) {
@@ -581,6 +589,12 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 	printGraph(myGameMap);
 }
 
+
+
+//add methods
+void Player::addNumOfPoweredCities(int c){
+	numOfPoweredCities += c;
+}
 
 
 //decrease methods

@@ -31,10 +31,10 @@ void Phase5::earnCash() {
     int earnedCash, money;
     for (int i = 0; i < numOfPlayer; i++) {
         int numOfPowerPlant = players[i].getNumOfPowerPlant();
-        int totalNumInput = 0;
+        int totalNumInput=0;
         for (int j = 0; j < numOfPowerPlant; j++) {
             PowerPlant currentPlant = players[i].getPowerPlant(j);
-            cout << "Player " << (i + 1)
+            cout << "[PROMPT] Player " << (i + 1)
                  << ": Do you wish to supply cities with electricity by using power plant "
                  << currentPlant.getNumber() << " ?" << endl;
             do {
@@ -51,10 +51,15 @@ void Phase5::earnCash() {
             if (totalNumInput > players[i].getNumOfCity())
                 totalNumInput = players[i].getNumOfCity();
         }
-        players[i].setNumOfPoweredCities(totalNumInput);
+
+        players[i].addNumOfPoweredCities(totalNumInput);
+
         earnedCash = payment[totalNumInput];
         money = players[i].getMoney() + earnedCash;
         players[i].setMoney(money);
+        cout << "[SUCCESS] You have supplied " << totalNumInput << " city/cities this round." << endl;
+        cout << "[INFO] You have earned "<< earnedCash<< " this round."<< endl;
+        cout << "[INFO] Now you have "<<players[i].getNumOfPoweredCities()<<" city/cities that have been powered.\n"<< endl;
     }
 }
 
@@ -67,20 +72,20 @@ bool Phase5::validUsingPowerPlant(int i, PowerPlant currentPlant) {
         int numCoalHybrid, numOilHybrid;
         do {
             do{
-                cout << "\nPlease enter the coal that you want to use to power the power plant:" << endl;
+                cout << "\n[PROMPT] Please enter the coal that you want to use to power the power plant:" << endl;
                 cout << "-> ";
                 if(!cin){
-                    cout << "Invalid input";
+                    cout << "[ERROR] Invalid input";
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
             }while(!(cin >> numCoalHybrid));
 
             do{
-                cout << "\nPlease enter the oil that you want to use to power the power plant:" << endl;
+                cout << "\n[PROMPT] Please enter the oil that you want to use to power the power plant:" << endl;
                 cout << "-> ";
                 if(!cin){
-                    cout << "Invalid input";
+                    cout << "[ERROR] Invalid input";
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
@@ -98,7 +103,7 @@ bool Phase5::validUsingPowerPlant(int i, PowerPlant currentPlant) {
                 players[i].deCoalNum(needNum);
                 return true;
             } else
-                cout << "You can not power cities by using power plant "
+                cout << "[ERROR] You can not power cities by using power plant because you do not have enough coals"
                      << currentPlant.getNumber() << endl;
             return false;
         case PowerPlant::oil:
@@ -107,7 +112,7 @@ bool Phase5::validUsingPowerPlant(int i, PowerPlant currentPlant) {
                 players[i].deOilNum(needNum);
                 return true;
             } else
-                cout << "You can not power cities by using power plant "
+                cout << "[ERROR] You can not power cities by using power plant because you do not have enough oil"
                      << currentPlant.getNumber() << endl;
             return false;
         case PowerPlant::garbage:
@@ -116,7 +121,7 @@ bool Phase5::validUsingPowerPlant(int i, PowerPlant currentPlant) {
                 players[i].deGarbageNum(needNum);
                 return true;
             } else
-                cout << "You can not power cities by using power plant "
+                cout << "[ERROR] You can not power cities by using power plant because you do not have enough garbage"
                      << currentPlant.getNumber() << endl;
             return false;
         case PowerPlant::uranium:
@@ -125,7 +130,7 @@ bool Phase5::validUsingPowerPlant(int i, PowerPlant currentPlant) {
                 players[i].deUraniumNum(needNum);
                 return true;
             } else
-                cout << "You can not power cities by using power plant "
+                cout << "[ERROR] You can not power cities by using power plant because you do not have enough uranium"
                      << currentPlant.getNumber() << endl;
             return false;
         default:
@@ -247,11 +252,10 @@ void Phase5::reSupplyResource(Resources *array_resource) {
     int numOfOilToSupply = toSupply.getOil();
     int numOfGarbageToSupply = toSupply.getGarbage();
     int numOfUraniumToSupply = toSupply.getUranium();
-    cout << "-------------------------------" << endl;
-    cout << "To be re-supplied in step " << step << " for coal: " << numOfCoalToSupply << endl;
-    cout << "To be re-supplied in step " << step << " for oil: " << numOfOilToSupply << endl;
-    cout << "To be re-supplied in step " << step << " for garbage: " << numOfGarbageToSupply << endl;
-    cout << "To be re-supplied in step " << step << " for uranium: " << numOfUraniumToSupply << endl;
+    cout << "[INFO] To be re-supplied in step " << step << " for coal: " << numOfCoalToSupply << endl;
+    cout << "[INFO] To be re-supplied in step " << step << " for oil: " << numOfOilToSupply << endl;
+    cout << "[INFO] To be re-supplied in step " << step << " for garbage: " << numOfGarbageToSupply << endl;
+    cout << "[INFO] To be re-supplied in step " << step << " for uranium: " << numOfUraniumToSupply << endl;
 
     //re-supply the uranium
     for (int i = 11; i >= 0; i--) {
@@ -384,6 +388,7 @@ void Phase5::updateMarket(std::vector<PowerPlant> &powerPlants, std::vector<Powe
 	//remove this card and the lowest numbered power plant from the game and do not draw replacements
 	PowerPlant theFirstInDrawStack = powerPlants.front();
 	if (theFirstInDrawStack.getTypeName() == "step3") {
+        cout <<"[INFO] It is STEP 3 Card !!" <<endl;
 		market.erase(market.begin());
 		PowerPlant::setMarketOrder(market);
 		powerPlants.erase(powerPlants.begin());

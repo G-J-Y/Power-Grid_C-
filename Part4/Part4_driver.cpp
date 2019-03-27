@@ -20,6 +20,7 @@ int main() {
     players[3] = Player();
 
     //set player1:  owns 6 cities, 0 Elektro, 4 coal, 6 oil, 2 garbage, the power plants 06, 07 and 10
+    players[0].setName("Allen");
     players[0].setMoney(0);
     players[0].setNumOfCity(6);
     players[0].setNumOfPowerPlant(3);
@@ -31,6 +32,7 @@ int main() {
     players[0].setGarbageNum(2);
 
     //set player2:  owns 3 cities, 2 Elektro, 2 coal, 2 oil, 2 uranium, the power plants 05 and 11
+    players[1].setName("Bob");
     players[1].setMoney(2);
     players[1].setNumOfCity(3);
     players[1].setNumOfPowerPlant(2);
@@ -41,6 +43,7 @@ int main() {
     players[1].setUraniumNum(2);
 
     //set player3:  owns 0 cities, 3 Elektro, 2 garbage, the power plants 06
+    players[2].setName("Cara");
     players[2].setMoney(3);
     players[2].setNumOfCity(1);
     players[2].setNumOfPowerPlant(1);
@@ -48,6 +51,7 @@ int main() {
     players[2].setOilNum(2);
 
     //set player4:  owns 2 cities, 4 Elektro, 1 coal, the power plants 15
+    players[3].setName("David");
     players[3].setMoney(4);
     players[3].setNumOfCity(2);
     players[3].setNumOfPowerPlant(1);
@@ -126,9 +130,7 @@ int main() {
         market.push_back(powerPlants[0]);
         powerPlants.erase(powerPlants.begin());
     }
-
     PowerPlant ecoCard = powerPlants[2];
-    //cout<<ecoCard.toString()<<endl;
     powerPlants.erase(powerPlants.begin()+2);
     PowerPlant step3Card = powerPlants.back();
     powerPlants.pop_back();
@@ -139,30 +141,26 @@ int main() {
 
 
     //phase 5 begins
+    cout << "[INFO] PHASE5: Bureaucracy" << endl;
     Phase5 phase5 = Phase5(players, 4);
     phase5.earnCash();
 
 
-    //print each player possession
-    for (int i = 0; i < 4; i++) {
-        cout << "Player " << i+1 << ": \n" << players[i].toString() << "\n";
-    }
-    cout << endl;
-    cout << "-------------------------------" << endl;
-
     /**/
 
     //print the resources in the market before re-supply
+    cout << "[INFO] Here is the Resource Market:" << endl;
     for (int i = 0; i < 12; i++) {
         cout << array_resource[i].toString() << endl;
     }
-    cout << "-------------------------------" << endl;
+    cout << "-----------------------------------------------" << endl;
 
     //re-supply the resource market
     phase5.reSupplyResource(array_resource);
 
     //print the resources after re-supply
-    cout << "-------------------------------" << endl;
+    cout << "-----------------------------------------------" << endl;
+    std::cout << "[INFO] Here is the Resource Market:" << std::endl;
     for (int i = 0; i < 12; i++) {
         cout << array_resource[i].toString() << endl;
     }
@@ -176,32 +174,52 @@ int main() {
 
 
     //print the power plant market and the draw stack
-    cout << "-------------------------------" << endl;
+    cout << "-----------------------------------------------" << endl;
+    std::cout << "[INFO] Here is the Power Plant Market:" << std::endl;
     for(size_t i = 0; i < market.size(); i++){
         cout << market[i].toString() << endl;
     }
-    cout << "-------------------------------" << endl;
+    cout << "-----------------------------------------------" << endl;
+    std::cout << "[INFO] Here is the Power Plant Draw Stack:" << std::endl;
     for (size_t i = 0; i < powerPlants.size(); i++) {
         cout << powerPlants[i].toString() << endl;
     }
 
 
+    //each player possession at the end of this phase
+    cout << "-----------------------------------------------" << endl;
+    cout << "Each player possession at the end of this phase 5:" << endl;
+    Player::printPlayerPossession(players,4);
+
+
+
+
 
 
 	//just for testing in step 3
-	powerPlants.pop_back();
-	powerPlants.insert(powerPlants.begin(), PowerPlant(0, 0, PowerPlant::step3, 0));
+    cout << "-----------------------------------------------" << endl;
+	cout << "test for step 3" << endl;
+    for (size_t i = 0; i < powerPlants.size(); i++) {
+        if (powerPlants[i].getTypeName() == "step3") {
+            PowerPlant temp2;
+            temp2 = powerPlants[i];
+            powerPlants[i] = powerPlants[0];
+            powerPlants[0] = temp2;
+        }
+    }
 	phase5.updateMarket(powerPlants, market);
 
 	//print the power plant market and the draw stack
-	cout << "-------------------------------" << endl;
+    std::cout << "[INFO] Here is the Power Plant Market:" << std::endl;
 	for (size_t i = 0; i < market.size(); i++) {
 		cout << market[i].toString() << endl;
 	}
-	cout << "-------------------------------" << endl;
+	cout << "-----------------------------------------------" << endl;
+    std::cout << "[INFO] Here is the Power Plant Draw Stack:" << std::endl;
 	for (size_t i = 0; i < powerPlants.size(); i++) {
 		cout << powerPlants[i].toString() << endl;
 	}
+
 
 
     /**/
