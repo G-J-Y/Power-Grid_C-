@@ -5,17 +5,17 @@
 #include "mapLoader.h"
 
 
-int main1() {
+int main() {
 	//create testing player
-	int numOfPlayer = 2;
-	Player players[2];
+	const int numOfPlayer = 3;
+	Player players[numOfPlayer];
 	players[0].setName("Allen");
 	players[1].setName("Bob");
-	//players[2].setName("Cara");
+	players[2].setName("Cara");
 	//players[3].setName("David");
 
 	//Initialize the map for demo
-	Graph myGameMap(7);
+	Graph myGameMap(8);
 
 	map<string, int> cityNameIDPair;
 	cityNameIDPair.insert(pair<string, int>("Boston", 0));
@@ -25,6 +25,8 @@ int main1() {
 	cityNameIDPair.insert(pair<string, int>("Pittsburgh", 4));
 	cityNameIDPair.insert(pair<string, int>("Detroit", 5));
 	cityNameIDPair.insert(pair<string, int>("Buffalo", 6));
+	cityNameIDPair.insert(pair<string, int>("Norfolk", 7));
+	
 
 	createBaseCity(&myGameMap, cityNameIDPair);
 
@@ -36,6 +38,7 @@ int main1() {
 	addEdge(&myGameMap, "Detroit", "Buffalo", 7, cityNameIDPair);
 	addEdge(&myGameMap, "Buffalo", "Pittsburgh", 7, cityNameIDPair);
 	addEdge(&myGameMap, "Buffalo", "New York", 8, cityNameIDPair);
+	addEdge(&myGameMap, "Washington DC", "Norfolk", 5, cityNameIDPair);
 
 
 	//Initialize resources on the map
@@ -102,6 +105,10 @@ int main1() {
 	powerPlants[41] = PowerPlant(50, 0, PowerPlant::hybrid, 6);
 	powerPlants[42] = PowerPlant(0, 0, PowerPlant::step3, 0);
 
+	std::vector<PowerPlant> market(0);
+
+	
+
 
 	//Assume Player 1 has 150 Elektro PowerPlants 5,6,9
 
@@ -109,14 +116,27 @@ int main1() {
 	players[0].setPowerPlant(powerPlants[6], 1);
 	players[0].setPowerPlant(powerPlants[9], 2);
 	players[0].setNumOfPowerPlant(3);
-	players[0].setMoney(50);
+	players[0].setMoney(500);
 
-	//Assume Player 1 has 100 Elektro PowerPlants 20,21,26
+	//Assume Player 2 has 100 Elektro PowerPlants 20,21,26
 	players[1].setPowerPlant(powerPlants[20], 0);
 	players[1].setPowerPlant(powerPlants[21], 1);
 	players[1].setPowerPlant(powerPlants[26], 2);
 	players[1].setNumOfPowerPlant(3);
-	players[1].setMoney(100);
+	players[1].setMoney(500);
+
+	//Assume Player 3 has 100 Elektro PowerPlants 20,21,26
+	players[2].setPowerPlant(powerPlants[31], 0);
+	players[2].setPowerPlant(powerPlants[39], 1);
+	players[2].setPowerPlant(powerPlants[26], 2);
+	players[2].setNumOfPowerPlant(3);
+	players[2].setMoney(500);
+
+	//put first 8 cards into market
+	for (int i = 0; i < 8; i++) {
+		market.push_back(powerPlants[0]);
+		powerPlants.erase(powerPlants.begin());
+	}
 
 	//Initialization finished!
 
@@ -136,14 +156,28 @@ int main1() {
 
 	int step = 1;
 	for (int i = numOfPlayer-1; i >= 0; i--) {
-		players[i].building(&myGameMap,step,6);
+		players[i].building(&myGameMap,step,6,market,powerPlants);
 	}
+
+	//just for testing in step 3
+	cout << "-----------------------------------------------" << endl;
+	cout << "test for step 3" << endl;
+	for (size_t i = 0; i < powerPlants.size(); i++) {
+		if (powerPlants[i].getTypeName() == "step3") {
+			PowerPlant temp2;
+			temp2 = powerPlants[i];
+			powerPlants[i] = powerPlants[0];
+			powerPlants[0] = temp2;
+		}
+	}
+	players[2].building(&myGameMap, step, 6, market, powerPlants);
 
     //======================================================================
     std::cout << "[INFO] Print info of all the players:" << std::endl;
 	for(int i = 0; i<numOfPlayer;i++){
 		std::cout<< players[i].toString() <<std::endl;
 	}
+
 
 	delete[] array_resource;
 	system("pause");
