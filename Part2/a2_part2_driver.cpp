@@ -1,11 +1,11 @@
-#include "House.h"
+//#include "House.h"
 #include "SummaryCard.h"
-#include "Money.h"
+//#include "Money.h"
 #include "Resources.h"
 #include "PowerPlant.h"
 #include "Player.h"
 //#include "map.h"
-#include "mapLoader.h"
+//#include "mapLoader.h"
 #include <time.h>
 #include <vector>
 #include <iostream>
@@ -156,7 +156,7 @@ void checkReturnResources(Player &p) {
 				int keep;
 				int leftHybridSpace;
 				cout << "Excess " << excess_coal << " coal, and you have " << hybrid_max << " hybrid space" << endl;
-				cout << "The coal resources do you want to keep: ";
+				cout << "The coal resources do you want to put in hybrid: ";
 				cin >> keep;
 				while (keep < 0 || keep > hybrid_max) {
 					cout << "The number you enter is exceed, please enter a valid number: ";
@@ -468,32 +468,32 @@ int main() {
 		}
 	}
 
-	//*************************test check resources*************************
-	//coal: 3
-	players[0].setCoalNum(3);
-	players[0].setPowerPlant(powerPlants[12], 0);
-	//oil: 3
-	players[0].setOilNum(3);
-	players[0].setPowerPlant(powerPlants[13], 1);
-	//uranium: 2
-	players[0].setUraniumNum(2);
-	players[0].setPowerPlant(powerPlants[14], 2);
-	players[0].setNumOfPowerPlant(3);
-	//change to garbage: 2
-	buyCard(players[0], powerPlants[16]);
+	////*************************test check resources*************************
+	////coal: 3
+	//players[0].setCoalNum(3);
+	//players[0].setPowerPlant(powerPlants[12], 0);
+	////oil: 3
+	//players[0].setOilNum(3);
+	//players[0].setPowerPlant(powerPlants[13], 1);
+	////uranium: 2
+	//players[0].setUraniumNum(2);
+	//players[0].setPowerPlant(powerPlants[14], 2);
+	//players[0].setNumOfPowerPlant(3);
+	////change to garbage: 2
+	//buyCard(players[0], powerPlants[16]);
 
-	//coal: 5
-	players[1].setCoalNum(5);
-	players[1].setPowerPlant(powerPlants[12], 0);
-	//oil: 5
-	players[1].setOilNum(5);
-	players[1].setPowerPlant(powerPlants[13], 1);
-	//hybrid: 2 (1 coal + 1 oil)
-	players[1].setPowerPlant(powerPlants[9], 2);
-	players[1].setNumOfPowerPlant(3);
-	//change to garbage: 2
-	buyCard(players[1], powerPlants[16]);
-	//*************************test check resources*************************
+	////coal: 5
+	//players[1].setCoalNum(5);
+	//players[1].setPowerPlant(powerPlants[12], 0);
+	////oil: 5
+	//players[1].setOilNum(5);
+	//players[1].setPowerPlant(powerPlants[13], 1);
+	////hybrid: 2 (1 coal + 1 oil)
+	//players[1].setPowerPlant(powerPlants[9], 2);
+	//players[1].setNumOfPowerPlant(3);
+	////change to garbage: 2
+	//buyCard(players[1], powerPlants[16]);
+	////*************************test check resources*************************
 
 
 	////***********************test set cards order in each players & test if a player have 4 cards*************************
