@@ -1,0 +1,159 @@
+PowerPlant currentPowerPlant;
+		vector<Player> playersNotPass(numberOfPlayers);
+		int choice;
+		for (int i = 0; i < numberOfPlayers; i++)
+		{
+			playersNotPass[i] = players[i];
+		}
+
+		
+		while (playersNotPass.size()>1) {
+			// auction process
+			int numOfPlayerPass = 0;
+			int position;
+			while (numOfPlayerPass < playersNotPass.size()- 1) {
+
+				for (int i = 0; i < playersNotPass.size(); i++) {
+					position = i;
+					cout <<  "Size: " << playersNotPass.size() << endl;//
+					if (playersNotPass[i].getAuction() == true) {
+
+						string name = playersNotPass[i].getName();
+						cout << name << endl;
+						cout << "It's your turn" << endl;
+						cout << "Pass the whole round -> Enter: 9" << endl;
+						cout << "Auction -> Enter: 1" << endl;
+						cout << "Pass -> Enter: 0" << endl;
+						cin >> status;
+						cout << endl;
+
+						while (status != 0 && status != 1 && status!= 9)
+						{
+							cout << "Please enter a correct number" << endl;
+							cout << "Auction -> Enter: 1" << endl;
+							cout << "Pass -> Enter: 0" << endl;
+							cin >> status;
+						}
+						if (status == 9) {
+							for (int k = 0; k < numberOfPlayers; k++) {
+								if (players[k].getName() == name) {
+									pass(players[k]);
+								}
+							}
+							playersNotPass.erase(playersNotPass.begin() + (position - 1));
+							//numOfPlayerPass++;
+							
+						}
+						else if (status == 0) {
+							pass(playersNotPass[i]);
+							for (int k = 0; k < numberOfPlayers; k++) {
+								if (players[k].getName() == name) {
+									pass(players[k]);
+								}
+							}
+							numOfPlayerPass++;
+						}
+						else {
+							//if no card is auction
+							if (currentPowerPlant.getNumber() == 0) {
+								//choose a card to auction
+								cout << "Enter the number of the card in the market to start auction: ";
+								cin >> choice;
+								//check if the card is exist
+								for (int i = 0; i < 4; i++) {
+									if (market[i].getNumber() == choice) {
+										currentPowerPlant = market[i];
+										indexOfCard = i;
+									}
+								}
+								while (currentPowerPlant.getNumber() == 0)
+								{
+
+									cout << "You cannot buy this card, please enter a new number: ";
+									cin >> choice;
+									for (int i = 0; i < 4; i++) {
+										if (market[i].getNumber() == choice) {
+											currentPowerPlant = market[i];
+											indexOfCard = i;
+										}
+									}
+								}
+							}
+							if (numOfPlayerPass < playersNotPass.size() - 1) {
+								auction(playersNotPass[i], market[indexOfCard]);
+								
+							}
+
+
+
+						}
+					}
+				}
+			}
+			playersNotPass.erase(playersNotPass.begin()+(position-1));
+			//set card and money
+			for (int i = 0; i < numberOfPlayers; i++) {
+				if (players[i].getAuction() == true) {
+					int num = players[i].getNumOfPowerPlant();
+					players[i].setPowerPlant(market[indexOfCard], num);
+					players[i].setMoney(players[i].getMoney() - market[indexOfCard].getNumber());
+					//print the information of the card
+					cout << "Congratulation, " << players[i].getName() << endl;
+					cout << "You get: " << endl;
+					cout << currentPowerPlant.toString() << endl;
+					cout << endl;
+
+					num = players[i].getNumOfPowerPlant() + 1;
+					players[i].setNumOfPowerPlant(num);
+
+				}
+			}
+		}
+
+
+
+
+
+
+
+
+
+				/*for (int i = 0; i < 4; i++) {
+					if (market[i].getNumber() == choice) {
+						currentPowerPlant = market[i];
+						indexOfCard = i;
+					}
+									}
+					while (currentPowerPlant.getNumber() == 0)
+					{
+
+						cout << "You cannot buy this card, please enter a new number: ";
+						cin >> choice;
+						for (int i = 0; i < 4; i++) {
+							if (market[i].getNumber() == choice) {
+								currentPowerPlant = market[i];
+								indexOfCard = i;
+							}
+						}
+				}*/
+
+
+
+
+
+
+
+					/*int num = players[i].getNumOfPowerPlant();
+					players[i].setPowerPlant(market[indexOfCard], num);
+					players[i].setMoney(players[i].getMoney() - market[indexOfCard].getNumber());*/
+
+					//print the information of the card
+					cout << "Congratulation, " << players[i].getName() << endl;
+					cout << "You get: " << endl;
+					cout << currentPowerPlant.toString() << endl;
+					cout << endl;
+
+					////change the number of cards the player owned
+					//num = players[i].getNumOfPowerPlant() + 1;
+					//players[i].setNumOfPowerPlant(num);
+					//players[i].setBought(true);
