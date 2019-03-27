@@ -100,6 +100,110 @@ void setCardOwnedByPlayer(Player &p) {
 	}
 }
 
+//return excess resources
+void checkReturnResources(Player &p) {
+	int coal_max;
+	int oil_max;
+	int garbage_max;
+	int uranium_max;
+	int hybrid_max;
+	bool isHybrid = false;
+	//calculate the total amount of each resource
+	for (int i = 0; i < p.getNumOfPowerPlant(); i++) {
+		if (p.getPowerPlant(i).getTypeName() == "coal") {
+			coal_max += p.getPowerPlant(i).getNeed() * 2;
+		}
+		if (p.getPowerPlant(i).getTypeName() == "oil") {
+			oil_max += p.getPowerPlant(i).getNeed() * 2;
+		}
+		if (p.getPowerPlant(i).getTypeName() == "garbage") {
+			garbage_max += p.getPowerPlant(i).getNeed() * 2;
+		}
+		if (p.getPowerPlant(i).getTypeName() == "uranium") {
+			uranium_max += p.getPowerPlant(i).getNeed() * 2;
+		}
+		if (p.getPowerPlant(i).getTypeName() == "hybrid") {
+			isHybrid = true;
+			hybrid_max += p.getPowerPlant(i).getNeed() * 2;
+		}
+	}
+	int coalOilHybrid_max = coal_max + oil_max + hybrid_max;
+	//calculate the maximum resources a player can hold
+	int coal_player = p.getCoalNum();
+	int oil_player = p.getOilNum();
+	int garbage_player = p.getGarbageNum();
+	int uranium_player = p.getUraniumNum();
+	int coalOilHybrid_player = coal_player + oil_player;
+
+	if (isHybrid==true) {
+		int excess_coal = coal_player - coal_max;
+		int excess_oil = oil_player - oil_max;
+		if (excess_coal + excess_oil > hybrid_max) {
+			if (excess_coal > 0 && excess_oil <= 0) {
+				if (coal_player-(coal_max+hybrid_max > 0)) {
+					cout << "Excess and return " << coal_player - (coal_max + hybrid_max) << " coal" << endl;
+					p.setCoalNum(coal_max);
+				}
+
+			}
+			else if (excess_oil > 0 && excess_coal <= 0) {
+				if (oil_player - (oil_max + hybrid_max) > 0) {
+					cout << "Excess and return " << oil_player - (oil_max + hybrid_max) << " oil" << endl;
+					p.setOilNum(oil_max);
+				}
+			}
+			else {                                                      //excess_coal > 0 && excess_oil > 0
+				int keep;
+				int leftHybridSpace;
+				cout << "Excess " << excess_coal << " coal, and you have " << hybrid_max << " hybrid space" << endl;
+				cout << "The coal resources do you want to keep: ";
+				cin >> keep;
+				while (keep < 0 || keep > hybrid_max) {
+					cout << "The number you enter is exceed, please enter a valid number: ";
+					cin >> keep;
+				}
+				cout << "Excess and return " << excess_coal-keep << " coal" << endl;
+				p.setCoalNum(coal_max+keep);
+				leftHybridSpace = hybrid_max - keep;
+				if (excess_oil - leftHybridSpace > 0) {
+					cout << "Excess and return " << excess_oil - leftHybridSpace << " coal" << endl;
+					p.setOilNum(oil_max+leftHybridSpace);
+				}
+			}
+			if (garbage_player > garbage_max) {
+				cout << "Excess and return " << garbage_player - garbage_max << " garbage" << endl;
+				p.setGarbageNum(garbage_max);
+			}
+			if (uranium_player > uranium_max) {
+				cout << "Excess and return " << uranium_player - uranium_max << " uranium" << endl;
+				p.setUraniumNum(uranium_max);
+			}
+		}
+	}
+	else {
+		if (coal_player > coal_max) {
+			cout << "Excess and return " << coal_player - coal_max << " coal" << endl;
+			p.setCoalNum(coal_max);
+		}
+		if (oil_player > oil_max) {
+			cout << "Excess and return " << oil_player - oil_max << " coal" << endl;
+			p.setOilNum(oil_max);
+		}
+		if (garbage_player > garbage_max) {
+			cout << "Excess and return " << garbage_player - garbage_max << " garbage" << endl;
+			p.setGarbageNum(garbage_max);
+		}
+		if (uranium_player > uranium_max) {
+			cout << "Excess and return " << uranium_player - uranium_max << " uranium" << endl;
+			p.setUraniumNum(uranium_max);
+		}
+	}
+	
+
+	
+
+}
+
 //check if the cards owned by players over 4
 void buyCard(Player &p, PowerPlant card) {
 	int num = p.getNumOfPowerPlant();
