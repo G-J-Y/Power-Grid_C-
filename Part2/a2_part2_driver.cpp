@@ -1,11 +1,7 @@
-//#include "House.h"
-#include "SummaryCard.h"
-//#include "Money.h"
-#include "Resources.h"
 #include "PowerPlant.h"
+#include "Resources.h"
+#include "mapLoader.h"
 #include "Player.h"
-//#include "map.h"
-//#include "mapLoader.h"
 #include <time.h>
 #include <vector>
 #include <iostream>
