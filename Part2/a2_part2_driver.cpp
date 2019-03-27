@@ -65,7 +65,7 @@ void setPlayerOrder(Player p[], int n) {
 	}
 }
 
-//every time when a new card put into the market, set a new order
+//every time a new card put into the market, set a new order
 void setMarketOrder(vector<PowerPlant> &p) {
 	PowerPlant temp;
 	int cardPrice1;
@@ -80,6 +80,73 @@ void setMarketOrder(vector<PowerPlant> &p) {
 
 		}
 	}
+}
+
+//every time players buy a new card, set the order of card owned by player
+void setCardOwnedByPlayer(Player &p) {
+	PowerPlant big;
+	PowerPlant small;
+	
+	for (int i = 1; i < p.getNumOfPowerPlant(); i++) {
+		for (int j = p.getNumOfPowerPlant() - 1; j > i - 1; j--) {
+			if (p.getPowerPlant(j).getNumber() > p.getPowerPlant(j - 1).getNumber()) {
+				big = p.getPowerPlant(j);
+				small = p.getPowerPlant(j - 1);
+				p.setPowerPlant(big, j-1);
+				p.setPowerPlant(small, j);
+			}
+
+		}
+	}
+}
+
+//check if the cards owned by players over 4
+void buyCard(Player p, PowerPlant card) {
+	int num = p.getNumOfPowerPlant();
+	
+	if (num >= 3) {
+		int cardNumber;
+		bool success = false;
+		cout << p.getName() << ", The maximum number of cards of players is 3, now you own: " << endl;
+		for (int i = 0; i < num; i++) {
+			cout << p.getPowerPlant(i).toString() << endl;
+		}
+		cout << endl;
+		cout << "Please enter the number of the card you want to switch: ";
+		cin >> cardNumber;
+		do {
+			for (int j = 0; j < num; j++) {
+				if (p.getPowerPlant(j).getNumber() == cardNumber) {
+					success = true;
+
+					//switch
+					p.setPowerPlant(card, j);
+					setCardOwnedByPlayer(p);
+					cout << "Success! Now you own: " << endl;
+					p.setMoney(p.getMoney() - card.getNumber());
+
+					//print
+					for (int i = 0; i < num; i++) {
+						cout << p.getPowerPlant(i).toString() << endl;
+					}
+					cout << endl;
+				}
+			}
+			if (success == false) {
+				cout << "You don't have this card please enter a correct number: ";
+				cin >> cardNumber;
+			}
+		} while (success==false);
+
+		
+	}
+	else {
+		p.setPowerPlant(card, num);
+		p.setMoney(p.getMoney() - card.getNumber());
+		num = num + 1;
+		p.setNumOfPowerPlant(num);
+	}
+	
 }
 
 //check if no one buy card in this turn
@@ -99,9 +166,8 @@ bool checkNoOneBuyCard(Player p[]) {
 }
 
 //if draw step3 card
-void changeMarketToStep3(vector<PowerPlant> p, int index) {
-	step = 3;
-	p.erase(p.begin() + index - 1);
+void changeMarketToStep3(vector<PowerPlant> &p) {
+	p.pop_back();
 	p.erase(p.begin());
 }
 
@@ -277,7 +343,7 @@ int main() {
 	powerPlants[39] = PowerPlant(44, 0, PowerPlant::eco, 5);
 	powerPlants[40] = PowerPlant(46, 3, PowerPlant::hybrid, 7);
 	powerPlants[41] = PowerPlant(50, 0, PowerPlant::hybrid, 6);
-	powerPlants[42] = PowerPlant(0, 0, PowerPlant::step3, 0);
+	powerPlants[42] = PowerPlant(99, 0, PowerPlant::step3, 0);
 
 	//give a random order in the first turn
 	if (turn == 1) {
@@ -289,6 +355,36 @@ int main() {
 			cout << endl;
 		}
 	}
+
+
+	//test set cards order in each players 
+	for (int i = 0; i < numberOfPlayers; i++) {
+		int numOfCards = players[i].getNumOfPowerPlant();
+		while (numOfCards < 3) {
+			players[i].setPowerPlant(powerPlants.front(), numOfCards);
+			powerPlants.erase(powerPlants.begin());
+			numOfCards++;
+			players[i].setNumOfPowerPlant(numOfCards);
+		}
+		setCardOwnedByPlayer(players[i]);
+	}
+	for (int i = 0; i < numberOfPlayers; i++) {
+		cout << players[i].getName() << endl;
+		cout << players[i].toString() << endl;
+		cout << endl;
+	}
+	cout << endl;
+	setPlayerOrder(players, numberOfPlayers);
+	cout << "New order of the players " << endl;
+	for (int i = 0; i < numberOfPlayers; i++) {
+		cout << players[i].getName() << endl;
+		cout << players[i].toString() << endl;
+		cout << endl;
+	}
+	cout << endl;
+
+	//test if a player have 4 cards
+	buyCard(players[0], powerPlants[20]);
 
 
 
@@ -354,8 +450,6 @@ int main() {
 			int choice;
 			//int indexOfCard;
 
-
-
 			// auction process
 			int numOfPlayerPass = 0;
 			while (numOfPlayerPass < playerLeft - 1)
@@ -374,8 +468,6 @@ int main() {
 
 							cout << players[i].getName() << endl;
 							cout << "It's your turn" << endl;
-
-
 
 							//who's turn right now
 							/*cout << players[i].getName() << endl;
@@ -406,7 +498,7 @@ int main() {
 								numOfPlayerPass++;
 							}
 							else {
-				
+								
 								//if no card is auction
 								if (currentPowerPlant.getNumber() == 0) {
 									//choose a card to auction
@@ -558,7 +650,6 @@ int main() {
 	//when turn > 1
 	else {
 		int playerLeft = numberOfPlayers;
-		PowerPlant currentPowerPlant;
 
 		while (playerLeft > 1)
 		{
@@ -566,10 +657,10 @@ int main() {
 			//int indexOfCard;
 
 			//reset the status to true
-			for (int i = 0; i < numberOfPlayers; i++) {
+			/*for (int i = 0; i < numberOfPlayers; i++) {
 				players[i].setAuction(true);
 			}
-
+*/
 			// auction process
 			int numOfPlayerPass = 0;
 
@@ -620,33 +711,14 @@ int main() {
 
 							}
 							else {
-								cout << "Test: " << currentPowerPlant.getNumber() << endl;             //test
+								
 								if (currentPowerPlant.getNumber() == 0) {
 									//if no card is auction, choose a card to start auction
 									cout << "Enter the number of the card in the market to start auction: ";
 									cin >> choice;
 									//check if the card is exist
-
 									abilityOfPurchase(market, choice);
 
-									/*for (int i = 0; i < 4; i++) {
-										if (market[i].getNumber() == choice) {
-											currentPowerPlant = market[i];
-											indexOfCard = i;
-										}
-									}
-									while (currentPowerPlant.getNumber() == 0)
-									{
-
-										cout << "You cannot buy this card, please enter a new number: ";
-										cin >> choice;
-										for (int i = 0; i < 4; i++) {
-											if (market[i].getNumber() == choice) {
-												currentPowerPlant = market[i];
-												indexOfCard = i;
-											}
-										}
-									}*/
 								}
 
 								if (numOfPlayerPass < playerLeft - 1) {
@@ -674,7 +746,7 @@ int main() {
 					cout << "You get: " << endl;
 					cout << currentPowerPlant.toString() << endl;
 					cout << endl;
-
+					//change the number of cards the player owned
 					num = players[i].getNumOfPowerPlant() + 1;
 					players[i].setNumOfPowerPlant(num);
 					players[i].setBought(true);
@@ -682,19 +754,33 @@ int main() {
 
 					//draw a new plant card, put it in the market and change the order
 					market[indexOfCard] = powerPlants.front();
-					powerPlants.erase(powerPlants.begin());
-					setMarketOrder(market);
-
-					////reset the status to true
-					//for (int i = 0; i < numberOfPlayers; i++) {
-					//	players[i].setAuction(true);
+					if (powerPlants.front().getTypeName() == "step3") {
+						step = 3;
+						setMarketOrder(market);
+						changeMarketToStep3(market);
+						powerPlants.erase(powerPlants.begin());
+					}
+					else {
+						powerPlants.erase(powerPlants.begin());
+						setMarketOrder(market);
+					}
+					
+					//**************check step3 process****************
+					//changeMarketToStep3(market);
+					//cout << "------------------------------Market (Updated)------------------------------" << endl;//test
+					//for (int i = 0; i < market.size(); i++) {
+					//	cout << market[i].toString() << endl;
 					//}
-
-			
+					cout << endl;
 
 				}
 
 			}
+			//reset the status to true
+			for (int i = 0; i < numberOfPlayers; i++) {
+				players[i].setAuction(true);
+			}
+
 			//reset auction price and auction card
 			currentPowerPlant.setNumber(0);
 			currentAuctionPrice = 0;
@@ -749,24 +835,8 @@ int main() {
 					cout << "Enter the number of the card in the market to start auction: ";
 					cin >> choice;
 					//check if the card is exist
-					for (int i = 0; i < 4; i++) {
-						if (market[i].getNumber() == choice) {
-							currentPowerPlant = market[i];
-							indexOfCard = i;
-						}
-					}
-					while (currentPowerPlant.getNumber() == 0)
-					{
+					abilityOfPurchase(market, choice);
 
-						cout << "You cannot buy this card, please enter a new number: ";
-						cin >> choice;
-						for (int i = 0; i < 4; i++) {
-							if (market[i].getNumber() == choice) {
-								currentPowerPlant = market[i];
-								indexOfCard = i;
-							}
-						}
-					}
 				}
 				auction(players[who], market[indexOfCard]);
 				//set card and money
@@ -785,8 +855,21 @@ int main() {
 
 				//draw a new plant card, put it in the market and change the order
 				market[indexOfCard] = powerPlants.front();
-				powerPlants.erase(powerPlants.begin());
-				setMarketOrder(market);
+				if (powerPlants.front().getTypeName() == "step3") {
+					step = 3;
+					setMarketOrder(market);
+					changeMarketToStep3(market);
+					powerPlants.erase(powerPlants.begin());
+				}
+				else {
+					powerPlants.erase(powerPlants.begin());
+					setMarketOrder(market);
+				}
+
+				//reset the status to true
+				for (int i = 0; i < numberOfPlayers; i++) {
+					players[i].setAuction(true);
+				}
 
 				//reset auction price and auction card
 				currentPowerPlant.setNumber(0);
@@ -822,6 +905,9 @@ int main() {
 		}
 		cout << endl;
 	}
+
+
+	
 
 	// set the order of the players at the end of each turn
 	setPlayerOrder(players, numberOfPlayers);
