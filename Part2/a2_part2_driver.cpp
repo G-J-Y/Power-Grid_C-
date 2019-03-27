@@ -102,11 +102,11 @@ void setCardOwnedByPlayer(Player &p) {
 
 //return excess resources
 void checkReturnResources(Player &p) {
-	int coal_max;
-	int oil_max;
-	int garbage_max;
-	int uranium_max;
-	int hybrid_max;
+	int coal_max = 0;
+	int oil_max = 0;
+	int garbage_max = 0;
+	int uranium_max = 0;
+	int hybrid_max= 0;
 	bool isHybrid = false;
 	//calculate the total amount of each resource
 	for (int i = 0; i < p.getNumOfPowerPlant(); i++) {
@@ -186,7 +186,7 @@ void checkReturnResources(Player &p) {
 			p.setCoalNum(coal_max);
 		}
 		if (oil_player > oil_max) {
-			cout << "Excess and return " << oil_player - oil_max << " coal" << endl;
+			cout << "Excess and return " << oil_player - oil_max << " oil" << endl;
 			p.setOilNum(oil_max);
 		}
 		if (garbage_player > garbage_max) {
@@ -216,6 +216,9 @@ void buyCard(Player &p, PowerPlant card) {
 			cout << p.getPowerPlant(i).toString() << endl;
 		}
 		cout << endl;
+		cout << "The new card you bought: " << endl;
+		cout << card.toString() << endl;
+		cout << endl;
 		cout << "Please enter the number of the card you want to switch: ";
 		cin >> cardNumber;
 		do {
@@ -233,6 +236,10 @@ void buyCard(Player &p, PowerPlant card) {
 					for (int i = 0; i < num; i++) {
 						cout << p.getPowerPlant(i).toString() << endl;
 					}
+					cout << endl;
+
+					//check resouces method
+					checkReturnResources(p);
 					cout << endl;
 				}
 			}
@@ -460,6 +467,33 @@ int main() {
 			cout << endl;
 		}
 	}
+
+	//*************************test check resources*************************
+	//coal: 3
+	players[0].setCoalNum(3);
+	players[0].setPowerPlant(powerPlants[12], 0);
+	//oil: 3
+	players[0].setOilNum(3);
+	players[0].setPowerPlant(powerPlants[13], 1);
+	//uranium: 2
+	players[0].setUraniumNum(2);
+	players[0].setPowerPlant(powerPlants[14], 2);
+	players[0].setNumOfPowerPlant(3);
+	//change to garbage: 2
+	buyCard(players[0], powerPlants[16]);
+
+	//coal: 5
+	players[1].setCoalNum(5);
+	players[1].setPowerPlant(powerPlants[12], 0);
+	//oil: 5
+	players[1].setOilNum(5);
+	players[1].setPowerPlant(powerPlants[13], 1);
+	//hybrid: 2 (1 coal + 1 oil)
+	players[1].setPowerPlant(powerPlants[9], 2);
+	players[1].setNumOfPowerPlant(3);
+	//change to garbage: 2
+	buyCard(players[1], powerPlants[16]);
+	//*************************test check resources*************************
 
 
 	////***********************test set cards order in each players & test if a player have 4 cards*************************
@@ -812,7 +846,7 @@ int main() {
 								players[i].setRoundStatus(false);
 								pass(players[i]);
 								numOfPlayerPass++;
-								//playerLeft--;
+								playerLeft--;
 
 							}
 							else {
@@ -838,7 +872,7 @@ int main() {
 				}
 			}
 			//the number of player who doesn't buy the card
-			playerLeft--;
+			//playerLeft--;
 			//who buy this card
 			for (int i = 0; i < numberOfPlayers; i++) {
 				if (players[i].getAuction() == true && currentPowerPlant.getNumber() != 0) {     
@@ -850,6 +884,8 @@ int main() {
 					cout << "You get: " << endl;
 					cout << currentPowerPlant.toString() << endl;
 					cout << endl;
+
+					playerLeft--;
 
 					//draw a new plant card, put it in the market and change the order
 					market[indexOfCard] = powerPlants.front();
@@ -902,77 +938,79 @@ int main() {
 			for (int i = 0; i < numberOfPlayers; i++) {
 				if (players[i].getBought() == false && players[i].getRoundStatus() == true) {
 					who = i;
+					//who's turn right now
+					cout << players[who].getName() << endl;
+					cout << "You are the last player" << endl;
+					cout << "Pass the whole round -> Enter: 9" << endl;
+					cout << "Auction -> Enter: 1" << endl;
+					cin >> status;
+					cout << endl;
+
+					while (status != 1 && status != 9)
+					{
+						cout << "Please enter a correct number" << endl;
+						cout << "Pass the whole round -> Enter: 9" << endl;
+						cout << "Auction -> Enter: 1" << endl;
+						cout << "Pass -> Enter: 0" << endl;
+						cin >> status;
+					}
+
+					if (status == 9) {
+						players[who].setRoundStatus(false);
+						pass(players[who]);
+						playerLeft--;
+
+					}
+					else {
+
+						if (currentPowerPlant.getNumber() == 0) {
+							//choose a card to auction
+							cout << "Enter the number of the card in the market to start auction: ";
+							cin >> choice;
+							//check if the card is exist
+							abilityOfPurchase(market, choice);
+
+						}
+						auction(players[who], market[indexOfCard]);
+
+						buyCard(players[who], market[indexOfCard]);
+
+						//print the information of the card
+						cout << "Congratulation, " << players[who].getName() << endl;
+						cout << "You get: " << endl;
+						cout << currentPowerPlant.toString() << endl;
+						cout << endl;
+
+						//draw a new plant card, put it in the market and change the order
+						market[indexOfCard] = powerPlants.front();
+						if (powerPlants.front().getTypeName() == "step3") {
+							step = 3;
+							setMarketOrder(market);
+							changeMarketToStep3(market);
+							powerPlants.erase(powerPlants.begin());
+						}
+						else {
+							powerPlants.erase(powerPlants.begin());
+							setMarketOrder(market);
+						}
+
+						//reset the status to true
+						for (int i = 0; i < numberOfPlayers; i++) {
+							players[i].setAuction(true);
+						}
+
+						//reset auction price and auction card
+						currentPowerPlant.setNumber(0);
+						currentAuctionPrice = 0;
+						//numOfPlayerPass = 0;
+						indexOfCard = NULL;
+
+					}
+
+
 				}
 			}
-			//who's turn right now
-			cout << players[who].getName() << endl;
-			cout << "You are the last player" << endl;
-			cout << "Pass the whole round -> Enter: 9" << endl;
-			cout << "Auction -> Enter: 1" << endl;
-			cin >> status;
-			cout << endl;
-
-			while (status != 1 && status != 9)
-			{
-				cout << "Please enter a correct number" << endl;
-				cout << "Pass the whole round -> Enter: 9" << endl;
-				cout << "Auction -> Enter: 1" << endl;
-				cout << "Pass -> Enter: 0" << endl;
-				cin >> status;
-			}
-
-			if (status == 9) {
-				players[who].setRoundStatus(false);
-				pass(players[who]);
-				playerLeft--;
-
-			}
-			else {
-
-				if (currentPowerPlant.getNumber() == 0) {
-					//choose a card to auction
-					cout << "Enter the number of the card in the market to start auction: ";
-					cin >> choice;
-					//check if the card is exist
-					abilityOfPurchase(market, choice);
-
-				}
-				auction(players[who], market[indexOfCard]);
-
-				buyCard(players[who], market[indexOfCard]);
-
-				//print the information of the card
-				cout << "Congratulation, " << players[who].getName() << endl;
-				cout << "You get: " << endl;
-				cout << currentPowerPlant.toString() << endl;
-				cout << endl;
-
-				//draw a new plant card, put it in the market and change the order
-				market[indexOfCard] = powerPlants.front();
-				if (powerPlants.front().getTypeName() == "step3") {
-					step = 3;
-					setMarketOrder(market);
-					changeMarketToStep3(market);
-					powerPlants.erase(powerPlants.begin());
-				}
-				else {
-					powerPlants.erase(powerPlants.begin());
-					setMarketOrder(market);
-				}
-
-				//reset the status to true
-				for (int i = 0; i < numberOfPlayers; i++) {
-					players[i].setAuction(true);
-				}
-
-				//reset auction price and auction card
-				currentPowerPlant.setNumber(0);
-				currentAuctionPrice = 0;
-				//numOfPlayerPass = 0;
-				indexOfCard = NULL;
-
-			}
-
+			
 		}
 
 		//reset the Bought status to false
