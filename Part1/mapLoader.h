@@ -48,6 +48,8 @@ public:
 	void setOwners(string owner1) {
 		owners.push_back(owner1);
 	}
+	
+	~CityNode(); //destructor
 
 	//must have forward declaration "class Graph;" to let the following work
 	//the follow contain "Graph", which has not been declared yet without forward declaration
@@ -77,6 +79,10 @@ public:
 	
 	CityNode* getHead() { return head; }
 	CityNode* getBase() { return base; }
+
+	~AdjList(); //destructor
+
+
 	//must have forward declaration "class Graph;" to let the following work
 	friend class Graph;
 	friend void createBaseCity(Graph *graph, const map<string, int> myMap);
