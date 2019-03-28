@@ -60,6 +60,10 @@ void Player::setAuction(bool b) {
 	auction = b;
 }
 //set method: change value
+void Player::setPrice(int p) {
+	auctionPrice = p;
+}
+//set method: change value
 void Player::setRoundStatus(bool b) {
 	roundStatus = b;
 }
@@ -148,7 +152,7 @@ string Player::toString() {
 
 void Player::printPlayerPossession(Player* players, int n){
 	for(int i = 0; i<n;i++){
-    cout << players[i].toString() << endl;
+		cout << players[i].toString() << endl;
 	}
 }
 

@@ -46,6 +46,7 @@ public:
 	void setGarbageNum(int);
 	void setUraniumNum(int);
 	void setAuction(bool);
+	void setPrice(int p);
 	void setName(string);
     void setRoundStatus(bool);
     void setBought(bool);
@@ -84,10 +85,11 @@ public:
 	static void printPlayerPossession(Player*, int);
 
 	void buyResources(Resources*res);
-	void building(Graph* graph, int &step,int numOfPlayer);
+	bool building(Graph* graph, int &step,int numOfPlayer, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants);
 
 };
 
+bool adjustMarket(int &step, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants);
 #endif // !PLAYER_H__H_
 #pragma once
 
