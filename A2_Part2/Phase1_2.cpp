@@ -152,7 +152,7 @@ void checkReturnResources(Player &p) {
                 p.setCoalNum(coal_max + keep);
                 leftHybridSpace = hybrid_max - keep;
                 if (excess_oil - leftHybridSpace > 0) {
-                    cout << "Excess and return " << excess_oil - leftHybridSpace << " coal" << endl;
+                    cout << "Excess and return " << excess_oil - leftHybridSpace << " oil" << endl;
                     p.setOilNum(oil_max + leftHybridSpace);
                 }
             }
@@ -244,7 +244,7 @@ void buyCard(Player &p, PowerPlant card) {
 }
 
 //check if no one buy card in this turn
-bool checkNoOneBuyCard(Player p[]) {
+bool checkNoOneBuyCard(Player p[],int numberOfPlayers) {
     int numOfPassRound = 0;
     for (int i = 0; i < numberOfPlayers; i++) {
         if (p[i].getRoundStatus() == false) {
@@ -368,7 +368,7 @@ void auction(Player &p, PowerPlant n) {
 }
 
 
-void auctionPhase(Player *players, vector<PowerPlant> &powerPlants, vector<PowerPlant> &market, int numberOfPlayers) {
+void auctionPhase(Player players[], vector<PowerPlant> &powerPlants, vector<PowerPlant> &market, int numberOfPlayers) {   //*player
     //start the auction, status: pass(0) || auction(1)
     int status;
 
@@ -626,6 +626,20 @@ void auctionPhase(Player *players, vector<PowerPlant> &powerPlants, vector<Power
                                     }
                                 } while (status == 0);
                             }
+							if (currentPowerPlant.getNumber() != 0 && status == 9) {
+								do {
+									cout
+										<< "This is the process of auction.You cannot pass the whole round, please enter 0 to pass auction: ";
+									cin >> status;
+									while (status != 0 && status != 1 && status != 9) {
+										cout << "Please enter a correct number" << endl;
+										cout << "Pass the whole round -> Enter: 9" << endl;
+										cout << "Auction -> Enter: 1" << endl;
+										cin >> status;
+									}
+								} while (status == 9);
+							}
+
                             if (status == 0) {
                                 pass(players[i]);
                                 numOfPlayerPass++;
@@ -685,13 +699,13 @@ void auctionPhase(Player *players, vector<PowerPlant> &powerPlants, vector<Power
                         setMarketOrder(market);
                     }
 
-                    //**************check step3 process****************
+                    ////**************check step3 process****************
                     //changeMarketToStep3(market);
-                    //cout << "------------------------------Market (Updated)------------------------------" << endl;//test
+                    //cout << "------------------------------Market (Step 3)------------------------------" << endl;//test
                     //for (int i = 0; i < market.size(); i++) {
                     //	cout << market[i].toString() << endl;
                     //}
-                    cout << endl;
+                    //cout << endl;
 
                 }
 

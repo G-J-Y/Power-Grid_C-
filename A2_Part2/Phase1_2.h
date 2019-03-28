@@ -12,7 +12,7 @@
 //static variable
 static int currentAuctionPrice = 0;
 static int numberOfPlayers;
-static int turn = 1;
+static int turn = 2;
 static int step = 1;
 static int indexOfCard = 0 ;
 static PowerPlant currentPowerPlant;
@@ -30,7 +30,7 @@ void checkReturnResources(Player &p);
 
 void buyCard(Player &p, PowerPlant card);
 
-bool checkNoOneBuyCard(Player p[]);
+bool checkNoOneBuyCard(Player p[],int n);
 
 void changeMarketToStep3(vector<PowerPlant> &p);
 
@@ -40,7 +40,7 @@ void pass(Player &p);
 
 void auction(Player &p, PowerPlant n);
 
-void auctionPhase(Player *, vector<PowerPlant> &, vector<PowerPlant> &, int);
+void auctionPhase(Player p[], vector<PowerPlant> &, vector<PowerPlant> &, int numberOfPlayers);
 
 
 #endif // !PHASE1_2_H__H_

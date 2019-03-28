@@ -195,14 +195,14 @@ int main() {
 
 
     //auction process
-    auctionPhase(players, powerPlants, market, numberOfPlayers);
+    auctionPhase(players, powerPlants, market,numberOfPlayers);
 
 
     cout << "Phase finish" << endl;
     cout << endl;
 
     //if no one buy card, delete the smallest one
-    if (checkNoOneBuyCard(players)) {
+    if (checkNoOneBuyCard(players,numberOfPlayers)) {
         cout << "No one buy power plant card in this turn" << endl;
         cout << "------------------------------Market (Updated)------------------------------" << endl;
         market[0] = powerPlants.front();
