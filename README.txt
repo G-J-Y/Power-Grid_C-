@@ -1,6 +1,6 @@
 The 4 parts of assignment 2 are in their corresponding folder.
-For example, for part 1, the corresponding folder is Comp345A1Part1(???).
-The src folder is where all source codes are and is for demo.
+For example, for part 1, the corresponding folder is A2_Part1.
+The src folder is where all source codes are and is for demo only.
  
 In this assignment, we experiment different ways to implement the main game loop. 
 Part 2: use several free functions in Phase1_2.cpp(determine Player Order and auction Power Plants); 
