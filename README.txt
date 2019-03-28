@@ -1,5 +1,5 @@
-The 4 parts of assignment 1 are in their corresponding folder.
-For example, for part 1, the corresponding folder is Comp345A1Part1.
+The 4 parts of assignment 2 are in their corresponding folder.
+For example, for part 1, the corresponding folder is Comp345A1Part1(???).
 The src folder is where all source codes are and is for demo.
  
 In this assignment, we experiment different ways to implement the main game loop. 
