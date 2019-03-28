@@ -56,6 +56,9 @@ CityNode* CityNode::operator=(const CityNode *cn) {
 	return this;
 }
 
+CityNode::~CityNode() {
+	delete next;
+}
 
 AdjList::AdjList() {
 	base = NULL;
@@ -97,6 +100,10 @@ AdjList& AdjList::operator=(const AdjList &al) {
 	return *this;
 }
 
+AdjList::~AdjList() {
+	delete head;
+	delete base;
+}
 
 Graph::Graph() {} 
 Graph::Graph(int theSize)
@@ -393,24 +400,12 @@ bool isConnected2(Graph* graph, int beginCityID) {
 
 
 void removeEdge(Graph* graph, int cityID) {	
-	CityNode* root;
-	CityNode* prev;
+	//CityNode* root;
+	//CityNode* prev;
 	for (int i = 0; i < graph->size; i++) {
 		if (graph->arr[i].base->getID() == cityID) {
 			//cout << cityID << " found in base " <<  endl;;
-			prev = graph->arr[i].head;
-			root = graph->arr[i].head;
-			graph->arr[i].head = NULL;  //disconnect the Adjlist head from all its node
-
-			//deal with the node in heap
-			while (root != NULL) {
-				root = root->getNext(); // move to next node
-				delete prev; //delete the node before root 
-				prev = root; //points to root again
-			}
-			delete root; //delete the last node
-			prev = NULL; //deal with dangling pointer
-			root = NULL;
+			graph->arr[i].head = NULL;  //disconnect the Adjlist head from all its node			
 		}	
 	}
 }
@@ -431,8 +426,7 @@ void removeEdge2(Graph* graph, int cityID) {
 		if (root != NULL && root->getID() == cityID) { //we add root != NULL because arr[i]could be an empty Adjlist
 										//because we might have already removed all city #i's adjacent cities in arr[i]
 			//cout << cityName << " found in node list head " <<  endl;
-			graph->arr[i].head = root->getNext();
-			delete root;
+			graph->arr[i].head = root->getNext();	
 			continue; //check next AdjList
 		}		
 		
@@ -448,16 +442,16 @@ void removeEdge2(Graph* graph, int cityID) {
 					//cout << cityID << " found in node list (not head) " <<  endl;
 					prev->next = root->next; //say we want to delete node A, 
 											 //this makes the node before A link to node after A					
-					root->next = NULL; //make node A link to NULL					
-					delete root; // delete node A
-					root = NULL; // deal with dangling pointer (can also end while loop)
+					root->next = NULL; //make node A link to NULL						
+					root = NULL; // to end while loop
 					
 				}
 				//else, check next node
 				if (root != NULL)
 					root = root->next;	
 				else 
-					break; //if root == NULL, it means cityName is deleted and dangling pointer is treated
+					break; //if root == NULL, it means target city node is removed 
+						   //or no city that needs to be removed is found
 				prev = prev->next;
 				
 			}
