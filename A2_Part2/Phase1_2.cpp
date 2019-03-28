@@ -517,17 +517,20 @@ void auctionPhase(Player *players, vector<PowerPlant> &powerPlants, vector<Power
 
             auction(players[who], market[indexOfCard]);
             //set card and money
-            int num = players[who].getNumOfPowerPlant();
+
+			buyCard(players[who], market[indexOfCard]);
+          /*  int num = players[who].getNumOfPowerPlant();
             players[who].setPowerPlant(market[indexOfCard], num);
-            players[who].setMoney(players[who].getMoney() - market[indexOfCard].getNumber());
+            players[who].setMoney(players[who].getMoney() - market[indexOfCard].getNumber());*/
+
             //print the information of the card
             cout << "Congratulation, " << players[who].getName() << endl;
             cout << "You get: " << endl;
             cout << currentPowerPlant.toString() << endl;
             cout << endl;
 
-            num = players[who].getNumOfPowerPlant() + 1;
-            players[who].setNumOfPowerPlant(num);
+            /*num = players[who].getNumOfPowerPlant() + 1;
+            players[who].setNumOfPowerPlant(num);*/
 
             //draw a new plant card, put it in the market and change the order
             market[indexOfCard] = powerPlants.front();
