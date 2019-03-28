@@ -156,7 +156,7 @@ int main() {
 	bool goToStep3 = false;
 	for (int i = numOfPlayer - 1; i >= 0; i--) 
 	{
-		bool result = players[i].building(&myGameMap, step, 6, market, powerPlants);
+		bool result = players[i].building(&myGameMap, step, numOfPlayer, market, powerPlants);
 		if (!goToStep3) 
 			goToStep3 = result;
 	}
