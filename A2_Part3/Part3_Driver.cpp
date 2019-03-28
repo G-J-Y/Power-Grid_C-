@@ -152,18 +152,19 @@ int main() {
 	//======================================================================
 	std::cout << "[INFO] PHASE4: Building" << std::endl;
 	int step = 1;
-	/*
-		bool goToStep3 = false;
-		for (int i = numOfPlayer - 1; i >= 0; i--) {
+	/**/
+	bool goToStep3 = false;
+	for (int i = numOfPlayer - 1; i >= 0; i--) 
+	{
 		bool result = players[i].building(&myGameMap, step, 6, market, powerPlants);
-		if (!goToStep3) {
+		if (!goToStep3) 
 			goToStep3 = result;
-		}
 	}
+	
 
 	//======================================================================
 	//just for testing in step 3
-	/**/
+	/*
 	
 	cout << "-----------------------------------------------" << endl;
 	cout << "Test case for step 3" << endl;

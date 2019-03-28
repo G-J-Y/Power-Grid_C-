@@ -46,6 +46,7 @@ public:
 	void setGarbageNum(int);
 	void setUraniumNum(int);
 	void setAuction(bool);
+	void setPrice(int p);
 	void setName(string);
     void setRoundStatus(bool);
     void setBought(bool);

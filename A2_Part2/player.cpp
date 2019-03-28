@@ -60,6 +60,10 @@ void Player::setAuction(bool b) {
 	auction = b;
 }
 //set method: change value
+void Player::setPrice(int p) {
+	auctionPrice = p;
+}
+//set method: change value
 void Player::setRoundStatus(bool b) {
 	roundStatus = b;
 }
@@ -136,7 +140,7 @@ string Player::getName() const{
 // print the data of players
 string Player::toString() {
 	string print = "Overview card for Player: " + name + "\n->Money: " + to_string(money);
-	print += "coal: " + to_string(coalNum) + " | oil: " + to_string(oilNum) + "  | garbage: " + to_string(garbageNum) + " | uranium: " + to_string(uraniumNum) + "\n";
+	print += " | coal: " + to_string(coalNum) + " | oil: " + to_string(oilNum) + "  | garbage: " + to_string(garbageNum) + " | uranium: " + to_string(uraniumNum) + "\n";
 	print += "->Num of City: " + to_string(numOfCity) + " | Num Of PoweredCity: " + to_string(numOfPoweredCities)+ "\n";
 	print += "->Cards:\n";
 	for (int i = 0; i < numOfPowerPlant; i++) {
@@ -148,7 +152,7 @@ string Player::toString() {
 
 void Player::printPlayerPossession(Player* players, int n){
 	for(int i = 0; i<n;i++){
-    cout << players[i].toString() << endl;
+		cout << players[i].toString() << endl;
 	}
 }
 
@@ -505,30 +509,36 @@ void Player::buyResources(Resources *res) {
 }
 
 
-void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
+bool Player::building(Graph* myGameMap, int &step, int numOfPlayer, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants) {
 
 	std::cout << std::endl;
 	printGraph(myGameMap);
 	std::cout << "[INFO]" << name << ", it's your turn!"<<std::endl;
-
+	bool goToStep3 = false;
 	while (true) {
 		//check the step
-		if (numOfPlayer ==2){
+		if (numOfPlayer == 2){
 			if (numOfCity ==10){
-				step =2;
-				std::cout <<"[INFO] It is STEP 2 now!!" <<std::endl;
+				if (step == 1) {
+					step = 2;
+					goToStep3 = adjustMarket(step, market, powerPlants);
+				}
 			}
 		}
 		if (numOfPlayer==3||numOfPlayer==4||numOfPlayer==5){
 			if(numOfCity==7){
-				step =2;
-				std::cout <<"[INFO] It is STEP 2 now!!" <<std::endl;
+				if (step == 1) {
+					step = 2;
+					goToStep3 = adjustMarket(step, market, powerPlants);
+				}
 			}
 		}
 		if (numOfPlayer==6){
 			if(numOfCity==6){
-				step =2;
-				std::cout <<"[INFO] It is STEP 2 now!!" <<std::endl;
+				if (step == 1) {
+					step = 2;
+					goToStep3 = adjustMarket(step, market, powerPlants);
+				}
 			}
 		}
 
@@ -543,7 +553,7 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 		}
 
 		vector<string> owners = myGameMap->getArr()[inputNum].getBase()->getOwners();
-		int size = owners.size();
+		size_t size = owners.size();
 
 
 		//check if the city is on the map
@@ -570,7 +580,7 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 		}
 		
 		//check if player has enough money
-		int price = myGameMap->getArr()[inputNum].getBase()->getPrice(size);
+		size_t price = myGameMap->getArr()[inputNum].getBase()->getPrice(size);
 		//add network price
 		price += myGameMap->lowestPathPrice(inputNum,name);
 		if (money < price){
@@ -587,6 +597,7 @@ void Player::building(Graph* myGameMap, int &step, int numOfPlayer) {
 	}
 	
 	printGraph(myGameMap);
+	return goToStep3;
 }
 
 
@@ -609,4 +620,27 @@ void Player::deGarbageNum(int g){
 }
 void Player::deUraniumNum(int u){
 	uraniumNum -= u;
+}
+
+bool adjustMarket(int &step, vector<PowerPlant> &market, vector<PowerPlant> &powerPlants) {
+	bool goToStep3 = false;
+	std::cout << "[INFO] It is STEP 2 now!!" << std::endl;
+	std::cout << "[INFO] Remove first card in the market!" << std::endl;
+	market.erase(market.begin());						//remove first card in market
+	std::cout << "[INFO] Add a new card to the market!" << std::endl;
+	if (powerPlants[0].getType() == PowerPlant::step3) {
+		std::cout << "[INFO] Find STEP 3 Card. Shuffle the deck." << std::endl;
+		std::cout << "[INFO] STEP 3 starts in phase 5!!" << std::endl;
+		powerPlants.erase(powerPlants.begin());
+		PowerPlant::shuffle(powerPlants);
+		bool goToStep3 = true;
+	}
+	else {
+		market.push_back(powerPlants[0]);
+		powerPlants.erase(powerPlants.begin());
+	}
+	
+	std::cout << "[INFO] Reorder the cards in the market!" << std::endl;
+	PowerPlant::setMarketOrder(market);					//reorder
+	return goToStep3;
 }
