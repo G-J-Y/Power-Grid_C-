@@ -12,7 +12,7 @@
 //static variable
 static int currentAuctionPrice = 0;
 static int numberOfPlayers;
-static int turn = 2;
+static int turn = 1;
 static int step = 1;
 static int indexOfCard = 0 ;
 static PowerPlant currentPowerPlant;

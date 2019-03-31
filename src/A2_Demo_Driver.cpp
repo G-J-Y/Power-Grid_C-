@@ -244,8 +244,8 @@ int main() {
 
 	//set a simple name for each player
 	for (int i = 0; i < numberOfPlayers; i++) {
-		string name = "Player" + to_string(i + 1);
-		players[i].setName(name);
+	string name = "Player" + to_string(i + 1);
+	players[i].setName(name);
 	}
 
 	//Create power plant cards
@@ -387,13 +387,13 @@ int main() {
 	//
 	cout << "------------------------------After shuffle------------------------------" << endl;
 	PowerPlant::shuffle(powerPlants);
-	//for (int i = 0; i < powerPlants.size(); i++) {
-	//   cout << powerPlants[i].toString() << endl;
-    //}
+	for (int i = 0; i < powerPlants.size(); i++) {
+		cout << powerPlants[i].toString() << endl;
+	}
 	cout << endl;
 
-	//Find cards: powerPlant 13 & step 3
-	if (turn == 1) {
+	//Find cards: powerPlant 13 & step 3, and because of the demo, it will be showed each turn
+	//if (turn == 1) {}
 		for (int i = 0; i < powerPlants.size(); i++) {
 			if (powerPlants[i].getNumber() == 13) {
 				PowerPlant temp1;
@@ -414,18 +414,17 @@ int main() {
 			cout << powerPlants[i].toString() << endl;
 		}
 		cout << endl;
-	}
+	
 
 
 	//auction process
 	auctionPhase(players, powerPlants, market, numberOfPlayers);
 
-
 	cout << "Phase finish" << endl;
 	cout << endl;
 
 	//if no one buy card, delete the smallest one
-	if (checkNoOneBuyCard(players)) {
+	if (checkNoOneBuyCard(players, numberOfPlayers)) {
 		cout << "No one buy power plant card in this turn" << endl;
 		cout << "------------------------------Market (Updated)------------------------------" << endl;
 		market[0] = powerPlants.front();
@@ -451,7 +450,7 @@ int main() {
 	turn++;
 	cout << endl;
 
-	delete [] players;
+	delete[] players;
 	system("pause");
 	return 0;
 
@@ -465,7 +464,7 @@ int main() {
 
 
 
-
+	/*
 
 	//Part 3: Game play: main game loop Phase 3 and 4
 	//Buying Resources and building

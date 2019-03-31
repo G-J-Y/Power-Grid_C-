@@ -631,6 +631,7 @@ void auctionPhase(Player players[], vector<PowerPlant> &powerPlants, vector<Powe
 									cout
 										<< "This is the process of auction.You cannot pass the whole round, please enter 0 to pass auction: ";
 									cin >> status;
+									cout << endl;
 									while (status != 0 && status != 1 && status != 9) {
 										cout << "Please enter a correct number" << endl;
 										cout << "Pass the whole round -> Enter: 9" << endl;
