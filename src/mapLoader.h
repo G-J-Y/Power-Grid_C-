@@ -146,7 +146,7 @@ private:
 
 class mapLoader {
 public:
-	int Load();
+	int Load(Graph& g, int nop);
 	//load map from text file 
 	//returns number of players
 };

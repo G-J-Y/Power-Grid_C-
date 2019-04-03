@@ -473,7 +473,7 @@ void removeArea(Graph* graph, int areaNo) {
 
 
 
-int mapLoader::Load() {
+int mapLoader::Load(Graph& g, int numOfplayer) {
 	cout << "Please input the name of the map file: \n";
 	string fileName;
 	cin >> fileName;
@@ -544,11 +544,11 @@ int mapLoader::Load() {
 	
 	
 
-	int numOfplayer;
+	//int numOfplayer;
 	int numToRemove; //how many areas to be removed
 	int areaToRemove; // which area to be removed
-	cout << "\nEnter the number of players (2-6): ";
-	cin >> numOfplayer;
+	//cout << "\nEnter the number of players (2-6): ";
+	//cin >> numOfplayer;
 	while (numOfplayer < 2 || numOfplayer > 6) {
 		cout << "Must be a number from 2-6. Enter again: ";
 		cin >> numOfplayer;
