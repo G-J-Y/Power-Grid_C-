@@ -179,6 +179,7 @@ void Game::phase1() {
 }
 
 void Game::phase3() {
+	std::cout << "[INFO] PHASE3: Buying Resources" << std::endl;
 	for (int i = numOfPlayer - 1; i >= 0; i--) {
 		std::cout << "[INFO] " << players[i].getName() << ", it's your turn now!" << std::endl;
 		std::cout << players[i].toString();
@@ -541,6 +542,7 @@ void Game::phase3() {
 }
 
 void Game::phase4() {
+	std::cout << "[INFO] PHASE4: Building" << std::endl;
 	bool goToStep3 = false;
 	for (int i = numOfPlayer - 1; i >= 0; i--)
 	{
