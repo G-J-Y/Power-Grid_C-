@@ -9,11 +9,154 @@ Game::Game(int numOfPlayer) {
 	step = 1;
 	turn = 1;
 	powerPlants = vector<PowerPlant> (43);
+	//graph = new Graph(42); //if not initialize here, there's no address for graph
+					   // myLoader.Load(graph, numOfPlayer) calls graph by reference, but graph has no address
 }
 
 void Game::loader() {
-	mapLoader myLoader;
-	myLoader.Load(graph, numOfPlayer);
+	//mapLoader myLoader;
+	//myLoader.Load(graph, numOfPlayer);	
+
+
+	//create game map
+	cout << "Please input the name of the map file: \n";
+	string fileName;
+	cin >> fileName;
+	ifstream inputStream;
+	inputStream.open(fileName);
+
+	if (inputStream.fail())
+	{
+		if (inputStream.fail())
+		{
+			cout << "Wrong format of map file!";
+			exit(1);
+		}
+	}
+
+	map<string, int> cityNameIDPair;
+	int cityID = 0;
+	string next;
+
+	inputStream >> next; //read the first string in the file
+	if (next != "[City]") //a map file should start with "[City]"
+	{
+		cout << "This is not a valid map file text!";
+		exit(1);
+	}
+
+	//read the first part of the file (city name list)
+	//stores them into map<string, int>
+	while (!inputStream.eof()) {
+		inputStream >> next;
+		if (next == "[Edge]")
+			break;
+		//cout << next << endl;
+		cityNameIDPair.insert(pair<string, int>(next, cityID));
+		cityID++;  //after storing the last city, the city size still increment once
+	}
+
+	//read the second part of the text
+	string firstCity;
+	string secondCity;
+	string distance;
+	int intDistance;
+	int size = cityID; //if there is 10 city, the cityID will be 10 now
+	Graph gameMap(size);
+	//gameMap = Graph(size);	
+	createBaseCity(&gameMap, cityNameIDPair);
+	printGraph(&gameMap);
+	cout << "2222\n";
+	/**/
+	while (!inputStream.eof()) {
+		inputStream >> firstCity >> secondCity >> distance;
+		//cout << firstCity << " " << secondCity << " " << distance << endl;
+		intDistance = std::stoi(distance); //cast string to int
+		addEdge(&gameMap, firstCity, secondCity, intDistance, cityNameIDPair);
+	}
+
+
+	printGraph(&gameMap);
+
+	if (isConnected(&gameMap))
+		cout << "The original map is a connected graph.\n";
+	else
+		cout << "The original map is not a connected graph.\n";
+
+	//Now will create a map for certain number of players
+	//2 players -- 3 regions
+	//3 players -- 3 regions
+	//4 players -- 4 regions
+	//5 players -- 5 regions
+	//6 players -- 6 regions //in game rule it's 6 players -- 5 regions	
+	//int numOfplayer;
+	int numToRemove; //how many areas to be removed
+	int areaToRemove; // which area to be removed
+	//cout << "\nEnter the number of players (2-6): ";
+	//cin >> numOfplayer;
+	while (numOfPlayer < 2 || numOfPlayer > 6) {
+		cout << "Must be a number from 2-6. Enter again: ";
+		cin >> numOfPlayer;
+	}
+
+	switch (numOfPlayer) {
+	case 2:
+	case 3:
+		numToRemove = 3;
+		break;
+	case 4:
+		numToRemove = 2;
+		break;
+	case 5:
+		numToRemove = 1;
+		break;
+	case 6:
+		numToRemove = 0;
+		break;
+	}
+	cout << "In this game, there will be " << numOfPlayer << " players.\n"
+		<< "You need to choose " << numToRemove << " area(s) you don't want (1 - 6).\n";
+
+	//Graph* copy;
+
+	while (true) {
+		graph = new Graph(gameMap);
+		for (int i = 0; i < numToRemove; i++) {
+			cout << "\nEnter the " << i << "th area you don't want: ";
+			cin >> areaToRemove;
+			removeArea(graph, areaToRemove);
+		}
+
+		cout << "\n----------------Map After Choosing Areas--------------------\n";
+		printGraph(graph);
+
+		int test = 0;
+		for (int i = 0; i < graph->getSize(); i++) {
+			if (graph->getArr()[i].getHead() == NULL)
+				test++;
+			else break;
+		}
+
+
+
+		cout << "The number of cities left in the map: " << graph->numOfCities() << endl;
+		if (isConnected2(graph, test)) {
+			cout << "\nAll areas in the map is connected. Game starts. Good Luck!!\n\n";
+			break;
+		}
+
+		else {
+			cout << "\nNot all areas in the map is connected!! \nPlease choose the area you don't want again. \n";
+			delete graph;
+		}
+	}
+
+	//tests whether the game map is created well. If yes, it should print the map
+	cout << "\n----------------Printing game map in Game::loader--------------- \n";
+	printGraph(graph);
+	cout << "----------------Finish printing in Game::loader---------------- \n\n";
+
+
 	//set Player's name
 
 	for (int i = 0; i < numOfPlayer; i++) {
@@ -99,6 +242,9 @@ void Game::loader() {
 }
 
 void Game::phase1() {
+	cout << "\n----------------Printing game map in Game::phase1--------------- \n";
+	printGraph(graph);
+	cout << "----------------Finish printing in Game::phase1---------------- \n\n";
 	//give a random order in the first turn
 	if (turn == 1) {
 		shufflePlayers(players, numOfPlayer);
@@ -179,6 +325,8 @@ void Game::phase1() {
 }
 
 void Game::phase3() {
+
+
 	std::cout << "[INFO] PHASE3: Buying Resources" << std::endl;
 	for (int i = numOfPlayer - 1; i >= 0; i--) {
 		std::cout << "[INFO] " << players[i].getName() << ", it's your turn now!" << std::endl;
@@ -540,7 +688,7 @@ void Game::phase3() {
 	
 	}
 }
-
+/**
 void Game::phase4() {
 	std::cout << "[INFO] PHASE4: Building" << std::endl;
 	bool goToStep3 = false;
@@ -635,5 +783,7 @@ void Game::phase4() {
 	if (goToStep3) {
 		step = 3;
 	}
+	
 
 }
+/**/

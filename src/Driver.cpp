@@ -6,7 +6,7 @@ int main() {
 	myGame.loader();
 	myGame.phase1();
 	myGame.phase3();
-	myGame.phase4();
+	//myGame.phase4();
 
 	system("pause");
 	return 0;

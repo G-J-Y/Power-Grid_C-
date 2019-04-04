@@ -1,10 +1,3 @@
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <list>
-#include <queue>
-#include <vector>
-#include <algorithm>
 #include "mapLoader.h"
 
 using std::cout;
@@ -132,6 +125,16 @@ Graph::~Graph() {
 	delete[] arr;
 }
 
+Graph& Graph::operator = (const Graph& g) {
+	size = g.size;
+	if (g.arr) { //make sure dynamic array arr in g exist
+		arr = new AdjList[size];
+		for (int i = 0; i < size; i++)
+			arr[i] = g.arr[i]; //uses overloaded operator = in AdjList class
+	}
+	return *this;
+}
+
 int Graph::numOfCities() {
 	int counter = 0;
 	for (int i = 0; i < size; i++)
@@ -248,13 +251,14 @@ void createBaseCity(Graph *graph, map<string, int> myMap) { //map cannot be cons
 	//link this node to the a base according to its ID
 	//e.g. if the ID is 0, then link this node to the base in arr[0], and so on	 
 	for (map<string, int>::iterator it = myMap.begin(); it != myMap.end(); it++) {
+		
 		name = it->first; //city name is the first of the pair <"Montreal", 0>, that is, "Montreal"
-		ID = myMap.at(name); // city ID is the corresponding integer of "Montreal", that is, 0
+		ID = it->second; // city ID is the corresponding integer of "Montreal", that is, 0
 		nptr = new CityNode(ID);// create a city node with ID = 0;
 		nptr->setName(name); // set the city name to "Montreal"
 		graph->arr[ID].base = nptr; // add it to arr[0] in dyanamic array in graph
-	}
-
+		
+	}	
 }
 
 void addEdge(Graph *graph, string firstCity, string secondCity, int distance, const map<string, int> myMap)
@@ -472,8 +476,8 @@ void removeArea(Graph* graph, int areaNo) {
 }
 
 
-
-int mapLoader::Load(Graph& g, int numOfplayer) {
+/*
+void mapLoader::Load(Graph* copy, int numOfplayer) {
 	cout << "Please input the name of the map file: \n";
 	string fileName;
 	cin >> fileName;
@@ -518,8 +522,11 @@ int mapLoader::Load(Graph& g, int numOfplayer) {
 	int intDistance;
 	int size = cityID; //if there is 10 city, the cityID will be 10 now
 	Graph gameMap(size);
+	//gameMap = Graph(size);	
 	createBaseCity(&gameMap, cityNameIDPair);
-
+	printGraph(&gameMap);
+	cout << "2222\n";
+	
 	while (!inputStream.eof()) {
 		inputStream >> firstCity >> secondCity >> distance;
 		//cout << firstCity << " " << secondCity << " " << distance << endl;
@@ -541,9 +548,6 @@ int mapLoader::Load(Graph& g, int numOfplayer) {
 	//4 players -- 4 regions
 	//5 players -- 5 regions
 	//6 players -- 6 regions //in game rule it's 6 players -- 5 regions	
-	
-	
-
 	//int numOfplayer;
 	int numToRemove; //how many areas to be removed
 	int areaToRemove; // which area to be removed
@@ -607,9 +611,9 @@ int mapLoader::Load(Graph& g, int numOfplayer) {
 	}
 
 
-
-	copy->~Graph();
+	
 	cout << "---------------Map Loading completed---------------\n\n\n";
-	return numOfplayer;
-
+	//return numOfplayer;
+	
 }  //end of Load() function
+/**/

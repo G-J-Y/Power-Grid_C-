@@ -14,7 +14,7 @@ private:
 	House house[132];
 	vector<PowerPlant> powerPlants;
 	vector<PowerPlant> market;
-	Graph graph;
+	Graph* graph;
 
 public:
 	Game();

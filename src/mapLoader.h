@@ -4,6 +4,13 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <list>
+#include <queue>
+#include <vector>
+#include <algorithm>
 //using namespace std;
 using std::string;
 using std::map;
@@ -121,6 +128,7 @@ public:
 	int getSize() { return size; }
 	int numOfCities(); //return the number of cities in the graph
 	AdjList* getArr() { return arr; };
+	Graph& operator = (const Graph& g);
 
 	set<int> findAdjCities(int baseID) const;
 	
@@ -146,7 +154,7 @@ private:
 
 class mapLoader {
 public:
-	int Load(Graph& g, int nop);
+	//void Load(Graph* copy, int numOfplayer);
 	//load map from text file 
 	//returns number of players
 };
