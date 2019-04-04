@@ -265,7 +265,7 @@ void changeMarketToStep3(vector<PowerPlant> &p) {
 }
 
 //check if a player can buy a card
-void abilityOfPurchase(vector<PowerPlant> m, int c) {
+void abilityOfPurchase(vector<PowerPlant> m, int c,int step) {
     if (step == 3) {
         for (int i = 0; i < m.size(); i++) {
             if (m[i].getNumber() == c) {
@@ -368,7 +368,7 @@ void auction(Player &p, PowerPlant n) {
 }
 
 
-void auctionPhase(Player players[], vector<PowerPlant> &powerPlants, vector<PowerPlant> &market, int numberOfPlayers) {   //*player
+void auctionPhase(Player players[], vector<PowerPlant> &powerPlants, vector<PowerPlant> &market, int numberOfPlayers, int step,int turn) {   //*player
     //start the auction, status: pass(0) || auction(1)
     int status;
 
@@ -428,12 +428,18 @@ void auctionPhase(Player players[], vector<PowerPlant> &powerPlants, vector<Powe
 
                                 //if no card is auction
                                 if (currentPowerPlant.getNumber() == 0) {
+									//Print the cards in the market
+									cout << "------------------------------Market------------------------------" << endl;
+									for (int i = 0; i < market.size(); i++) {
+										cout << market[i].toString() << endl;
+									}
+									cout << endl;
                                     //choose a card to auction
                                     cout << "Enter the number of the card in the market to start auction: ";
                                     cin >> choice;
 
                                     //check if the card is exist
-                                    abilityOfPurchase(market, choice);
+                                    abilityOfPurchase(market, choice,step);
 
                                 }
 
@@ -513,7 +519,7 @@ void auctionPhase(Player players[], vector<PowerPlant> &powerPlants, vector<Powe
             cout << endl;
 
             //check if the card is exist
-            abilityOfPurchase(market, choice);
+            abilityOfPurchase(market, choice,step);
 
             auction(players[who], market[indexOfCard]);
             //set card and money
@@ -657,7 +663,7 @@ void auctionPhase(Player players[], vector<PowerPlant> &powerPlants, vector<Powe
                                     cout << "Enter the number of the card in the market to start auction: ";
                                     cin >> choice;
                                     //check if the card is exist
-                                    abilityOfPurchase(market, choice);
+                                    abilityOfPurchase(market, choice,step);
                                 }
 
                                 if (numOfPlayerPass < playerLeft - 1) {
@@ -766,7 +772,7 @@ void auctionPhase(Player players[], vector<PowerPlant> &powerPlants, vector<Powe
                             cout << "Enter the number of the card in the market to start auction: ";
                             cin >> choice;
                             //check if the card is exist
-                            abilityOfPurchase(market, choice);
+                            abilityOfPurchase(market, choice,step);
 
                         }
                         auction(players[who], market[indexOfCard]);

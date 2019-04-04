@@ -191,7 +191,7 @@ void Player::buyResources(Resources *res) {
 			hybridMax += powerPlant[i].getNeed() * 2;
 		}
 	}
-
+	
 	while (true)
 	{
 		//Coal Turn
