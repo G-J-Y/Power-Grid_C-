@@ -688,14 +688,14 @@ void Game::phase3() {
 	
 	}
 }
-/**
+
 void Game::phase4() {
 	std::cout << "[INFO] PHASE4: Building" << std::endl;
 	bool goToStep3 = false;
 	for (int i = numOfPlayer - 1; i >= 0; i--)
 	{
 		std::cout << std::endl;
-		printGraph(&graph);
+		printGraph(graph);
 		std::cout << "[INFO]" << players[i].getName() << ", it's your turn!" << std::endl;
 		while (true) {
 			//check the step
@@ -734,12 +734,12 @@ void Game::phase4() {
 				break;
 			}
 
-			vector<string> owners = graph.getArr()[inputNum].getBase()->getOwners();
+			vector<string> owners = graph->getArr()[inputNum].getBase()->getOwners();
 			size_t size = owners.size();
 
 
 			//check if the city is on the map
-			if (graph.getArr()[inputNum].getHead() == NULL) {
+			if (graph->getArr()[inputNum].getHead() == NULL) {
 				cout << "[ERROR] This city is not on the map. Please try another city!!\n";
 				continue;
 			}
@@ -762,23 +762,23 @@ void Game::phase4() {
 			}
 
 			//check if player has enough money
-			int price = graph.getArr()[inputNum].getBase()->getPrice(size);
+			int price = graph->getArr()[inputNum].getBase()->getPrice(size);
 			//add network price
-			price += graph.lowestPathPrice(inputNum, players[i].getName());
+			price += graph->lowestPathPrice(inputNum, players[i].getName());
 			if (players[i].getMoney() < price) {
 				std::cout << "[ERROR] You do not have enough money. Please try another city!" << std::endl;
 				continue;
 			}
 
-			graph.getArr()[inputNum].getBase()->addOwner(players[i].getName());
+			graph->getArr()[inputNum].getBase()->addOwner(players[i].getName());
 			players[i].setMoney(players[i].getMoney() - price);
 			players[i].setNumOfCity(players[i].getNumOfCity() + 1);
-			std::cout << "[SUCCESS] You have built a house in " << graph.getArr()[inputNum].getBase()->getName() << " successfully." << std::endl;
+			std::cout << "[SUCCESS] You have built a house in " << graph->getArr()[inputNum].getBase()->getName() << " successfully." << std::endl;
 			std::cout << "[SUCCESS] It cost you  " << price << " Elektro. Now you have " << players[i].getMoney() << " Elektro." << std::endl;
 
 		}
 
-		printGraph(&graph);
+		printGraph(graph);
 	}
 	if (goToStep3) {
 		step = 3;
@@ -786,4 +786,3 @@ void Game::phase4() {
 	
 
 }
-/**/
