@@ -346,17 +346,97 @@ void Game::phase3() {
 }
 
 
-bool goToStep3 = false;
+
 void Game::phase4() {
 	std::cout << "[INFO] PHASE4: Building" << std::endl;
-
+	bool goToStep3 = false;
 	for (int i = numOfPlayer - 1; i >= 0; i--)
 	{
 		std::cout << std::endl;
 		printGraph(graph);
+		std::cout << "[INFO]" << players[i].getName() << ", it's your turn!" << std::endl;
+		while (true)
+		{
 
-		building(step, numOfPlayer, players, i, graph, powerPlants, market);
+			//check the step
+			if (numOfPlayer == 2) {
+				if (players[i].getNumOfCity() == 10) {
+					if (step == 1) {
+						step = 2;
+						goToStep3 = adjustMarket(step, market, powerPlants);
+					}
+				}
+			}
+			if (numOfPlayer == 3 || numOfPlayer == 4 || numOfPlayer == 5) {
+				if (players[i].getNumOfCity() == 7) {
+					if (step == 1) {
+						step = 2;
+						goToStep3 = adjustMarket(step, market, powerPlants);
+					}
+				}
+			}
+			if (numOfPlayer == 6) {
+				if (players[i].getNumOfCity() == 6) {
+					if (step == 1) {
+						step = 2;
+						goToStep3 = adjustMarket(step, market, powerPlants);
+					}
+				}
+			}
 
+			std::cout << "[PROMPT]" << "Please enter the ID of the city that you want to build.(Enter -1 to skip)" << std::endl;
+			std::cout << "[ENTER] ";
+			int inputNum;
+			std::cin >> inputNum;
+			std::cout << std::endl;
+
+			if (inputNum == -1) {
+				break;
+			}
+
+			vector<string> owners = graph->getArr()[inputNum].getBase()->getOwners();
+			size_t size = owners.size();
+
+
+			//check if the city is on the map
+			if (graph->getArr()[inputNum].getHead() == NULL) {
+				cout << "[ERROR] This city is not on the map. Please try another city!!\n";
+				continue;
+			}
+
+			//check if the player have already built one
+			bool isBuilt = false;
+			for (size_t j = 0; j < size; j++) {
+				if (players[j].getName() == owners[j]) {
+					cout << "[ERROR] You have owned this city. Please try another city!!\n";
+					isBuilt = true;
+					continue;
+				}
+			}
+			if (isBuilt) { continue; }
+
+			//check if there is enough space
+			if (size >= (size_t)step) {
+				std::cout << "[ERROR] You can not build plant in this city because there is no more space!" << std::endl;
+				continue;
+			}
+
+			//check if player has enough money
+			int price = graph->getArr()[inputNum].getBase()->getPrice(size);
+			//add network price
+			price += graph->lowestPathPrice(inputNum, players[i].getName());
+			if (players[i].getMoney() < price) {
+				std::cout << "[ERROR] You do not have enough money. Please try another city!" << std::endl;
+				continue;
+			}
+
+			graph->getArr()[inputNum].getBase()->addOwner(players[i].getName());
+			players[i].setMoney(players[i].getMoney() - price);
+			players[i].setNumOfCity(players[i].getNumOfCity() + 1);
+			std::cout << "[SUCCESS] You have built a house in " << graph->getArr()[inputNum].getBase()->getName() << " successfully." << std::endl;
+			std::cout << "[SUCCESS] It cost you  " << price << " Elektro. Now you have " << players[i].getMoney() << " Elektro." << std::endl;
+
+		}
 		printGraph(graph);
 	}
 	if (goToStep3) {

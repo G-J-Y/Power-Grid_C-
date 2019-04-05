@@ -9,7 +9,7 @@ extern bool goToStep3;
 
 
 void buyResources(int, Player*, Resources*);
-void building(int, int, Player*, int, Graph*, vector<PowerPlant> &, vector<PowerPlant> &);
+//void building(int, int, Player*, int, Graph*, vector<PowerPlant> &, vector<PowerPlant> &);
 
 
 #endif //PROJECT_PHASE3_4_H

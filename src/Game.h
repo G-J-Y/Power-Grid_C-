@@ -18,6 +18,11 @@ private:
 	vector<PowerPlant> market;
 	Graph* graph;
 
+
+	//void auctionPhase();
+
+
+
 public:
 	Game();
 	Game(int numOfPlayer);
@@ -28,4 +33,7 @@ public:
 	void phase3();
 	void phase4();
 	void phase5();
+
+
+
 };
