@@ -345,15 +345,17 @@ void Game::phase3() {
 	}
 }
 
+
+bool goToStep3 = false;
 void Game::phase4() {
 	std::cout << "[INFO] PHASE4: Building" << std::endl;
-	static bool goToStep3 = false;
+
 	for (int i = numOfPlayer - 1; i >= 0; i--)
 	{
 		std::cout << std::endl;
 		printGraph(graph);
 
-		building(step, numOfPlayer, players, i, graph, goToStep3, powerPlants, market);
+		building(step, numOfPlayer, players, i, graph, powerPlants, market);
 
 		printGraph(graph);
 	}

@@ -351,7 +351,10 @@ void buyResources(int i, Player* players, Resources* resources){
     }
 }
 
-void building(int step, int numOfPlayer, Player* players, int i, Graph* graph, bool goToStep3, vector<PowerPlant> &powerPlants, vector<PowerPlant> &market){
+
+
+
+void building(int step, int numOfPlayer, Player* players, int i, Graph* graph, vector<PowerPlant> &powerPlants, vector<PowerPlant> &market){
 
 
     std::cout << "[INFO]" << players[i].getName() << ", it's your turn!" << std::endl;
