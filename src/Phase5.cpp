@@ -10,23 +10,15 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-Phase5::Phase5() {
-    players = nullptr;
-    step = 1;
-}
 
-
-Phase5::Phase5(Player *pl, int n) {
-    players = pl;
-    numOfPlayer = n;
-    step = 1;
-}
-
+int payment[21] = {10, 22, 33, 44, 54, 64, 73, 82, 90, 98, 105, 112, 118, 124, 129, 134, 138, 142, 145, 148,
+                   150};     //payment corresponding to the number of powered cities
+Resources recycle;
 
 //every player indicates how many cities in his network he wishes
 //(and is able) to supply with electricity. He earns cash based on the number of cities
 //he powers as shown on the payment table
-void Phase5::earnCash() {
+void earnCash(Player* players, int numOfPlayer) {
     string yesInput;
     int earnedCash, money;
     for (int i = 0; i < numOfPlayer; i++) {
@@ -40,7 +32,7 @@ void Phase5::earnCash() {
             do {
                 cin >> yesInput;
                 if (yesInput == "Y" || yesInput == "y") {
-                    if (validUsingPowerPlant(i, currentPlant)) {
+                    if (validUsingPowerPlant(players, i, currentPlant)) {
                         totalNumInput += currentPlant.getSupplyCity();
                         break;
                     }
@@ -63,9 +55,8 @@ void Phase5::earnCash() {
     }
 }
 
-
 //return true if the input is valid for the number of cities the player wants to power
-bool Phase5::validUsingPowerPlant(int i, PowerPlant currentPlant) {
+bool validUsingPowerPlant(Player* players, int i, PowerPlant currentPlant) {
     PowerPlant::Type type = currentPlant.getType();
     int needNum = currentPlant.getNeed();
     if (type == PowerPlant::hybrid) {
@@ -138,8 +129,7 @@ bool Phase5::validUsingPowerPlant(int i, PowerPlant currentPlant) {
     }
 }
 
-
-void Phase5::reSupplyResource(Resources *array_resource) {
+void reSupplyResource(int step, int numOfPlayer, Resources *array_resource) {
 
     //Based on the number of players and the step of the game, the players re-supply the resource market (see table at the back of the rules) from the supply of resources
     Resources table;
@@ -383,7 +373,7 @@ void Phase5::reSupplyResource(Resources *array_resource) {
 }
 
 //Place the highest numbered power plant from the future market face down under the draw stack and draw a new one to replace it
-void Phase5::updateMarket(std::vector<PowerPlant> &powerPlants, std::vector<PowerPlant> &market) {
+void updateMarket(int step, std::vector<PowerPlant> &powerPlants, std::vector<PowerPlant> &market) {
 	//If the »Step 3« card is drawn in phase 5 (Bureaucracy),
 	//remove this card and the lowest numbered power plant from the game and do not draw replacements
 	PowerPlant theFirstInDrawStack = powerPlants.front();

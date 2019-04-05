@@ -2,7 +2,9 @@
 #include "mapLoader.h"
 #include "Player.h"
 #include "Resources.h"
-#include"Phase1_2.h"
+#include "Phase1_2.h"
+#include "Phase3_4.h"
+#include "Phase5.h"
 
 class Game {
 private:

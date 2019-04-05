@@ -11,6 +11,16 @@
 using namespace std;
 
 
+
+//static variable
+int currentAuctionPrice = 0;
+//static int numberOfPlayers;
+//static int turn = 1;
+//static int step = 1;
+int indexOfCard = 0 ;
+PowerPlant currentPowerPlant;
+
+
 //in the first turn, the order of players is random
 void shufflePlayers(Player array[], int length) {
     int value;
