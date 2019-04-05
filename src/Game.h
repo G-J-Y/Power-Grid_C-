@@ -4,7 +4,7 @@
 #include "Resources.h"
 #include "Phase1_2.h"
 #include "Phase3_4.h"
-#include "Phase5.h"
+//#include "Phase5.h"
 
 class Game {
 private:
@@ -19,7 +19,13 @@ private:
 	Graph* graph;
 
 
-	//void auctionPhase();
+
+
+//phase5
+	void earnCash(Resources);                    //the players earn cash
+	bool validUsingPowerPlant(int, PowerPlant, Resources);    //return true if the input is valid for the number of cities the player wants to power
+	void reSupplyResource(Resources);  //Based on the number of players and the step of the game, the players re-supply the resource market from the supply of resources.
+	void updateMarket();//Place the highest numbered power plant from the future market face down under the draw stack and draw a new one to replace it. Rearrange the market appropriately.
 
 
 
