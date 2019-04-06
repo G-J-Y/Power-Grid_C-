@@ -1,5 +1,5 @@
 #pragma once
-
+#include <time.h>
 #include "mapLoader.h"
 #include "Player.h"
 #include "Resources.h"
@@ -39,7 +39,7 @@ private:
 
     void pass(Player &p);
 
-    void auction(Player &p, PowerPlant n);
+    void auction(Player &p, PowerPlant n,int &passNum);
 
     void auctionPhase();
 

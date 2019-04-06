@@ -805,7 +805,7 @@ void Game::pass(Player &p) {
 }
 
 //this method set the price when in the auction process
-void Game::auction(Player &p, PowerPlant n) {
+void Game::auction(Player &p, PowerPlant n,int &passNum) {
     //currentAuctionPrice;
     int price;
     cout << "Please enter the price you auction: ";
@@ -818,6 +818,7 @@ void Game::auction(Player &p, PowerPlant n) {
             cin >> price;
             if (price == 0) {
                 pass(p);
+				passNum++;
                 break;
             }
         } while (price > p.getMoney());
@@ -830,6 +831,7 @@ void Game::auction(Player &p, PowerPlant n) {
                 cin >> price;
                 if (price == 0) {
                     pass(p);
+					passNum++;
                     break;
                 }
             } while (price < currentAuctionPrice);
@@ -844,6 +846,7 @@ void Game::auction(Player &p, PowerPlant n) {
                 cin >> price;
                 if (price == 0) {
                     pass(p);
+					passNum++;
                     break;
                 }
             } while (price <= currentAuctionPrice);
@@ -939,7 +942,7 @@ void Game::auctionPhase() {   //*player
                                 }
 
                                 if (numOfPlayerPass < playerLeft - 1) {
-                                    auction(players[i], market[indexOfCard]);
+                                    auction(players[i], market[indexOfCard],numOfPlayerPass);			
                                     //cout <<"Price" <<players[i].getPrice() << endl;
                                 }
 
@@ -1000,6 +1003,7 @@ void Game::auctionPhase() {   //*player
         if (playerLeft == 1) {
             int who = 0;
             int choice;
+			int numOfPass = numOfPlayer-1;
             for (int i = 0; i < numOfPlayer; i++) {
                 if (players[i].getNumOfPowerPlant() == 0) {
                     who = i;
@@ -1016,7 +1020,7 @@ void Game::auctionPhase() {   //*player
             //check if the card is exist
             abilityOfPurchase(choice);
 
-            auction(players[who], market[indexOfCard]);
+            auction(players[who], market[indexOfCard],numOfPass);
             //set card and money
 
             buyCard(players[who], market[indexOfCard]);
@@ -1162,7 +1166,7 @@ void Game::auctionPhase() {   //*player
                                 }
 
                                 if (numOfPlayerPass < playerLeft - 1) {
-                                    auction(players[i], market[indexOfCard]);
+                                    auction(players[i], market[indexOfCard],numOfPlayerPass);
                                 }
 
                             }
@@ -1236,6 +1240,7 @@ void Game::auctionPhase() {   //*player
         if (playerLeft == 1) {
             int who;
             int choice;
+			int numOfPass = numOfPlayer - 1;
             for (int i = 0; i < numOfPlayer; i++) {
                 if (players[i].getBought() == false && players[i].getRoundStatus() == true) {
                     who = i;
@@ -1270,7 +1275,7 @@ void Game::auctionPhase() {   //*player
                             abilityOfPurchase(choice);
 
                         }
-                        auction(players[who], market[indexOfCard]);
+                        auction(players[who], market[indexOfCard],numOfPass);
 
                         buyCard(players[who], market[indexOfCard]);
 
