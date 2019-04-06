@@ -4,10 +4,15 @@ int main() {
 
 	Game myGame(2);
 	myGame.loader();
-	myGame.phase1();
-	myGame.phase3();
-	myGame.phase4();
-    myGame.phase5();
+
+	while(true){
+		myGame.phase1();
+		myGame.phase3();
+		myGame.phase4();
+		if(myGame.checkWin()) break;
+		myGame.phase5();
+
+	}
 	system("pause");
 	return 0;
 }
