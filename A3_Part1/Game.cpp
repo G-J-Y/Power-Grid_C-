@@ -10,6 +10,8 @@ Game::Game(int numOfPlayer) {
     turn = 1;
 	phase = 1;
     powerPlants = vector<PowerPlant>(43);
+	gameObserver = new GameObserver(this);
+
     //graph = new Graph(42); //if not initialize here, there's no address for graph
     // myLoader.Load(graph, numOfPlayer) calls graph by reference, but graph has no address
 }
@@ -302,6 +304,8 @@ void Game::phase1() {
         }
         cout << endl;
 
+		//Observer
+		this->notifyHeader();
 
         //auction process
         auctionPhase();

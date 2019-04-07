@@ -4,7 +4,7 @@
 #include "Player.h"
 #include "Resources.h"
 #include "Subject.h"
-#include "Observer.h"
+#include "GameObserver.h"
 
 class Game : public Subject{
 private:
@@ -18,6 +18,7 @@ private:
     vector<PowerPlant> market;
     Graph *graph;
 	int phase;
+	GameObserver *gameObserver;
 	
 
 
