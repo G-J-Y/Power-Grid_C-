@@ -3,7 +3,7 @@
 #include "observer.h"
 class Subject
 {
-private:
+protected:
 	std::list<Observer*> *_observers;
 public:
 	Subject();
