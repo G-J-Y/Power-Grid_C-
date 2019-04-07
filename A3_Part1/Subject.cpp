@@ -19,9 +19,9 @@ void Subject::detach(Observer *o) {
 	_observers->remove(o);
 }
 
-//void Subject::notify() {
-//	std::list<Observer *>::iterator i = _observers->begin();
-//	for (; i != _observers->end(); i++) {
-//		(*i)->updateStep();
-//	}
-//}
+void Subject::notify() {
+	std::list<Observer *>::iterator i = _observers->begin();
+	for (; i != _observers->end(); i++) {
+		(*i)->updateHeader();
+	}
+}

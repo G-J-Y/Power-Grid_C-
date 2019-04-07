@@ -10,6 +10,6 @@ public:
 	~Subject();
 	virtual void attach(Observer *o);
 	virtual void detach(Observer *o);
-	//virtual void notify();
+	virtual void notify();
 };
 

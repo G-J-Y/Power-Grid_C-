@@ -4,7 +4,7 @@ class Observer
 protected:
 	Observer();
 public:
-	//virtual void updateStep() = 0;
+	virtual void updateHeader() = 0;
 	~Observer();
 };
 
