@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
-#include "observer.h"
+#include "Observer.h"
+//class Observer;
 class Subject
 {
 private:

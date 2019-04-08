@@ -1,10 +1,10 @@
 #pragma once
+#include "Subject.h"
 #include <time.h>
 #include "mapLoader.h"
 #include "Player.h"
 #include "Resources.h"
-#include "Subject.h"
-#include "GameObserver.h"
+//#include "GameObserver.h"
 
 class Game : public Subject{
 private:
@@ -18,7 +18,7 @@ private:
     vector<PowerPlant> market;
     Graph *graph;
 	int phase;
-	GameObserver *gameObserver;
+	//GameObserver *gameObserver;
 	
 
 

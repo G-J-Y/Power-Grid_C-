@@ -1,5 +1,5 @@
 #include "GameObserver.h"
-#include "Game.h"
+//#include "Game.h"
 #include <iostream>
 using namespace std;
 
