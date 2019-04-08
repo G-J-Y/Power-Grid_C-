@@ -11,10 +11,12 @@ Game::Game(int numOfPlayer) {
     powerPlants = vector<PowerPlant>(43);
     //graph = new Graph(42); //if not initialize here, there's no address for graph
     // myLoader.Load(graph, numOfPlayer) calls graph by reference, but graph has no address
-    playerObserver = new PlayerObserver[numOfPlayer];
+    playerObservers = new PlayerObserver[numOfPlayer];
     for (int i = 0;i<numOfPlayer;i++){
-        playerObserver[i] = PlayerObserver(players[i]);
+        playerObservers[i] = *(new PlayerObserver(&(players[i])));
     }
+
+
 }
 
 
@@ -22,7 +24,7 @@ void Game::loader() {
     //mapLoader myLoader;
     //myLoader.Load(graph, numOfPlayer);
 
-
+	players[1].notify();
     //create game map
     cout << "Please input the name of the map file: \n";
     string fileName;
@@ -1440,7 +1442,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS] " << inputNum << " coal cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
-
+            players[i].notify();
             break;
         }
 
@@ -1457,7 +1459,7 @@ void Game::buyResources(int i) {
             if (inputNum == 0) {
                 break;
             }
-            //Check if Player's inventory is vaild
+            //Check if Player's inventory is valid
 
             if (inputNum > oilMax + hybridMax - oilNum + ((coalMax - coalNum) < 0 ? (coalMax - coalNum) : 0)) {
                 std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber.";
@@ -1471,17 +1473,17 @@ void Game::buyResources(int i) {
             int cost = 0;
             int tempAmount = 0;
 
-            for (int i = 0; i < 12; i++) {
-                int left = resources[i].getOil();
+            for (int j = 0; j < 12; j++) {
+                int left = resources[j].getOil();
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * (inputNum - tempAmount);
+                    cost += resources[j].getPrice() * (inputNum - tempAmount);
                     tempAmount = inputNum;
                     break;
                 } else if (left < inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * left;
+                    cost += resources[j].getPrice() * left;
                     tempAmount += left;
                 }
             }
@@ -1499,19 +1501,19 @@ void Game::buyResources(int i) {
             players[i].setMoney(players[i].getMoney() - cost);
 
             tempAmount = 0;
-            for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 12; j++) {
 
-                int left = resources[i].getOil();
+                int left = resources[j].getOil();
 
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    resources[i].setOil(left - (inputNum - tempAmount));
+                    resources[j].setOil(left - (inputNum - tempAmount));
                     break;
                 } else if (left < inputNum - tempAmount) {
                     tempAmount += left;
-                    resources[i].setOil(0);
+                    resources[j].setOil(0);
                 }
             }
             //get resources
@@ -1519,6 +1521,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS]" << inputNum << " oil cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
+            players[i].notify();
             break;
         }
 
@@ -1534,7 +1537,7 @@ void Game::buyResources(int i) {
             if (inputNum == 0) {
                 break;
             }
-            //Check if Player's inventory is vaild
+            //Check if Player's inventory is valid
 
             if (inputNum > garbageMax - garbageNum) {
                 std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber.";
@@ -1548,17 +1551,17 @@ void Game::buyResources(int i) {
             int cost = 0;
             int tempAmount = 0;
 
-            for (int i = 0; i < 12; i++) {
-                int left = resources[i].getGarbage();
+            for (int j = 0; j < 12; j++) {
+                int left = resources[j].getGarbage();
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * (inputNum - tempAmount);
+                    cost += resources[j].getPrice() * (inputNum - tempAmount);
                     tempAmount = inputNum;
                     break;
                 } else if (left < inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * left;
+                    cost += resources[j].getPrice() * left;
                     tempAmount += left;
                 }
             }
@@ -1576,19 +1579,19 @@ void Game::buyResources(int i) {
             players[i].setMoney(players[i].getMoney() - cost);
 
             tempAmount = 0;
-            for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 12; j++) {
 
-                int left = resources[i].getGarbage();
+                int left = resources[j].getGarbage();
 
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    resources[i].setGarbage(left - (inputNum - tempAmount));
+                    resources[j].setGarbage(left - (inputNum - tempAmount));
                     break;
                 } else if (left < inputNum - tempAmount) {
                     tempAmount += left;
-                    resources[i].setGarbage(0);
+                    resources[j].setGarbage(0);
                 }
             }
 
@@ -1597,6 +1600,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS]" << inputNum << " garbage cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
+            players[i].notify();
             break;
         }
 
@@ -1626,17 +1630,17 @@ void Game::buyResources(int i) {
             int cost = 0;
             int tempAmount = 0;
 
-            for (int i = 0; i < 12; i++) {
-                int left = resources[i].getUranium();
+            for (int j = 0; j < 12; j++) {
+                int left = resources[j].getUranium();
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * (inputNum - tempAmount);
+                    cost += resources[j].getPrice() * (inputNum - tempAmount);
                     tempAmount = inputNum;
                     break;
                 } else if (left < inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * left;
+                    cost += resources[j].getPrice() * left;
                     tempAmount += left;
                 }
             }
@@ -1653,19 +1657,19 @@ void Game::buyResources(int i) {
             //pay money
             players[i].setMoney(players[i].getMoney() - cost);
             tempAmount = 0;
-            for (int i = 0; i < 12; i++) {
+            for (int j = 0; i < 12; i++) {
 
-                int left = resources[i].getUranium();
+                int left = resources[j].getUranium();
 
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    resources[i].setUranium(left - (inputNum - tempAmount));
+                    resources[j].setUranium(left - (inputNum - tempAmount));
                     break;
                 } else if (left < inputNum - tempAmount) {
                     tempAmount += left;
-                    resources[i].setUranium(0);
+                    resources[j].setUranium(0);
                 }
             }
             //get resources
@@ -1674,6 +1678,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS]" << inputNum << " uranium cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
+            players[i].notify();
             break;
         }
         break;
@@ -1690,7 +1695,7 @@ bool Game::adjustMarket(int &step) {
         std::cout << "[INFO] STEP 3 starts in phase 5!!" << std::endl;
         powerPlants.erase(powerPlants.begin());
         PowerPlant::shuffle(powerPlants);
-        bool goToStep3 = true;
+        goToStep3 = true;
     }
     else {
         market.push_back(powerPlants[0]);

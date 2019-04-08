@@ -21,7 +21,7 @@ Player::Player() {
 	auctionPrice = 0;
 	roundStatus = true;
 	bought = false;
-	playerObserver = new PlayerObserver(this);
+	//playerObserver = new PlayerObserver(this);
 }
 
 //set method: change value
@@ -178,8 +178,4 @@ void Player::deGarbageNum(int g){
 }
 void Player::deUraniumNum(int u){
 	uraniumNum -= u;
-}
-
-Player::~Player() {
-	delete playerObserver;
 }

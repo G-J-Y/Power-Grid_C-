@@ -6,7 +6,7 @@
 #include "Resources.h"
 #include "mapLoader.h"
 #include "Subject.h"
-#include "PlayerObserver.h"
+//#include "PlayerObserver.h"
 
 using namespace std;
 
@@ -33,12 +33,12 @@ private:
     int auctionPrice;
 
 	House house;
-	PlayerObserver* playerObserver;
+	//PlayerObserver* playerObserver;
 
 
 public:
 	Player();
-	~Player();
+
 	//set methods
 	void setMoney(int);
 	void setNumOfCity(int);

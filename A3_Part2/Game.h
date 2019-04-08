@@ -3,7 +3,7 @@
 #include "mapLoader.h"
 #include "Player.h"
 #include "Resources.h"
-
+#include "PlayerObserver.h"
 
 class Game {
 private:
@@ -16,7 +16,7 @@ private:
     vector<PowerPlant> powerPlants;
     vector<PowerPlant> market;
     Graph *graph;
-    PlayerObserver playerObserver;
+    PlayerObserver* playerObservers;
 
 
     //phase1_2
