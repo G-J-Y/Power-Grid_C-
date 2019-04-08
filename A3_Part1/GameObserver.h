@@ -15,6 +15,7 @@ public:
 	void updatePlayer();
 	void updatePhase();
 	void updateHeader();
+	void updateAuctionResult(Player p, PowerPlant card);
 	
 };
 

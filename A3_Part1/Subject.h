@@ -1,6 +1,7 @@
 #pragma once
-#include <list>
 #include "Observer.h"
+#include <list>
+
 //class Observer;
 class Subject
 {
@@ -16,6 +17,7 @@ public:
 	virtual void notifyPhase();
 	virtual void notifyPlayer();
 	virtual void notifyHeader();
+	virtual void notifyAuctionResult(Player p, PowerPlant card);
 	
 };
 

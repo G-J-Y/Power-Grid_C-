@@ -52,3 +52,10 @@ void Subject::notifyHeader() {
 		(*i)->updateHeader();
 	}
 }
+
+void Subject::notifyAuctionResult(Player p, PowerPlant card) {
+	std::list<Observer *>::iterator i = _observers->begin();
+	for (; i != _observers->end(); i++) {
+		(*i)->updateAuctionResult(p,card);
+	}
+}
