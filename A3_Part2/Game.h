@@ -3,9 +3,13 @@
 #include "mapLoader.h"
 #include "Player.h"
 #include "Resources.h"
-#include "PlayerObserver.h"
+#include "Subject.h"
 
-class Game {
+
+class GameObserver;
+
+class Game : public Subject {
+
 private:
     int step;
     int turn;
@@ -16,8 +20,6 @@ private:
     vector<PowerPlant> powerPlants;
     vector<PowerPlant> market;
     Graph *graph;
-    PlayerObserver* playerObservers;
-
 
     //phase1_2
     void shufflePlayers( );
@@ -83,5 +85,9 @@ public:
 
     void phase5();
 
+    void notifyPositionInfo();
 
+    void notifyPlayerInfo();
+
+    friend class GameObserver;
 };

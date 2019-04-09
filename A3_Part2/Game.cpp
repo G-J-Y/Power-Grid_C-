@@ -11,11 +11,6 @@ Game::Game(int numOfPlayer) {
     powerPlants = vector<PowerPlant>(43);
     //graph = new Graph(42); //if not initialize here, there's no address for graph
     // myLoader.Load(graph, numOfPlayer) calls graph by reference, but graph has no address
-    playerObservers = new PlayerObserver[numOfPlayer];
-    for (int i = 0;i<numOfPlayer;i++){
-        playerObservers[i] = *(new PlayerObserver(&(players[i])));
-    }
-
 
 }
 
@@ -24,7 +19,7 @@ void Game::loader() {
     //mapLoader myLoader;
     //myLoader.Load(graph, numOfPlayer);
 
-	players[1].notify();
+
     //create game map
     cout << "Please input the name of the map file: \n";
     string fileName;
@@ -256,7 +251,7 @@ void Game::phase1() {
             cout << endl;
         }
     }
-
+    notifyPositionInfo();
     //
     cout << "------------------------------After shuffle------------------------------" << endl;
     PowerPlant::shuffle(powerPlants);
@@ -556,8 +551,8 @@ void Game::setPlayerOrder(Player p[], int n) {
 //every time a new card put into the market, set a new order
 void Game::setMarketOrder(vector<PowerPlant> &p) {
     PowerPlant temp;
-    for (int i = 1; i < p.size(); i++) {
-        for (int j = p.size() - 1; j > i - 1; j--) {
+    for (size_t  i = 1; i < p.size(); i++) {
+        for (size_t j = p.size() - 1; j > i - 1; j--) {
             if (p[j].getNumber() < p[j - 1].getNumber()) {
                 temp = p[j];
                 p[j] = p[j - 1];
@@ -764,7 +759,7 @@ void Game::changeMarketToStep3(vector<PowerPlant> &p) {
 //check if a player can buy a card
 void Game::abilityOfPurchase(int c) {
     if (step == 3) {
-        for (int i = 0; i < market.size(); i++) {
+        for (size_t  i = 0; i < market.size(); i++) {
             if (market[i].getNumber() == c) {
                 currentPowerPlant = market[i];
                 indexOfCard = i;
@@ -774,7 +769,7 @@ void Game::abilityOfPurchase(int c) {
             int choice;
             cout << "You cannot buy this card, please enter a new number: ";
             cin >> choice;
-            for (int i = 0; i < market.size(); i++) {
+            for (size_t  i = 0; i < market.size(); i++) {
                 if (market[i].getNumber() == choice) {
                     currentPowerPlant = market[i];
                     indexOfCard = i;
@@ -931,7 +926,7 @@ void Game::auctionPhase() {   //*player
                                     //Print the cards in the market
                                     cout << "------------------------------Market------------------------------"
                                          << endl;
-                                    for (int i = 0; i < market.size(); i++) {
+                                    for (size_t i = 0; i < market.size(); i++) {
                                         cout << market[i].toString() << endl;
                                     }
                                     cout << endl;
@@ -994,7 +989,7 @@ void Game::auctionPhase() {   //*player
 
             //Print the cards in the market
             cout << "------------------------------Market (Updated)------------------------------" << endl;
-            for (int i = 0; i < market.size(); i++) {
+            for (size_t i = 0; i < market.size(); i++) {
                 cout << market[i].toString() << endl;
             }
             cout << endl;
@@ -1053,7 +1048,7 @@ void Game::auctionPhase() {   //*player
 
             //Print the cards in the market
             cout << "------------------------------Market (Updated)------------------------------" << endl;
-            for (int i = 0; i < market.size(); i++) {
+            for (size_t i = 0; i < market.size(); i++) {
                 cout << market[i].toString() << endl;
             }
             cout << endl;
@@ -1232,7 +1227,7 @@ void Game::auctionPhase() {   //*player
 
             //Print the cards in the market
             cout << "------------------------------Market (Updated)------------------------------" << endl;
-            for (int i = 0; i < market.size(); i++) {
+            for (size_t i = 0; i < market.size(); i++) {
                 cout << market[i].toString() << endl;
             }
             cout << endl;
@@ -1326,7 +1321,7 @@ void Game::auctionPhase() {   //*player
 
         //Print the cards in the market
         cout << "------------------------------Market (Updated)------------------------------" << endl;
-        for (int i = 0; i < market.size(); i++) {
+        for (size_t i = 0; i < market.size(); i++) {
             cout << market[i].toString() << endl;
         }
         cout << endl;
@@ -1442,7 +1437,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS] " << inputNum << " coal cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
-            players[i].notify();
+            notifyPlayerInfo();
             break;
         }
 
@@ -1521,7 +1516,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS]" << inputNum << " oil cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
-            players[i].notify();
+            notifyPlayerInfo();
             break;
         }
 
@@ -1600,7 +1595,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS]" << inputNum << " garbage cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
-            players[i].notify();
+            notifyPlayerInfo();
             break;
         }
 
@@ -1678,7 +1673,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS]" << inputNum << " uranium cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
-            players[i].notify();
+            notifyPlayerInfo();
             break;
         }
         break;
@@ -2092,3 +2087,17 @@ void Game::updateMarket() {
     }
 }
 
+void Game::notifyPositionInfo(){
+    std::list<Observer *>::iterator i = _observers->begin();
+    for (; i != _observers->end(); i++) {
+        (*i)->updatePositionInfo();
+    }
+}
+
+void Game::notifyPlayerInfo(){
+
+    std::list<Observer *>::iterator i = _observers->begin();
+    for (; i != _observers->end(); i++) {
+        (*i)->updatePlayerInfo();
+    }
+}

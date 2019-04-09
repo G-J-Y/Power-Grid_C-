@@ -1,16 +1,18 @@
-#include "Game.h"
 
+#include "Game.h"
+#include "GameObserver.h"
 int main() {
 
-	Game myGame(2);
-	myGame.loader();
+	Game* myGame = new  Game(2);
+    GameObserver* gameOB = new GameObserver(myGame);
+    myGame->loader();
 
 	while(true){
-		myGame.phase1();
-		myGame.phase3();
-		myGame.phase4();
-		if(myGame.checkWin()) break;
-		myGame.phase5();
+		myGame->phase1();
+		myGame->phase3();
+		myGame->phase4();
+		if(myGame->checkWin()) break;
+		myGame->phase5();
 
 	}
 	system("pause");

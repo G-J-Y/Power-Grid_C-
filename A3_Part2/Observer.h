@@ -4,7 +4,12 @@ class Observer
 protected:
 	Observer();
 public:
-	virtual void update () = 0;
+
 	~Observer();
+
+	//update();
+    virtual void updatePositionInfo()=0;
+
+    virtual void updatePlayerInfo()=0;
 };
 

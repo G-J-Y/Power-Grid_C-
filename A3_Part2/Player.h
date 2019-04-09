@@ -6,11 +6,10 @@
 #include "Resources.h"
 #include "mapLoader.h"
 #include "Subject.h"
-//#include "PlayerObserver.h"
 
 using namespace std;
 
-class Player: public Subject {
+class Player {
 private:
 	//basic data
 	string name;
@@ -33,7 +32,6 @@ private:
     int auctionPrice;
 
 	House house;
-	//PlayerObserver* playerObserver;
 
 
 public:

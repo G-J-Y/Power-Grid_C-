@@ -18,10 +18,10 @@ void Subject::attach(Observer *o) {
 void Subject::detach(Observer *o) {
 	_observers->remove(o);
 }
-
-void Subject::notify() {
-	std::list<Observer *>::iterator i = _observers->begin();
-	for (; i != _observers->end(); i++) {
-		(*i)->update();
-	}
-}
+//
+//void Subject::notify() {
+//	std::list<Observer *>::iterator i = _observers->begin();
+//	for (; i != _observers->end(); i++) {
+//		(*i)->update();
+//	}
+//}
