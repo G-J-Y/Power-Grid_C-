@@ -9,6 +9,7 @@ Game::Game(int numOfPlayer) {
     step = 1;
     turn = 1;
     powerPlants = vector<PowerPlant>(43);
+    resources = ResourceMarket::instance()->getResourcesMarket();
     //graph = new Graph(42); //if not initialize here, there's no address for graph
     // myLoader.Load(graph, numOfPlayer) calls graph by reference, but graph has no address
 }
@@ -220,18 +221,19 @@ void Game::loader() {
 
 
     //Initialize resources Market
-    resources[0] = Resources(3, 0, 0, 0, 1);
-    resources[1] = Resources(3, 0, 0, 0, 2);
-    resources[2] = Resources(3, 3, 0, 0, 3);
-    resources[3] = Resources(3, 3, 0, 0, 4);
-    resources[4] = Resources(3, 3, 0, 0, 5);
-    resources[5] = Resources(3, 3, 0, 0, 6);
-    resources[6] = Resources(3, 3, 3, 0, 7);
-    resources[7] = Resources(3, 3, 3, 0, 8);
-    resources[8] = Resources(0, 0, 0, 0, 10);
-    resources[9] = Resources(0, 0, 0, 0, 12);
-    resources[10] = Resources(0, 0, 0, 1, 14);
-    resources[11] = Resources(0, 0, 0, 1, 16);
+
+    //resourceMarket[0] = Resources(3, 0, 0, 0, 1);
+    //resources[1] = Resources(3, 0, 0, 0, 2);
+    //resources[2] = Resources(3, 3, 0, 0, 3);
+    //resources[3] = Resources(3, 3, 0, 0, 4);
+    //resources[4] = Resources(3, 3, 0, 0, 5);
+    //resources[5] = Resources(3, 3, 0, 0, 6);
+    //resources[6] = Resources(3, 3, 3, 0, 7);
+    //resources[7] = Resources(3, 3, 3, 0, 8);
+    //resources[8] = Resources(0, 0, 0, 0, 10);
+    //resources[9] = Resources(0, 0, 0, 0, 12);
+    //resources[10] = Resources(0, 0, 0, 1, 14);
+    //resources[11] = Resources(0, 0, 0, 1, 16);
 
 
 }
@@ -453,9 +455,9 @@ bool Game::checkWin(){
 void Game::phase5() {
     //phase 5 begins
 
-    Resources recycle;
+    //Resources recycle;
     cout << "[INFO] PHASE5: Bureaucracy" << endl;
-    earnCash(recycle);
+    earnCash();
 
 
     //print the resources in the market before re-supply
@@ -466,7 +468,7 @@ void Game::phase5() {
     cout << "-----------------------------------------------" << endl;
 
     //re-supply the resource market
-    reSupplyResource(recycle);
+    reSupplyResource();
 
     //print the resources after re-supply
     cout << "-----------------------------------------------" << endl;
@@ -1706,7 +1708,7 @@ bool Game::adjustMarket(int &step) {
 
 //phase 5 methods
 //every player earns cash based on the number of cities he powers as shown on the payment table
-void Game::earnCash(Resources recycle) {
+void Game::earnCash() {
     int payment[21] = {10, 22, 33, 44, 54, 64, 73, 82, 90, 98, 105, 112, 118, 124, 129, 134, 138, 142, 145, 148,
                        150};     //payment corresponding to the number of powered cities
     string yesInput;
@@ -1722,7 +1724,7 @@ void Game::earnCash(Resources recycle) {
             do {
                 cin >> yesInput;
                 if (yesInput == "Y" || yesInput == "y") {
-                    if (validUsingPowerPlant(i, currentPlant, recycle)) {
+                    if (validUsingPowerPlant(i, currentPlant)) {
                         totalNumInput += currentPlant.getSupplyCity();
                         break;
                     }
@@ -1743,11 +1745,13 @@ void Game::earnCash(Resources recycle) {
         cout << "[INFO] You have earned " << earnedCash << " this round." << endl;
         cout << "[INFO] Now you have " << players[i].getNumOfPoweredCities() << " city/cities that have been powered.\n"
              << endl;
+
+        recycle.toString();
     }
 }
 
 //return true if the input is valid for the number of cities the player wants to power
-bool Game::validUsingPowerPlant(int i, PowerPlant currentPlant, Resources recycle) {
+bool Game::validUsingPowerPlant(int i, PowerPlant currentPlant) {
     PowerPlant::Type type = currentPlant.getType();
     int needNum = currentPlant.getNeed();
     if (type == PowerPlant::hybrid) {
@@ -1821,7 +1825,7 @@ bool Game::validUsingPowerPlant(int i, PowerPlant currentPlant, Resources recycl
 }
 
 //Based on the number of players and the step of the game, the players re-supply the resource market from the supply of resources.
-void Game::reSupplyResource(Resources recycle) {
+void Game::reSupplyResource() {
 
     //Based on the number of players and the step of the game, the players re-supply the resource market (see table at the back of the rules) from the supply of resources
     Resources table;
