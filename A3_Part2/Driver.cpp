@@ -1,9 +1,15 @@
 #include "Game.h"
 
+
+
 int main() {
 
 	Game myGame(2);
 	myGame.loader();
+
+
+	//test for singleton
+	ResourcesMarket* testSinleton = ResourcesMarket:s_instance();
 
 	while(true){
 		myGame.phase1();
