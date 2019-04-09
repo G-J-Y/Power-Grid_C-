@@ -13,7 +13,6 @@ private:
 
 
 public:
-
     static ResourceMarket *instance();
     Resources* getResourcesMarket(){return resourcesMarket;};
 };
