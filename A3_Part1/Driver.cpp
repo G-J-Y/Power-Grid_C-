@@ -6,13 +6,13 @@ int main() {
 	GameObserver *gameObserver = new GameObserver(myGame);
 	myGame->loader();
 	while(true){
-		myGame->notifyTurn();
 		myGame->phase1();
 		myGame->phase2();
 		myGame->phase3();
 		myGame->phase4();
 		if(myGame->checkWin()) break;
 		myGame->phase5();
+		myGame->notifyTurn();
 	}
 	system("pause");
 	return 0;
