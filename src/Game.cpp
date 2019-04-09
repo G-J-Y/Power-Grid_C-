@@ -9,19 +9,15 @@ Game::Game(int numOfPlayer) {
     step = 1;
     turn = 1;
     powerPlants = vector<PowerPlant>(43);
-
+    resources = ResourceMarket::instance()->getResourcesMarket();
     //graph = new Graph(42); //if not initialize here, there's no address for graph
     // myLoader.Load(graph, numOfPlayer) calls graph by reference, but graph has no address
-
-
 }
 
 
 void Game::loader() {
     //mapLoader myLoader;
     //myLoader.Load(graph, numOfPlayer);
-
-
 
 
     //create game map
@@ -225,13 +221,19 @@ void Game::loader() {
 
 
     //Initialize resources Market
-    resources = ResourceMarket::instance()->getResourcesMarket();
 
-
-    //test
-    //ResourceMarket secondSingleton;
-    //ResourceMarket* thirdSingleton = new ResourceMarket();
-
+    //resourceMarket[0] = Resources(3, 0, 0, 0, 1);
+    //resources[1] = Resources(3, 0, 0, 0, 2);
+    //resources[2] = Resources(3, 3, 0, 0, 3);
+    //resources[3] = Resources(3, 3, 0, 0, 4);
+    //resources[4] = Resources(3, 3, 0, 0, 5);
+    //resources[5] = Resources(3, 3, 0, 0, 6);
+    //resources[6] = Resources(3, 3, 3, 0, 7);
+    //resources[7] = Resources(3, 3, 3, 0, 8);
+    //resources[8] = Resources(0, 0, 0, 0, 10);
+    //resources[9] = Resources(0, 0, 0, 0, 12);
+    //resources[10] = Resources(0, 0, 0, 1, 14);
+    //resources[11] = Resources(0, 0, 0, 1, 16);
 
 
 }

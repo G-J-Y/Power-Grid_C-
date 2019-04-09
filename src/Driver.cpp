@@ -5,9 +5,6 @@ int main() {
 	Game myGame(2);
 	myGame.loader();
 
-
-
-
 	while(true){
 		myGame.phase1();
 		myGame.phase3();
