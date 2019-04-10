@@ -15,9 +15,11 @@ private:
 	string name;
 	int money;
 	int numOfCity;
+	string ownedCity;
 	int numOfPowerPlant;
 	int numOfPoweredCities;
 	PowerPlant powerPlant[3];
+	
 
 	//Resources
 	int coalNum;
@@ -84,7 +86,8 @@ public:
 	//print information
 	string toString();
 	static void printPlayerPossession(Player*, int);
-
+	
+	void addCity(string);
 };
 
 

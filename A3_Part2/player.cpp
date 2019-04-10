@@ -10,6 +10,7 @@ Player::Player() {
 	name = "";
 	money = 50;
 	numOfCity = 0;
+	ownedCity = "";
 	numOfPowerPlant = 0;
 	numOfPoweredCities = 0;
 	//powerPlant;
@@ -142,6 +143,7 @@ string Player::toString() {
 	string print = "Overview card for Player: " + name + "\n->Money: " + to_string(money);
 	print += " | coal: " + to_string(coalNum) + " | oil: " + to_string(oilNum) + "  | garbage: " + to_string(garbageNum) + " | uranium: " + to_string(uraniumNum) + "\n";
 	print += "->Num of City: " + to_string(numOfCity) + " | Num Of PoweredCity: " + to_string(numOfPoweredCities)+ "\n";
+	print += "->Owned City: " + ownedCity + "\n";
 	print += "->Cards:\n";
 	for (int i = 0; i < numOfPowerPlant; i++) {
 		print += "  " + powerPlant[i].toString()+"\n";
@@ -177,4 +179,8 @@ void Player::deGarbageNum(int g){
 }
 void Player::deUraniumNum(int u){
 	uraniumNum -= u;
+}
+
+void Player::addCity(string city) {
+	ownedCity += city + " ";
 }

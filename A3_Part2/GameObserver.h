@@ -14,8 +14,7 @@ public:
     GameObserver();
     GameObserver(Game* g);
     ~GameObserver();
-    void updatePositionInfo();
-    void updatePlayerInfo();
+    void update();
 };
 
 

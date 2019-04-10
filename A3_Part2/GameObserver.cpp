@@ -18,15 +18,11 @@ GameObserver::~GameObserver()
     m_game->detach(this);
 }
 
-void GameObserver::updatePositionInfo(){
-    cout<<"Here is the Position of Players:"<<endl;
-    for (int j = 0 ;j<m_game->numOfPlayer;j++){
-        cout<<"[" << (j+1) <<"] --> "<< m_game->players[j].getName()<<endl;
-    }
-}
-
-void GameObserver::updatePlayerInfo(){
+void GameObserver::update(){
+    cout<<"====================Game Static Observer======================="<<endl;
     for(int i = 0 ;i<m_game->numOfPlayer;i++){
+        cout<<"[" << (i+1) <<"] --> "<< m_game->players[i].getName()<<endl;
         cout<< m_game->players[i].toString()<<endl;
     }
+    cout<<"===================End Game Static Observer===================="<<endl;
 }

@@ -85,9 +85,7 @@ public:
 
     void phase5();
 
-    void notifyPositionInfo();
-
-    void notifyPlayerInfo();
+//    void notify();
 
     friend class GameObserver;
 };
