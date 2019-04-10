@@ -7,6 +7,7 @@ int main() {
 
 	while(true){
 		myGame.phase1();
+		myGame.phase2();
 		myGame.phase3();
 		myGame.phase4();
 		if(myGame.checkWin()) break;

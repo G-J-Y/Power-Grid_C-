@@ -7,7 +7,7 @@ void Moderate::execute(PowerPlant& currentPowerPlant, int& currentPrice,
 	vector<PowerPlant>& market, int& numOfPlayerPass,
 	int& playerLeft, int& indexOfCard, Player &p, int turn)
 {
-	cout << "---Moderate strategy used by " << p.getName() << "---\n";
+	cout << "\n---Moderate strategy used by " << p.getName() << "---\n";
 
 	int capacity = 0; //stores the max units of resources a player can buy
 					  //regardless of type

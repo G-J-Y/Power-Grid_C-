@@ -7,7 +7,7 @@ Game::Game() {};
 Game::Game(int numOfPlayer) {
     players = new Player[numOfPlayer];
     this->numOfPlayer = numOfPlayer;
-    step = 1;
+    step = 2;
     turn = 1;
     powerPlants = vector<PowerPlant>(43);
     //graph = new Graph(42); //if not initialize here, there's no address for graph
@@ -243,9 +243,9 @@ void Game::loader() {
 }
 
 void Game::phase1() {
-    cout << "\n----------------Printing game map in Game::phase1--------------- \n";
-    printGraph(graph);
-    cout << "----------------Finish printing in Game::phase1---------------- \n\n";
+    //cout << "\n----------------Printing game map in Game::phase1--------------- \n";
+    //printGraph(graph);
+    //cout << "----------------Finish printing in Game::phase1---------------- \n\n";
     //give a random order in the first turn
     if (turn == 1) {
         shufflePlayers();
@@ -258,89 +258,100 @@ void Game::phase1() {
     }
 
     //
-    cout << "------------------------------After shuffle------------------------------" << endl;
+    cout << "------------------------------After shuffle PowerPlant deck------------------------------" << endl;
     PowerPlant::shuffle(powerPlants);
     /*for (int i = 0; i < powerPlants.size(); i++) {
         cout << powerPlants[i].toString() << endl;
     }*/
     cout << endl;
 
-    //Find cards: powerPlant 13 & step 3
-    if (turn == 1) {
-        for (size_t i = 0; i < powerPlants.size(); i++) {
-            if (powerPlants[i].getNumber() == 13) {
-                PowerPlant temp1;
-                temp1 = powerPlants[i];
-                powerPlants[i] = powerPlants[0];
-                powerPlants[0] = temp1;
-            }
-            if (powerPlants[i].getTypeName() == "step3") {
-                PowerPlant temp2;
-                temp2 = powerPlants[i];
-                powerPlants[i] = powerPlants[powerPlants.size() - 1];
-                powerPlants[powerPlants.size() - 1] = temp2;
-            }
-        }
-        cout << "--------------------After Setting Card Number13 & Card Step3--------------------" << endl;
-        for (size_t i = 0; i < powerPlants.size(); i++) {
-            cout << powerPlants[i].toString() << endl;
-        }
-        cout << endl;
 
-		
-		//for testing moderate strategy only
-		//create 3 cards with resourse needed 1 unit
-		PowerPlant testCard1(97, 2, PowerPlant::coal,1);
-		PowerPlant testCard2(98, 1, PowerPlant::oil, 1);
-		PowerPlant testCard3(99, 3, PowerPlant::garbage,1);
-		
-		//let all player hold 3 cards
-		//and let resource they hold reach capacity (double of the resources needed by a card)
-		for (int i = 0; i < numOfPlayer; i++) {
-			players[i].setPowerPlant(testCard1, 0);
-			players[i].setPowerPlant(testCard2, 1);
-			players[i].setPowerPlant(testCard3, 2);
-			players[i].setNumOfPowerPlant(3);
-			players[i].setCoalNum(4);
-			players[i].setOilNum(2);
-			players[i].setGarbageNum(6);
+
+    //Find cards: powerPlant 13 & step 3, put them as the first and last card in the deck
+	if (turn == 1) {
+		for (size_t i = 0; i < powerPlants.size(); i++) {
+			if (powerPlants[i].getNumber() == 13) {
+				PowerPlant temp1;
+				temp1 = powerPlants[i];
+				powerPlants[i] = powerPlants[0];
+				powerPlants[0] = temp1;
+			}
+			if (powerPlants[i].getTypeName() == "step3") {
+				PowerPlant temp2;
+				temp2 = powerPlants[i];
+				powerPlants[i] = powerPlants[powerPlants.size() - 1];
+				powerPlants[powerPlants.size() - 1] = temp2;
+			}
 		}
+		cout << "--------------------deck After Setting Card Number13 & Card Step3--------------------" << endl;
+		for (size_t i = 0; i < powerPlants.size(); i++) {
+			cout << powerPlants[i].toString() << endl;
+		}
+		cout << endl;
 
 
-        //auction process
-        auctionPhase();
+		
+	}   
+}
+
+void Game::phase2() {
+	
+	//for TESTING moderate strategy ONLY
+	//create 3 cards with resourse needed 1 unit
+	PowerPlant testCard1(97, 2, PowerPlant::coal, 1);
+	PowerPlant testCard2(98, 1, PowerPlant::oil, 1);
+	PowerPlant testCard3(99, 3, PowerPlant::garbage, 1);
+
+	//let all player hold 3 cards
+	//and let resource they hold reach capacity (double of the resources needed by a card)
+	for (int i = 0; i < numOfPlayer; i++) {
+		players[i].setPowerPlant(testCard1, 0);
+		players[i].setPowerPlant(testCard2, 1);
+		players[i].setPowerPlant(testCard3, 2);
+		players[i].setNumOfPowerPlant(3);
+		players[i].setCoalNum(4);
+		players[i].setOilNum(2);
+		players[i].setGarbageNum(6);
+	}
+	//finish for TESTING
 
 
-        cout << "Phase finish" << endl;
-        cout << endl;
-
-        //if no one buy card, delete the smallest one
-        if (checkNoOneBuyCard()) {
-            cout << "No one buy power plant card in this turn" << endl;
-            cout << "------------------------------Market (Updated)------------------------------" << endl;
-            market[0] = powerPlants.front();
-            setMarketOrder(market);
-            powerPlants.erase(powerPlants.begin());
-            for (size_t i = 0; i < market.size(); i++) {
-                cout << market[i].toString() << endl;
-            }
-            cout << endl;
-        }
+	
+	
+	
+	//auction process
+	auctionPhase();
 
 
-        // set the order of the players at the end of each turn
-        setPlayerOrder(players, numOfPlayer);
-        cout << "New order of the players " << endl;
-        for (int i = 0; i < numOfPlayer; i++) {
-            cout << players[i].getName() << endl;
-            cout << players[i].toString() << endl;
-            cout << endl;
-        }
+	cout << "Phase finish" << endl;
+	cout << endl;
 
-        cout << "Moving to the next phase" << endl;
-        //turn++;
-        cout << endl;
-    }
+	//if no one buy card, delete the smallest one
+	if (checkNoOneBuyCard()) {
+		cout << "No one buy power plant card in this turn" << endl;
+		cout << "------------------------------Market (Updated)------------------------------" << endl;
+		market[0] = powerPlants.front();
+		setMarketOrder(market);
+		powerPlants.erase(powerPlants.begin());
+		for (size_t i = 0; i < market.size(); i++) {
+			cout << market[i].toString() << endl;
+		}
+		cout << endl;
+	}
+
+
+	// set the order of the players at the end of each turn
+	setPlayerOrder(players, numOfPlayer);
+	cout << "New order of the players " << endl;
+	for (int i = 0; i < numOfPlayer; i++) {
+		cout << players[i].getName() << endl;
+		cout << players[i].toString() << endl;
+		cout << endl;
+	}
+
+	cout << "Moving to the next phase" << endl;
+	//turn++;
+	cout << endl;
 }
 
 void Game::phase3() {
@@ -901,6 +912,28 @@ void Game::auctionPhase() {   //*player
     //status: pass(0) || auction(1)
     int status;		
 
+	//ask user if they want to use any strategy
+	for (int i = 0; i < numOfPlayer; i++) {
+		Strategy *agg = new Aggressive();
+		Strategy *mod = new Moderate();
+		Strategy *env = new Environmentalist();
+
+		cout << players[i].getName() << ", Please select a strategy: \n"
+			<< "1. Aggressive\n"
+			<< "2. Moderate\n"
+			<< "3. Environmental\n"
+			<< "0. No strategy\n";
+		int x;
+		cin >> x;
+		if (x == 1)
+			players[i].setStrategy(agg);
+		else if (x == 2)
+			players[i].setStrategy(mod);
+		else if (x == 3)
+			players[i].setStrategy(env);
+		else
+			players[i].setStrategy(NULL);
+	}
     //in the first turn, each players must buy one power plant
     if (turn == 1) {
         
@@ -910,27 +943,27 @@ void Game::auctionPhase() {   //*player
         //PowerPlant currentPowerPlant;
 
 		//ask user if they want to use any strategy
-		for (int i = 0; i < numOfPlayer; i++) {
-			Strategy *agg = new Aggressive();
-			Strategy *mod = new Moderate();
-			Strategy *env = new Environmentalist();
-			
-			cout << players[i].getName() << ", Please select a strategy: \n" 
-				<< "1. Aggressive\n"
-				<< "2. Moderate\n"
-				<< "3. Environmental\n"
-				<< "0. No strategy\n";
-			int x;
-			cin >> x;
-			if (x == 1)
-				players[i].setStrategy(agg);
-			else if (x == 2)
-				players[i].setStrategy(mod);
-			else if (x == 3)
-				players[i].setStrategy(env);
-			else
-				players[i].setStrategy(NULL);			
-		}
+		//for (int i = 0; i < numOfPlayer; i++) {
+		//	Strategy *agg = new Aggressive();
+		//	Strategy *mod = new Moderate();
+		//	Strategy *env = new Environmentalist();
+		//	
+		//	cout << players[i].getName() << ", Please select a strategy: \n" 
+		//		<< "1. Aggressive\n"
+		//		<< "2. Moderate\n"
+		//		<< "3. Environmental\n"
+		//		<< "0. No strategy\n";
+		//	int x;
+		//	cin >> x;
+		//	if (x == 1)
+		//		players[i].setStrategy(agg);
+		//	else if (x == 2)
+		//		players[i].setStrategy(mod);
+		//	else if (x == 3)
+		//		players[i].setStrategy(env);
+		//	else
+		//		players[i].setStrategy(NULL);			
+		//}
 
 		//when there are two or more players that hasn't got a card, they need to bid
         while (playerLeft > 1) {
@@ -1112,7 +1145,7 @@ void Game::auctionPhase() {   //*player
             int choice;
 			int numOfPass = numOfPlayer-1;
             for (int i = 0; i < numOfPlayer; i++) {
-                if (players[i].getNumOfPowerPlant() == 0 ) { 
+                if (players[i].getNumOfPowerPlant() == 0 || players[i].getNumOfPowerPlant() == 3) {
 					//for moderate test, last player's numOfPowerPlant should be 3
                     who = i;
                 }
@@ -1143,7 +1176,7 @@ void Game::auctionPhase() {   //*player
 				buyCard(players[who], market[indexOfCard]);
 			}
 
-			//the last player will choose to buy a card manually
+			//for player who does not use a strategy, he/she buys a card manually
 			else {
 				//who's turn right now
 				cout << players[who].getName() << endl;
@@ -1224,17 +1257,7 @@ void Game::auctionPhase() {   //*player
     //----------------------------------------turn > 1 auction------------------------------------
     else {
         int playerLeft = numOfPlayer;
-		cout << "Turn " << turn << " auction starts!!\n";
-		for (int i = 0; i < numOfPlayer; i++) {
-			Strategy *agg = new Aggressive();
-			cout << players[i].getName() << ", do you need strategy aggressive? (1/0)" << endl;
-			int x;
-			cin >> x;
-			if (x == 1)
-				players[i].setStrategy(agg);
-			else
-				players[i].setStrategy(NULL);
-		}
+		cout << "Turn " << turn << " auction starts!!\n";		
         //start turn
         while (playerLeft > 1) {
             int choice;
@@ -1248,11 +1271,13 @@ void Game::auctionPhase() {   //*player
             // auction process
             int numOfPlayerPass = 0;
 
-            while (numOfPlayerPass < playerLeft - 1) {
+            while (numOfPlayerPass < playerLeft - 1) {  // there are more than 2 players bidding
                 for (int i = 0; i < numOfPlayer; i++) {
-                    if (numOfPlayerPass >= playerLeft - 1) {
+                    if (numOfPlayerPass >= playerLeft - 1) { // if there are only 1 player bidding, no need to bid.
                         break;
                     }
+
+					// if player has already chosen not to buy card this turn, or the player has already bought a card this turn
                     if (players[i].getRoundStatus() == false || players[i].getBought() == true) {
                         pass(players[i]);
                     } 
@@ -1260,32 +1285,20 @@ void Game::auctionPhase() {   //*player
 					else {
                         //cout << "Bought?" << players[i].getBought() << endl; //test
 
-						// if this player choose to use a strategy
+						// if this player has chosen to use a strategy
+						// he/she will automatically buy or pass here
 						if (players[i].getStrategy()) {
-
-							int money = players[i].getMoney();
-							string name = players[i].getName();
-
-							//in executeStrategy function below, 
-							//if the player do not have enough money
-							//he/she will jump out the function (in the last round)
-							//and pass here
-							if (players[i].getMoney() <= currentAuctionPrice)
-							{
-								pass(players[i]);
-								numOfPlayerPass++;
-							}
-
 							//start using the strategy
 							players[i].executeStrategy(currentPowerPlant, currentAuctionPrice,
 								market, numOfPlayerPass,
 								playerLeft, indexOfCard, players[i], turn);
 							//at this point
 							//the player either wins the bid 
-							//or does not have enough money and will pass in next round
+							//or pass for not enough money or no target card
 
 						}
 
+						// if this player bid manually 
 						else {
 							if (players[i].getAuction() == true) {
 
@@ -1431,76 +1444,101 @@ void Game::auctionPhase() {   //*player
             for (int i = 0; i < numOfPlayer; i++) {
                 if (players[i].getBought() == false && players[i].getRoundStatus() == true) {
                     who = i;
-                    //who's turn right now
-                    cout << players[who].getName() << endl;
-                    cout << "You are the last player" << endl;
-                    cout << "Pass the whole round -> Enter: 9" << endl;
-                    cout << "Auction -> Enter: 1" << endl;
-                    cin >> status;
-                    cout << endl;
+                    
+					//if the last player is a player that uses strategy
+					if (players[who].getStrategy()) {
 
-                    while (status != 1 && status != 9) {
-                        cout << "Please enter a correct number" << endl;
-                        cout << "Pass the whole round -> Enter: 9" << endl;
-                        cout << "Auction -> Enter: 1" << endl;
-                        cout << "Pass -> Enter: 0" << endl;
-                        cin >> status;
-                    }
+						//start using the strategy
+						cout << "last player uses strategy.\n";
+						players[who].executeStrategy(currentPowerPlant, currentAuctionPrice,
+							market, numOfPass,
+							playerLeft, indexOfCard, players[who], turn);
+						//at this point
+						//the player either wins the bid 
+						//or does not have enough money and will pass in next round
+						choice = indexOfCard;
+						//if the money is not enough to buy the target card or the target card is not found
+						while (players[who].getMoney() < market[choice].getNumber() || choice == -1)
+						{
+							continue
+						}
+						abilityOfPurchase(choice);
+						buyCard(players[who], market[indexOfCard]);
+					}
 
-                    if (status == 9) {
-                        players[who].setRoundStatus(false);
-                        pass(players[who]);
-                        playerLeft--;
-
-                    } 
-
+					//if the last player is a player that does not use strategy
 					else {
+						//who's turn right now
 
-                        if (currentPowerPlant.getNumber() == 0) {
-                            //choose a card to auction
-                            cout << "Enter the number of the card in the market to start auction: ";
-                            cin >> choice;
-                            //check if the card is exist
-                            abilityOfPurchase(choice);
+						cout << players[who].getName() << endl;
+						cout << "You are the last player" << endl;
+						cout << "Pass the whole round -> Enter: 9" << endl;
+						cout << "Auction -> Enter: 1" << endl;
+						cin >> status;
+						cout << endl;
 
-                        }
-                        auction(players[who], market[indexOfCard],numOfPass);
+						while (status != 1 && status != 9) {
+							cout << "Please enter a correct number" << endl;
+							cout << "Pass the whole round -> Enter: 9" << endl;
+							cout << "Auction -> Enter: 1" << endl;
+							cout << "Pass -> Enter: 0" << endl;
+							cin >> status;
+						}
 
-                        buyCard(players[who], market[indexOfCard]);
+						if (status == 9) {
+							players[who].setRoundStatus(false);
+							pass(players[who]);
+							playerLeft--;
 
-                        //print the information of the card
-                        cout << "Congratulation, " << players[who].getName() << endl;
-                        cout << "You get: " << endl;
-                        cout << currentPowerPlant.toString() << endl;
-                        cout << endl;
+						}
 
-                        //draw a new plant card, put it in the market and change the order
-                        market[indexOfCard] = powerPlants.front();
-                        if (powerPlants.front().getTypeName() == "step3") {
-                            step = 3;
-                            setMarketOrder(market);
-                            changeMarketToStep3(market);
-                            powerPlants.erase(powerPlants.begin());
-                        } else {
-                            powerPlants.erase(powerPlants.begin());
-                            setMarketOrder(market);
-                        }
+						else {
 
-                        //reset the status to true
-                        for (int i = 0; i < numOfPlayer; i++) {
-                            players[i].setAuction(true);
-                        }
+							if (currentPowerPlant.getNumber() == 0) {
+								//choose a card to auction
+								cout << "Enter the number of the card in the market to start auction: ";
+								cin >> choice;
+								//check if the card is exist
+								abilityOfPurchase(choice);
 
-                        //reset auction price and auction card
-                        currentPowerPlant.setNumber(0);
-                        currentAuctionPrice = 0;
-                        //numOfPlayerPass = 0;
-                        indexOfCard = 0;
+							}
+							auction(players[who], market[indexOfCard], numOfPass);
 
-                    }
+							buyCard(players[who], market[indexOfCard]);
 
+							//print the information of the card
+							cout << "Congratulation, " << players[who].getName() << endl;
+							cout << "You get: " << endl;
+							cout << currentPowerPlant.toString() << endl;
+							cout << endl;
 
-                }
+							//draw a new plant card, put it in the market and change the order
+							market[indexOfCard] = powerPlants.front();
+							if (powerPlants.front().getTypeName() == "step3") {
+								step = 3;
+								setMarketOrder(market);
+								changeMarketToStep3(market);
+								powerPlants.erase(powerPlants.begin());
+							}
+							else {
+								powerPlants.erase(powerPlants.begin());
+								setMarketOrder(market);
+							}
+
+							//reset the status to true
+							for (int i = 0; i < numOfPlayer; i++) {
+								players[i].setAuction(true);
+							}
+
+							//reset auction price and auction card
+							currentPowerPlant.setNumber(0);
+							currentAuctionPrice = 0;
+							//numOfPlayerPass = 0;
+							indexOfCard = 0;
+
+						}
+					}
+				}
             }
 
         }
@@ -1517,9 +1555,7 @@ void Game::auctionPhase() {   //*player
         }
         cout << endl;
 
-    }
-
-	
+    } // end of auction for turn >= 2	
 }
 
 
