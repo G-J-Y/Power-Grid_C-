@@ -59,3 +59,10 @@ void Subject::notifyAuctionResult(Player p, PowerPlant card) {
 		(*i)->updateAuctionResult(p,card);
 	}
 }
+
+void Subject::notifyOnePlayerTurn(Player p) {
+	std::list<Observer *>::iterator i = _observers->begin();
+	for (; i != _observers->end(); i++) {
+		(*i)->updateOnePlayerTurn(p);
+	}
+}

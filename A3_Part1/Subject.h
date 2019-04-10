@@ -18,6 +18,6 @@ public:
 	virtual void notifyPlayer();
 	virtual void notifyHeader();
 	virtual void notifyAuctionResult(Player p, PowerPlant card);
-	
+	virtual void notifyOnePlayerTurn(Player p);
 };
 
