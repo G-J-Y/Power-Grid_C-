@@ -1,14 +1,18 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
-#include "Aggressive.h"
+
 #include "House.h"
-#include "Resources.h"
-#include "mapLoader.h"
+#include "PowerPlant.h"
 #include <string>
 
 //#include "Moderate.h"
 //#include "Environmentalist.h"
 using namespace std;
+
+class Strategy;
+class Aggressive;
+class Moderate;
+class Environmentalist;
 
 class Player {
 private:
@@ -39,6 +43,8 @@ private:
 public:
 	Player();
 	//Player(Strategy *initStrategy);  //part3
+	
+
 
 	//set methods
 	void setMoney(int);
@@ -94,9 +100,43 @@ public:
 
 	void executeStrategy(PowerPlant& currentCard, int& currentPrice
 		, vector<PowerPlant> market, int& numOfPlayerPass,
-		int& playerLeft, int& indexOfCard, int money, string name);
+		int& playerLeft, int& indexOfCard, Player &p, int turn);
 
 
+};
+
+class Strategy {
+public:
+	/**
+	* Method whose implementation varies depending on the strategy adopted.
+	*/
+
+	virtual void execute(PowerPlant& currentCard, int& currentPrice,
+		vector<PowerPlant>& market, int& numOfPlayerPass,
+		int& playerLeft, int& indexOfCard, Player &p, int turn) = 0;
+};
+
+
+class Aggressive : public Strategy {
+public:
+	void execute(PowerPlant& currentCard, int& currentPrice,
+		vector<PowerPlant>& market, int& numOfPlayerPass,
+		int& playerLeft, int& indexOfCard, Player &p, int turn);
+};
+
+
+class Moderate : public Strategy {
+public:
+	void execute(PowerPlant& currentPowerPlant, int& currentPrice,
+		vector<PowerPlant>& market, int& numOfPlayerPass,
+		int& playerLeft, int& indexOfCard, Player &p, int turn);
+};
+
+class Environmentalist : public Strategy {
+public:
+	void execute(PowerPlant& currentPowerPlant, int& currentPrice,
+		vector<PowerPlant>& market, int& numOfPlayerPass,
+		int& playerLeft, int& indexOfCard, Player &p, int turn);
 };
 
 
