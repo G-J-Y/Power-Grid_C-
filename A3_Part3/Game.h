@@ -2,7 +2,6 @@
 #include <time.h>
 #include "mapLoader.h"
 #include "Player.h"
-#include "Aggressive.h"
 #include "Resources.h"
 
 

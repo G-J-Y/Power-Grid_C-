@@ -54,3 +54,8 @@ void GameObserver::updateAuctionResult(Player p, PowerPlant card) {
 	//cout << card.toString() << endl;
 	cout << endl;
 }
+
+void GameObserver::updateOnePlayerTurn(Player p) {
+	cout << "It's player \"" << p.getName() << "\" turn" << endl;
+	cout << endl;
+}

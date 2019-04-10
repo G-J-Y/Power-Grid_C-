@@ -11,6 +11,7 @@ public:
 	virtual void updatePhase() = 0;
 	virtual void updatePlayer() = 0;
 	virtual void updateAuctionResult(Player p, PowerPlant card) = 0;
+	virtual void updateOnePlayerTurn(Player p)=0;
 	~Observer();
 };
 

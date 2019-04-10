@@ -215,9 +215,10 @@ void Player::deUraniumNum(int u){
 //part 3
 void Player::executeStrategy(PowerPlant& currentPowerPlant, int& currentAuctionPrice,
 	 vector<PowerPlant> market, int& numOfPlayerPass,
-	int& playerLeft, int& indexOfCard, int money, string name)
+	int& playerLeft, int& indexOfCard, Player &p, int turn)
 {
 	myStrategy->execute(currentPowerPlant, currentAuctionPrice,
 		 market, numOfPlayerPass,
-		playerLeft, indexOfCard, money, name);
+		playerLeft, indexOfCard, p, turn);
 }
+

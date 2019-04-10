@@ -363,7 +363,8 @@ void Game::phase3() {
 
     std::cout << "[INFO] PHASE3: Buying Resources" << std::endl;
     for (int i = numOfPlayer - 1; i >= 0; i--) {
-        std::cout << "[INFO] " << players[i].getName() << ", it's your turn now!" << std::endl;
+		notifyOnePlayerTurn(players[i]);
+        //std::cout << "[INFO] " << players[i].getName() << ", it's your turn now!" << std::endl;
         std::cout << players[i].toString();
         std::cout << std::endl;
 
@@ -388,7 +389,9 @@ void Game::phase4(){
     for (int i = numOfPlayer - 1; i >= 0; i--) {
         std::cout << std::endl;
         printGraph(graph);
-        std::cout << "[INFO]" << players[i].getName() << ", it's your turn!" << std::endl;
+		//observer which player's turn
+		notifyOnePlayerTurn(players[i]);
+        //std::cout << "[INFO]" << players[i].getName() << ", it's your turn!" << std::endl;
         while (true) {
 
             //check the step
@@ -541,6 +544,10 @@ void Game::phase5() {
 	phase = 1;
 	turn++;
 }
+
+
+
+
 
 
 
@@ -752,7 +759,7 @@ void Game::buyCard(Player &p, PowerPlant card) {
                     p.setPowerPlant(card, j);
                     setCardOwnedByPlayer(p);
                     cout << "Success! Now you own: " << endl;
-                    p.setMoney(p.getMoney() - card.getNumber());
+                    p.setMoney(p.getMoney()-currentAuctionPrice);
 
                     //print
                     for (int i = 0; i < num; i++) {
@@ -775,7 +782,7 @@ void Game::buyCard(Player &p, PowerPlant card) {
     } else {
         p.setPowerPlant(card, num);
         p.setBought(true);
-        p.setMoney(p.getMoney() - card.getNumber());
+        p.setMoney(p.getMoney() - currentAuctionPrice);
         num = num + 1;
         p.setNumOfPowerPlant(num);
     }
@@ -937,9 +944,10 @@ void Game::auctionPhase() {   //*player
                         //cout << "Status:" << players[i].getAuction() << endl;
                         if (players[i].getAuction() == true) {
 
-                            cout << players[i].getName() << endl;
+							notifyOnePlayerTurn(players[i]);
+                            /*cout << players[i].getName() << endl;
                             cout << "It's your turn" << endl;
-
+*/
                             //who's turn right now
                             /*cout << players[i].getName() << endl;
                             cout << "It's your turn" << endl;*/
@@ -1058,6 +1066,8 @@ void Game::auctionPhase() {   //*player
                     who = i;
                 }
             }
+
+			notifyOnePlayerTurn(players[who]);
             //who's turn right now
             cout << players[who].getName() << endl;
             cout << "You are the last one" << endl;
@@ -1147,8 +1157,10 @@ void Game::auctionPhase() {   //*player
                         //cout << "Bought?" << players[i].getBought() << endl; //test
                         if (players[i].getAuction() == true) {
 
-                            cout << players[i].getName() << endl;
-                            cout << "It's your turn" << endl;
+							notifyOnePlayerTurn(players[i]);
+                            /*cout << players[i].getName() << endl;
+                            cout << "It's your turn" << endl;*/
+
                             cout << "Pass the whole round -> Enter: 9" << endl;
                             cout << "Auction -> Enter: 1" << endl;
                             cout << "Pass -> Enter: 0" << endl;
@@ -1231,11 +1243,8 @@ void Game::auctionPhase() {   //*player
 
                     buyCard(players[i], market[indexOfCard]);
 
-                    //print the information of the card
-                    cout << "Congratulation, " << players[i].getName() << endl;
-                    cout << "You get: " << endl;
-                    cout << currentPowerPlant.toString() << endl;
-                    cout << endl;
+					//observer, which player get the card
+					notifyAuctionResult(players[i], currentPowerPlant);
 
                     playerLeft--;
 
@@ -1326,10 +1335,12 @@ void Game::auctionPhase() {   //*player
                         buyCard(players[who], market[indexOfCard]);
 
                         //print the information of the card
-                        cout << "Congratulation, " << players[who].getName() << endl;
+						//observer, which player get the card
+						notifyAuctionResult(players[who], currentPowerPlant);
+                        /*cout << "Congratulation, " << players[who].getName() << endl;
                         cout << "You get: " << endl;
                         cout << currentPowerPlant.toString() << endl;
-                        cout << endl;
+                        cout << endl;*/
 
                         //draw a new plant card, put it in the market and change the order
                         market[indexOfCard] = powerPlants.front();
@@ -1376,6 +1387,7 @@ void Game::auctionPhase() {   //*player
 
     }
 }
+
 
 
 
@@ -1745,6 +1757,8 @@ bool Game::adjustMarket(int &step) {
     PowerPlant::setMarketOrder(market);					//reorder
     return goToStep3;
 }
+
+
 
 
 
