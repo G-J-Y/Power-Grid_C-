@@ -1,7 +1,7 @@
 #include "Game.h"
 //using namespace std;
 //default constructor
-Game::Game() {};
+Game::Game(){};
 
 Game::Game(int numOfPlayer) {
     players = new Player[numOfPlayer];
@@ -11,7 +11,6 @@ Game::Game(int numOfPlayer) {
     powerPlants = vector<PowerPlant>(43);
     //graph = new Graph(42); //if not initialize here, there's no address for graph
     // myLoader.Load(graph, numOfPlayer) calls graph by reference, but graph has no address
-
 }
 
 
@@ -211,11 +210,11 @@ void Game::loader() {
         powerPlants.erase(powerPlants.begin());
     }
     //Print the cards in the market
-    cout << "------------------------------Market------------------------------" << endl;
-    for (size_t i = 0; i < market.size(); i++) {
-        cout << market[i].toString() << endl;
-    }
-    cout << endl;
+    //cout << "------------------------------Market------------------------------" << endl;
+    //for (size_t i = 0; i < market.size(); i++) {
+    //    cout << market[i].toString() << endl;
+    //}
+    //cout << endl;
 
 
 
@@ -237,27 +236,25 @@ void Game::loader() {
 }
 
 void Game::phase1() {
-   // cout << "\n----------------Printing game map in Game::phase1--------------- \n";
-    //printGraph(graph);
-    //cout << "----------------Finish printing in Game::phase1---------------- \n\n";
+   
     //give a random order in the first turn
     if (turn == 1) {
         shufflePlayers();
-        for (int i = 0; i < numOfPlayer; i++) {
-            //players[i].setNumOfCity(i);
-            cout << players[i].getName() << endl;
-            cout << players[i].toString() << endl;
-            cout << endl;
-        }
+        //for (int i = 0; i < numOfPlayer; i++) {
+        //    //players[i].setNumOfCity(i);
+        //    cout << players[i].getName() << endl;
+        //    cout << players[i].toString() << endl;
+        //    cout << endl;
+        //}
     }
     notify();
     //
-    cout << "------------------------------After shuffle------------------------------" << endl;
+    //cout << "------------------------------After shuffle------------------------------" << endl;
     PowerPlant::shuffle(powerPlants);
     /*for (int i = 0; i < powerPlants.size(); i++) {
         cout << powerPlants[i].toString() << endl;
     }*/
-    cout << endl;
+    //cout << endl;
 
     //Find cards: powerPlant 13 & step 3
 	if (turn == 1) {
@@ -276,11 +273,11 @@ void Game::phase1() {
 			}
 
 		}
-		cout << "--------------------After Setting Card Number13 & Card Step3--------------------" << endl;
+		/*cout << "--------------------After Setting Card Number13 & Card Step3--------------------" << endl;
 		for (size_t i = 0; i < powerPlants.size(); i++) {
 			cout << powerPlants[i].toString() << endl;
 		}
-		cout << endl;
+		cout << endl;*/
 	}
 
         //auction process
@@ -306,13 +303,13 @@ void Game::phase1() {
 
         // set the order of the players at the end of each turn
         setPlayerOrder(players, numOfPlayer);
-        cout << "New order of the players " << endl;
+        /*cout << "New order of the players " << endl;
         for (int i = 0; i < numOfPlayer; i++) {
             cout << players[i].getName() << endl;
             cout << players[i].toString() << endl;
             cout << endl;
-        }
-
+        }*/
+		notify();
         cout << "Moving to the next phase" << endl;
         //turn++;
         cout << endl;
@@ -704,7 +701,7 @@ void Game::buyCard(Player &p, PowerPlant card) {
                     p.setPowerPlant(card, j);
                     setCardOwnedByPlayer(p);
                     cout << "Success! Now you own: " << endl;
-                    p.setMoney(p.getMoney() - card.getNumber());
+                    p.setMoney(p.getMoney() - currentAuctionPrice);
 
                     //print
                     for (int i = 0; i < num; i++) {
@@ -727,7 +724,7 @@ void Game::buyCard(Player &p, PowerPlant card) {
     } else {
         p.setPowerPlant(card, num);
         p.setBought(true);
-        p.setMoney(p.getMoney() - card.getNumber());
+        p.setMoney(p.getMoney() -currentAuctionPrice);
         num = num + 1;
         p.setNumOfPowerPlant(num);
     }
@@ -892,9 +889,7 @@ void Game::auctionPhase() {   //*player
                             cout << players[i].getName() << endl;
                             cout << "It's your turn" << endl;
 
-                            //who's turn right now
-                            /*cout << players[i].getName() << endl;
-                            cout << "It's your turn" << endl;*/
+                            //who's turn right now   
                             cout << "Auction -> Enter: 1" << endl;
                             cout << "Pass -> Enter: 0" << endl;
                             cin >> status;
@@ -955,6 +950,7 @@ void Game::auctionPhase() {   //*player
             //who buy this card
             for (int i = 0; i < numOfPlayer; i++) {
                 if (players[i].getAuction() == true && currentPowerPlant.getNumber() != 0) {
+					//buyCard(players[i],currentPowerPlant);
                     int num = players[i].getNumOfPowerPlant();
                     players[i].setPowerPlant(market[indexOfCard], num);//give card to player
                     players[i].setMoney(players[i].getMoney() - currentAuctionPrice);//pay
@@ -981,6 +977,7 @@ void Game::auctionPhase() {   //*player
             }
 
             //reset auction price and auction card
+
             currentPowerPlant.setNumber(0);
             currentAuctionPrice = 0;
             //numOfPlayerPass = 0;
@@ -1006,6 +1003,7 @@ void Game::auctionPhase() {   //*player
                     who = i;
                 }
             }
+
             //who's turn right now
             cout << players[who].getName() << endl;
             cout << "You are the last one" << endl;
@@ -1040,6 +1038,7 @@ void Game::auctionPhase() {   //*player
             setMarketOrder(market);
 
             //reset auction price and auction card
+			players[who].setBought(false);        
             currentPowerPlant.setNumber(0);
             currentAuctionPrice = 0;
             //numOfPlayerPass = 0;
@@ -1153,8 +1152,13 @@ void Game::auctionPhase() {   //*player
                                 playerLeft--;
 
                             } else {
-
                                 if (currentPowerPlant.getNumber() == 0) {
+									cout << "------------------------------Market------------------------------"
+										<< endl;
+									for (size_t i = 0; i < market.size(); i++) {
+										cout << market[i].toString() << endl;
+									}
+									cout << endl;
                                     //if no card is auction, choose a card to start auction
                                     cout << "Enter the number of the card in the market to start auction: ";
                                     cin >> choice;
@@ -1300,7 +1304,7 @@ void Game::auctionPhase() {   //*player
                         }
 
                         //reset auction price and auction card
-                        currentPowerPlant.setNumber(0);
+						currentPowerPlant.setNumber(0);
                         currentAuctionPrice = 0;
                         //numOfPlayerPass = 0;
                         indexOfCard = 0;
@@ -2096,3 +2100,8 @@ void Game::updateMarket() {
 //        (*i)->update();
 //    }
 //}
+
+Game::~Game() {
+    delete players;
+    delete graph;
+}

@@ -15,6 +15,9 @@ int main() {
 		myGame->phase5();
 
 	}
+	delete gameOB;
+	delete myGame;
+
 	system("pause");
 	return 0;
 }
