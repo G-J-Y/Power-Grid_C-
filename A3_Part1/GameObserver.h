@@ -10,13 +10,14 @@ public:
 	GameObserver();
 	GameObserver(Game* g);
 	~GameObserver();
-	void updateStep();
+	void update();
+	/*void updateStep();
 	void updateTurn();
 	void updatePlayer();
 	void updatePhase();
 	void updateHeader();
 	void updateAuctionResult(Player p, PowerPlant card);
-	void updateOnePlayerTurn(Player p);
+	void updateOnePlayerTurn(Player p);*/
 	
 };
 

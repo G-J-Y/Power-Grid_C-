@@ -2,7 +2,7 @@
 #include"GameObserver.h"
 int main() {
 
-	Game *myGame = new Game(4);
+	Game *myGame = new Game(3);
 	GameObserver *gameObserver = new GameObserver(myGame);
 	myGame->loader();
 	while(true){
@@ -12,8 +12,9 @@ int main() {
 		myGame->phase4();
 		if(myGame->checkWin()) break;
 		myGame->phase5();
-		myGame->notifyTurn();
 	}
+	
+
 	system("pause");
 	return 0;
 }

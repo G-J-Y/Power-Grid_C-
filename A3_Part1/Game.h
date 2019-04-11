@@ -18,6 +18,7 @@ private:
     vector<PowerPlant> market;
     Graph *graph;
 	int phase;
+	Player currentPlayer;
 	//GameObserver *gameObserver;
 	
 
@@ -93,5 +94,6 @@ public:
 	int getNumOfPlayers();
 	int getPhase();
 	Player* getPlayers();
+	Player getCurrentPlayer();
 
 };

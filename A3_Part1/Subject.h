@@ -12,12 +12,13 @@ public:
 	~Subject();
 	virtual void attach(Observer *o);
 	virtual void detach(Observer *o);
-	virtual void notifyStep();
+	virtual void notify();
+	/*virtual void notifyStep();
 	virtual void notifyTurn();
 	virtual void notifyPhase();
 	virtual void notifyPlayer();
 	virtual void notifyHeader();
 	virtual void notifyAuctionResult(Player p, PowerPlant card);
-	virtual void notifyOnePlayerTurn(Player p);
+	virtual void notifyOnePlayerTurn(Player p);*/
 };
 
