@@ -1022,7 +1022,7 @@ void Game::auctionPhase() {   //*player
 					//buyCard(players[i],currentPowerPlant);
                     int num = players[i].getNumOfPowerPlant();
                     players[i].setPowerPlant(market[indexOfCard], num);
-                    players[i].setMoney(players[i].getMoney() - market[indexOfCard].getNumber());
+					players[i].setMoney(players[i].getMoney() - currentAuctionPrice);
 
                     //print the information of the card
                     cout << "Congratulation, " << players[i].getName() << endl;
@@ -1276,6 +1276,8 @@ void Game::auctionPhase() {   //*player
                     market[indexOfCard] = powerPlants.front();
                     if (powerPlants.front().getTypeName() == "step3") {
                         step = 3;
+						currentPlayer.setName("");
+						notify();
                         setMarketOrder(market);
                         changeMarketToStep3(market);
                         powerPlants.erase(powerPlants.begin());
@@ -1465,7 +1467,7 @@ void Game::buyResources(int i) {
             }
             //Check if Player's inventory is full
             if (inputNum > coalMax + hybridMax - coalNum + ((oilMax - oilNum) < 0 ? (oilMax - oilNum) : 0)) {
-                std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber." << std::endl;
+                std::cout << "[ERROR] You do not have enough space! Please enter a smaller number." << std::endl;
                 continue;
             }
 
