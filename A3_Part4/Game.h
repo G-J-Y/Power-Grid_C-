@@ -2,24 +2,24 @@
 #include <time.h>
 #include "mapLoader.h"
 #include "Player.h"
+#include "Resources.h"
+#include "Subject.h"
 #include "ResourceMarket.h"
 
 
-class Game {
+class GameObserver;
+
+class Game : public Subject {
+
 private:
     int step;
     int turn;
     int numOfPlayer;
     Player *players;
     Resources* resources;
-    //Resources* resources;
-
-    House house[132];
     vector<PowerPlant> powerPlants;
     vector<PowerPlant> market;
     Graph *graph;
-    Resources recycle;
-
 
     //phase1_2
     void shufflePlayers( );
@@ -55,11 +55,11 @@ private:
 
 
     //phase5
-    void earnCash();                    //the players earn cash
+    void earnCash(Resources);                    //the players earn cash
 
-    bool validUsingPowerPlant(int, PowerPlant);    //return true if the input is valid for the number of cities the player wants to power
+    bool validUsingPowerPlant(int, PowerPlant, Resources);    //return true if the input is valid for the number of cities the player wants to power
 
-    void reSupplyResource();  //Based on the number of players and the step of the game, the players re-supply the resource market from the supply of resources.
+    void reSupplyResource(Resources);  //Based on the number of players and the step of the game, the players re-supply the resource market from the supply of resources.
 
     void updateMarket();//Place the highest numbered power plant from the future market face down under the draw stack and draw a new one to replace it. Rearrange the market appropriately.
 
@@ -69,6 +69,8 @@ public:
     Game();
 
     Game(int numOfPlayer);
+
+    ~Game();
 
     void loader();
 
@@ -85,5 +87,7 @@ public:
 
     void phase5();
 
+//    void notify();
 
+    friend class GameObserver;
 };

@@ -1,7 +1,7 @@
 #include "Game.h"
-
+//using namespace std;
 //default constructor
-Game::Game() {};
+Game::Game(){};
 
 Game::Game(int numOfPlayer) {
     players = new Player[numOfPlayer];
@@ -9,7 +9,6 @@ Game::Game(int numOfPlayer) {
     step = 1;
     turn = 1;
     powerPlants = vector<PowerPlant>(43);
-    resources = ResourceMarket::instance()->getResourcesMarket();
     //graph = new Graph(42); //if not initialize here, there's no address for graph
     // myLoader.Load(graph, numOfPlayer) calls graph by reference, but graph has no address
 }
@@ -18,6 +17,26 @@ Game::Game(int numOfPlayer) {
 void Game::loader() {
     //mapLoader myLoader;
     //myLoader.Load(graph, numOfPlayer);
+
+
+
+    //Initialize resources Market
+    //In one game, there is only one resource market, we use singleton here to ensure that no other object can be created from ResourceMarket class
+    resources = ResourceMarket::instance()->getResourcesMarket();
+
+    //test singleton design pattern, there will be compiler errors if we uncomment the following statements
+    //ResourceMarket secondSingleton;
+    //ResourceMarket* thirdSingleton = new ResourceMarket();
+
+    //print the resource market
+    cout << "-----------------------------------------------" << endl;
+    std::cout << "[INFO] Here is the Resource Market:" << std::endl;
+    for (int i = 0; i < 12; i++) {
+        cout << resources[i].toString() << endl;
+    }
+
+
+
 
 
     //create game map
@@ -64,8 +83,7 @@ void Game::loader() {
     Graph gameMap(size);
     //gameMap = Graph(size);
     createBaseCity(&gameMap, cityNameIDPair);
-    printGraph(&gameMap);
-    cout << "2222\n";
+    //printGraph(&gameMap);
     /**/
     while (!inputStream.eof()) {
         inputStream >> firstCity >> secondCity >> distance;
@@ -148,9 +166,9 @@ void Game::loader() {
     }
 
     //tests whether the game map is created well. If yes, it should print the map
-    cout << "\n----------------Printing game map in Game::loader--------------- \n";
-    printGraph(graph);
-    cout << "----------------Finish printing in Game::loader---------------- \n\n";
+    //cout << "\n----------------Printing game map in Game::loader--------------- \n";
+   // printGraph(graph);
+ //   cout << "----------------Finish printing in Game::loader---------------- \n\n";
 
 
     //set Player's name
@@ -212,78 +230,60 @@ void Game::loader() {
         powerPlants.erase(powerPlants.begin());
     }
     //Print the cards in the market
-    cout << "------------------------------Market------------------------------" << endl;
-    for (size_t i = 0; i < market.size(); i++) {
-        cout << market[i].toString() << endl;
-    }
-    cout << endl;
+    //cout << "------------------------------Market------------------------------" << endl;
+    //for (size_t i = 0; i < market.size(); i++) {
+    //    cout << market[i].toString() << endl;
+    //}
+    //cout << endl;
 
-
-
-    //Initialize resources Market
-
-    //resourceMarket[0] = Resources(3, 0, 0, 0, 1);
-    //resources[1] = Resources(3, 0, 0, 0, 2);
-    //resources[2] = Resources(3, 3, 0, 0, 3);
-    //resources[3] = Resources(3, 3, 0, 0, 4);
-    //resources[4] = Resources(3, 3, 0, 0, 5);
-    //resources[5] = Resources(3, 3, 0, 0, 6);
-    //resources[6] = Resources(3, 3, 3, 0, 7);
-    //resources[7] = Resources(3, 3, 3, 0, 8);
-    //resources[8] = Resources(0, 0, 0, 0, 10);
-    //resources[9] = Resources(0, 0, 0, 0, 12);
-    //resources[10] = Resources(0, 0, 0, 1, 14);
-    //resources[11] = Resources(0, 0, 0, 1, 16);
 
 
 }
 
 void Game::phase1() {
-    cout << "\n----------------Printing game map in Game::phase1--------------- \n";
-    printGraph(graph);
-    cout << "----------------Finish printing in Game::phase1---------------- \n\n";
+   
     //give a random order in the first turn
     if (turn == 1) {
         shufflePlayers();
-        for (int i = 0; i < numOfPlayer; i++) {
-            //players[i].setNumOfCity(i);
-            cout << players[i].getName() << endl;
-            cout << players[i].toString() << endl;
-            cout << endl;
-        }
+        //for (int i = 0; i < numOfPlayer; i++) {
+        //    //players[i].setNumOfCity(i);
+        //    cout << players[i].getName() << endl;
+        //    cout << players[i].toString() << endl;
+        //    cout << endl;
+        //}
     }
-
+    notify();
     //
-    cout << "------------------------------After shuffle------------------------------" << endl;
+    //cout << "------------------------------After shuffle------------------------------" << endl;
     PowerPlant::shuffle(powerPlants);
     /*for (int i = 0; i < powerPlants.size(); i++) {
         cout << powerPlants[i].toString() << endl;
     }*/
-    cout << endl;
+    //cout << endl;
 
     //Find cards: powerPlant 13 & step 3
-    if (turn == 1) {
-        for (size_t i = 0; i < powerPlants.size(); i++) {
-            if (powerPlants[i].getNumber() == 13) {
-                PowerPlant temp1;
-                temp1 = powerPlants[i];
-                powerPlants[i] = powerPlants[0];
-                powerPlants[0] = temp1;
-            }
-            if (powerPlants[i].getTypeName() == "step3") {
-                PowerPlant temp2;
-                temp2 = powerPlants[i];
-                powerPlants[i] = powerPlants[powerPlants.size() - 1];
-                powerPlants[powerPlants.size() - 1] = temp2;
-            }
+	if (turn == 1) {
+		for (size_t i = 0; i < powerPlants.size(); i++) {
+			if (powerPlants[i].getNumber() == 13) {
+				PowerPlant temp1;
+				temp1 = powerPlants[i];
+				powerPlants[i] = powerPlants[0];
+				powerPlants[0] = temp1;
+			}
+			if (powerPlants[i].getTypeName() == "step3") {
+				PowerPlant temp2;
+				temp2 = powerPlants[i];
+				powerPlants[i] = powerPlants[powerPlants.size() - 1];
+				powerPlants[powerPlants.size() - 1] = temp2;
+			}
 
-        }
-        cout << "--------------------After Setting Card Number13 & Card Step3--------------------" << endl;
-        for (size_t i = 0; i < powerPlants.size(); i++) {
-            cout << powerPlants[i].toString() << endl;
-        }
-        cout << endl;
-
+		}
+		/*cout << "--------------------After Setting Card Number13 & Card Step3--------------------" << endl;
+		for (size_t i = 0; i < powerPlants.size(); i++) {
+			cout << powerPlants[i].toString() << endl;
+		}
+		cout << endl;*/
+	}
 
         //auction process
         auctionPhase();
@@ -308,21 +308,20 @@ void Game::phase1() {
 
         // set the order of the players at the end of each turn
         setPlayerOrder(players, numOfPlayer);
-        cout << "New order of the players " << endl;
+        /*cout << "New order of the players " << endl;
         for (int i = 0; i < numOfPlayer; i++) {
             cout << players[i].getName() << endl;
             cout << players[i].toString() << endl;
             cout << endl;
-        }
-
+        }*/
+		notify();
         cout << "Moving to the next phase" << endl;
         //turn++;
         cout << endl;
-    }
+    
 }
 
 void Game::phase3() {
-
 
     std::cout << "[INFO] PHASE3: Buying Resources" << std::endl;
     for (int i = numOfPlayer - 1; i >= 0; i--) {
@@ -332,11 +331,9 @@ void Game::phase3() {
 
         std::cout << "[INFO] Here is the Resource Market:" << std::endl;
 
-
-        for (int i = 0; i < 12; i++) {
-            std::cout << resources[i].toString() << std::endl;
+        for (int j = 0; j < 12; j++) {
+            std::cout << resources[j].toString() << std::endl;
         }
-
 
         buyResources(i);
 
@@ -433,9 +430,9 @@ void Game::phase4(){
                       << " successfully." << std::endl;
             std::cout << "[SUCCESS] It cost you  " << price << " Elektro. Now you have " << players[i].getMoney()
                       << " Elektro." << std::endl;
-
+			players[i].addCity(graph->getArr()[inputNum].getBase()->getName());
+			notify();
         }
-        printGraph(graph);
     }
     if (goToStep3) {
         step = 3;
@@ -455,9 +452,9 @@ bool Game::checkWin(){
 void Game::phase5() {
     //phase 5 begins
 
-    //Resources recycle;
+    Resources recycle;
     cout << "[INFO] PHASE5: Bureaucracy" << endl;
-    earnCash();
+    earnCash(recycle);
 
 
     //print the resources in the market before re-supply
@@ -468,7 +465,7 @@ void Game::phase5() {
     cout << "-----------------------------------------------" << endl;
 
     //re-supply the resource market
-    reSupplyResource();
+    reSupplyResource(recycle);
 
     //print the resources after re-supply
     cout << "-----------------------------------------------" << endl;
@@ -555,8 +552,8 @@ void Game::setPlayerOrder(Player p[], int n) {
 //every time a new card put into the market, set a new order
 void Game::setMarketOrder(vector<PowerPlant> &p) {
     PowerPlant temp;
-    for (int i = 1; i < p.size(); i++) {
-        for (int j = p.size() - 1; j > i - 1; j--) {
+    for (size_t  i = 1; i < p.size(); i++) {
+        for (size_t j = p.size() - 1; j > i - 1; j--) {
             if (p[j].getNumber() < p[j - 1].getNumber()) {
                 temp = p[j];
                 p[j] = p[j - 1];
@@ -709,7 +706,7 @@ void Game::buyCard(Player &p, PowerPlant card) {
                     p.setPowerPlant(card, j);
                     setCardOwnedByPlayer(p);
                     cout << "Success! Now you own: " << endl;
-                    p.setMoney(p.getMoney() - card.getNumber());
+                    p.setMoney(p.getMoney() - currentAuctionPrice);
 
                     //print
                     for (int i = 0; i < num; i++) {
@@ -732,7 +729,7 @@ void Game::buyCard(Player &p, PowerPlant card) {
     } else {
         p.setPowerPlant(card, num);
         p.setBought(true);
-        p.setMoney(p.getMoney() - card.getNumber());
+        p.setMoney(p.getMoney() -currentAuctionPrice);
         num = num + 1;
         p.setNumOfPowerPlant(num);
     }
@@ -763,7 +760,7 @@ void Game::changeMarketToStep3(vector<PowerPlant> &p) {
 //check if a player can buy a card
 void Game::abilityOfPurchase(int c) {
     if (step == 3) {
-        for (int i = 0; i < market.size(); i++) {
+        for (size_t  i = 0; i < market.size(); i++) {
             if (market[i].getNumber() == c) {
                 currentPowerPlant = market[i];
                 indexOfCard = i;
@@ -773,7 +770,7 @@ void Game::abilityOfPurchase(int c) {
             int choice;
             cout << "You cannot buy this card, please enter a new number: ";
             cin >> choice;
-            for (int i = 0; i < market.size(); i++) {
+            for (size_t  i = 0; i < market.size(); i++) {
                 if (market[i].getNumber() == choice) {
                     currentPowerPlant = market[i];
                     indexOfCard = i;
@@ -897,9 +894,7 @@ void Game::auctionPhase() {   //*player
                             cout << players[i].getName() << endl;
                             cout << "It's your turn" << endl;
 
-                            //who's turn right now
-                            /*cout << players[i].getName() << endl;
-                            cout << "It's your turn" << endl;*/
+                            //who's turn right now   
                             cout << "Auction -> Enter: 1" << endl;
                             cout << "Pass -> Enter: 0" << endl;
                             cin >> status;
@@ -930,7 +925,7 @@ void Game::auctionPhase() {   //*player
                                     //Print the cards in the market
                                     cout << "------------------------------Market------------------------------"
                                          << endl;
-                                    for (int i = 0; i < market.size(); i++) {
+                                    for (size_t i = 0; i < market.size(); i++) {
                                         cout << market[i].toString() << endl;
                                     }
                                     cout << endl;
@@ -953,24 +948,25 @@ void Game::auctionPhase() {   //*player
                         }
 
                     }
-                }
+                }//bidding finish
             }
             //the number of player who doesn't buy the card
             playerLeft--;
             //who buy this card
             for (int i = 0; i < numOfPlayer; i++) {
                 if (players[i].getAuction() == true && currentPowerPlant.getNumber() != 0) {
+					//buyCard(players[i],currentPowerPlant);
                     int num = players[i].getNumOfPowerPlant();
-                    players[i].setPowerPlant(market[indexOfCard], num);
-                    players[i].setMoney(players[i].getMoney() - market[indexOfCard].getNumber());
+                    players[i].setPowerPlant(market[indexOfCard], num);//give card to player
+                    players[i].setMoney(players[i].getMoney() - currentAuctionPrice);//pay
                     //print the information of the card
                     cout << "Congratulation, " << players[i].getName() << endl;
                     cout << "You get: " << endl;
                     cout << currentPowerPlant.toString() << endl;
                     cout << endl;
-
                     num = players[i].getNumOfPowerPlant() + 1;
                     players[i].setNumOfPowerPlant(num);
+					notify();
 
                 }
             }
@@ -986,6 +982,7 @@ void Game::auctionPhase() {   //*player
             }
 
             //reset auction price and auction card
+
             currentPowerPlant.setNumber(0);
             currentAuctionPrice = 0;
             //numOfPlayerPass = 0;
@@ -993,7 +990,7 @@ void Game::auctionPhase() {   //*player
 
             //Print the cards in the market
             cout << "------------------------------Market (Updated)------------------------------" << endl;
-            for (int i = 0; i < market.size(); i++) {
+            for (size_t i = 0; i < market.size(); i++) {
                 cout << market[i].toString() << endl;
             }
             cout << endl;
@@ -1011,6 +1008,7 @@ void Game::auctionPhase() {   //*player
                     who = i;
                 }
             }
+
             //who's turn right now
             cout << players[who].getName() << endl;
             cout << "You are the last one" << endl;
@@ -1035,7 +1033,7 @@ void Game::auctionPhase() {   //*player
             cout << "You get: " << endl;
             cout << currentPowerPlant.toString() << endl;
             cout << endl;
-
+			notify();
             /*num = players[who].getNumOfPowerPlant() + 1;
             players[who].setNumOfPowerPlant(num);*/
 
@@ -1045,6 +1043,7 @@ void Game::auctionPhase() {   //*player
             setMarketOrder(market);
 
             //reset auction price and auction card
+			players[who].setBought(false);        
             currentPowerPlant.setNumber(0);
             currentAuctionPrice = 0;
             //numOfPlayerPass = 0;
@@ -1052,7 +1051,7 @@ void Game::auctionPhase() {   //*player
 
             //Print the cards in the market
             cout << "------------------------------Market (Updated)------------------------------" << endl;
-            for (int i = 0; i < market.size(); i++) {
+            for (size_t i = 0; i < market.size(); i++) {
                 cout << market[i].toString() << endl;
             }
             cout << endl;
@@ -1062,12 +1061,12 @@ void Game::auctionPhase() {   //*player
         cout << endl;
 
         // set the order of the players at the end of each turn
-        setPlayerOrder(players, numOfPlayer);
-        for (int i = 0; i < numOfPlayer; i++) {
-            cout << players[i].getName() << endl;
-            cout << players[i].toString() << endl;
-            cout << endl;
-        }
+        //setPlayerOrder(players, numOfPlayer);
+        //for (int i = 0; i < numOfPlayer; i++) {
+        //    cout << players[i].getName() << endl;
+        //    cout << players[i].toString() << endl;
+        //    cout << endl;
+        //}
 
         cout << "Moving to the next phase" << endl;
         turn++;
@@ -1085,10 +1084,10 @@ void Game::auctionPhase() {   //*player
             //int indexOfCard;
 
             //reset the status to true
-            /*for (int i = 0; i < numOfPlayer; i++) {
+            for (int i = 0; i < numOfPlayer; i++) {
                 players[i].setAuction(true);
             }
-*/
+
             // auction process
             int numOfPlayerPass = 0;
 
@@ -1158,8 +1157,13 @@ void Game::auctionPhase() {   //*player
                                 playerLeft--;
 
                             } else {
-
                                 if (currentPowerPlant.getNumber() == 0) {
+									cout << "------------------------------Market------------------------------"
+										<< endl;
+									for (size_t i = 0; i < market.size(); i++) {
+										cout << market[i].toString() << endl;
+									}
+									cout << endl;
                                     //if no card is auction, choose a card to start auction
                                     cout << "Enter the number of the card in the market to start auction: ";
                                     cin >> choice;
@@ -1178,21 +1182,21 @@ void Game::auctionPhase() {   //*player
 
                     }
                 }
-            }
+            } //bidding finishes
             //the number of player who doesn't buy the card
             //playerLeft--;
             //who buy this card
             for (int i = 0; i < numOfPlayer; i++) {
                 if (players[i].getAuction() == true && currentPowerPlant.getNumber() != 0) {
 
-                    buyCard(players[i], market[indexOfCard]);
+                    buyCard(players[i], market[indexOfCard]);//get the card and pay
 
                     //print the information of the card
                     cout << "Congratulation, " << players[i].getName() << endl;
                     cout << "You get: " << endl;
                     cout << currentPowerPlant.toString() << endl;
                     cout << endl;
-
+					notify();
                     playerLeft--;
 
                     //draw a new plant card, put it in the market and change the order
@@ -1231,7 +1235,7 @@ void Game::auctionPhase() {   //*player
 
             //Print the cards in the market
             cout << "------------------------------Market (Updated)------------------------------" << endl;
-            for (int i = 0; i < market.size(); i++) {
+            for (size_t i = 0; i < market.size(); i++) {
                 cout << market[i].toString() << endl;
             }
             cout << endl;
@@ -1305,7 +1309,7 @@ void Game::auctionPhase() {   //*player
                         }
 
                         //reset auction price and auction card
-                        currentPowerPlant.setNumber(0);
+						currentPowerPlant.setNumber(0);
                         currentAuctionPrice = 0;
                         //numOfPlayerPass = 0;
                         indexOfCard = 0;
@@ -1325,7 +1329,7 @@ void Game::auctionPhase() {   //*player
 
         //Print the cards in the market
         cout << "------------------------------Market (Updated)------------------------------" << endl;
-        for (int i = 0; i < market.size(); i++) {
+        for (size_t i = 0; i < market.size(); i++) {
             cout << market[i].toString() << endl;
         }
         cout << endl;
@@ -1341,6 +1345,7 @@ void Game::auctionPhase() {   //*player
 
 //phase3_4 methods
 void Game::buyResources(int i) {
+
     int coalMax = 0;
     int oilMax = 0;
     int garbageMax = 0;
@@ -1382,7 +1387,7 @@ void Game::buyResources(int i) {
             }
             //Check if Player's inventory is full
             if (inputNum > coalMax + hybridMax - coalNum + ((oilMax - oilNum) < 0 ? (oilMax - oilNum) : 0)) {
-                std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber." << std::endl;
+                std::cout << "[ERROR] You do not have enough space! Please enter a smaller number." << std::endl;
                 continue;
             }
 
@@ -1392,17 +1397,17 @@ void Game::buyResources(int i) {
             int cost = 0;
             int tempAmount = 0;
 
-            for (int i = 0; i < 12; i++) {
-                int left = resources[i].getCoal();                    //left is the resources left in the marketS
+            for (int j = 0; j < 12; j++) {
+                int left = resources[j].getCoal();                    //left is the resources left in the marketS
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * (inputNum - tempAmount);
+                    cost += resources[j].getPrice() * (inputNum - tempAmount);
                     tempAmount = inputNum;
                     break;
                 } else if (left < inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * left;
+                    cost += resources[j].getPrice() * left;
                     tempAmount += left;
                 }
             }
@@ -1420,19 +1425,19 @@ void Game::buyResources(int i) {
             players[i].setMoney(players[i].getMoney() - cost);
 
             tempAmount = 0;
-            for (int i = 0; i < 12; i++) {
+            for (int j = 0; j< 12; j++) {
 
-                int left = resources[i].getCoal();
+                int left = resources[j].getCoal();
 
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    resources[i].setCoal(left - (inputNum - tempAmount));
+                    resources[j].setCoal(left - (inputNum - tempAmount));
                     break;
                 } else if (left < inputNum - tempAmount) {
                     tempAmount += left;
-                    resources[i].setCoal(0);
+                    resources[j].setCoal(0);
                 }
             }
             //get resources
@@ -1440,7 +1445,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS] " << inputNum << " coal cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
-
+            notify();
             break;
         }
 
@@ -1457,7 +1462,7 @@ void Game::buyResources(int i) {
             if (inputNum == 0) {
                 break;
             }
-            //Check if Player's inventory is vaild
+            //Check if Player's inventory is valid
 
             if (inputNum > oilMax + hybridMax - oilNum + ((coalMax - coalNum) < 0 ? (coalMax - coalNum) : 0)) {
                 std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber.";
@@ -1471,17 +1476,17 @@ void Game::buyResources(int i) {
             int cost = 0;
             int tempAmount = 0;
 
-            for (int i = 0; i < 12; i++) {
-                int left = resources[i].getOil();
+            for (int j = 0; j < 12; j++) {
+                int left = resources[j].getOil();
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * (inputNum - tempAmount);
+                    cost += resources[j].getPrice() * (inputNum - tempAmount);
                     tempAmount = inputNum;
                     break;
                 } else if (left < inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * left;
+                    cost += resources[j].getPrice() * left;
                     tempAmount += left;
                 }
             }
@@ -1499,19 +1504,19 @@ void Game::buyResources(int i) {
             players[i].setMoney(players[i].getMoney() - cost);
 
             tempAmount = 0;
-            for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 12; j++) {
 
-                int left = resources[i].getOil();
+                int left = resources[j].getOil();
 
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    resources[i].setOil(left - (inputNum - tempAmount));
+                    resources[j].setOil(left - (inputNum - tempAmount));
                     break;
                 } else if (left < inputNum - tempAmount) {
                     tempAmount += left;
-                    resources[i].setOil(0);
+                    resources[j].setOil(0);
                 }
             }
             //get resources
@@ -1519,6 +1524,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS]" << inputNum << " oil cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
+            notify();
             break;
         }
 
@@ -1534,7 +1540,7 @@ void Game::buyResources(int i) {
             if (inputNum == 0) {
                 break;
             }
-            //Check if Player's inventory is vaild
+            //Check if Player's inventory is valid
 
             if (inputNum > garbageMax - garbageNum) {
                 std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber.";
@@ -1548,17 +1554,17 @@ void Game::buyResources(int i) {
             int cost = 0;
             int tempAmount = 0;
 
-            for (int i = 0; i < 12; i++) {
-                int left = resources[i].getGarbage();
+            for (int j = 0; j < 12; j++) {
+                int left = resources[j].getGarbage();
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * (inputNum - tempAmount);
+                    cost += resources[j].getPrice() * (inputNum - tempAmount);
                     tempAmount = inputNum;
                     break;
                 } else if (left < inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * left;
+                    cost += resources[j].getPrice() * left;
                     tempAmount += left;
                 }
             }
@@ -1576,19 +1582,19 @@ void Game::buyResources(int i) {
             players[i].setMoney(players[i].getMoney() - cost);
 
             tempAmount = 0;
-            for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 12; j++) {
 
-                int left = resources[i].getGarbage();
+                int left = resources[j].getGarbage();
 
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    resources[i].setGarbage(left - (inputNum - tempAmount));
+                    resources[j].setGarbage(left - (inputNum - tempAmount));
                     break;
                 } else if (left < inputNum - tempAmount) {
                     tempAmount += left;
-                    resources[i].setGarbage(0);
+                    resources[j].setGarbage(0);
                 }
             }
 
@@ -1597,6 +1603,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS]" << inputNum << " garbage cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
+            notify();
             break;
         }
 
@@ -1612,7 +1619,7 @@ void Game::buyResources(int i) {
             if (inputNum == 0) {
                 break;
             }
-            //Check if Player's inventory is vaild
+            //Check if Player's inventory is valid
 
             if (inputNum > uraniumMax - uraniumNum) {
                 std::cout << "[ERROR] You do not have enough space! Please enter a smaller numeber.";
@@ -1626,17 +1633,17 @@ void Game::buyResources(int i) {
             int cost = 0;
             int tempAmount = 0;
 
-            for (int i = 0; i < 12; i++) {
-                int left = resources[i].getUranium();
+            for (int j = 0; j < 12; j++) {
+                int left = resources[j].getUranium();
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * (inputNum - tempAmount);
+                    cost += resources[j].getPrice() * (inputNum - tempAmount);
                     tempAmount = inputNum;
                     break;
                 } else if (left < inputNum - tempAmount) {
-                    cost += resources[i].getPrice() * left;
+                    cost += resources[j].getPrice() * left;
                     tempAmount += left;
                 }
             }
@@ -1653,19 +1660,19 @@ void Game::buyResources(int i) {
             //pay money
             players[i].setMoney(players[i].getMoney() - cost);
             tempAmount = 0;
-            for (int i = 0; i < 12; i++) {
+            for (int j = 0; i < 12; i++) {
 
-                int left = resources[i].getUranium();
+                int left = resources[j].getUranium();
 
                 if (left == 0) {
                     continue;
                 }
                 if (left >= inputNum - tempAmount) {
-                    resources[i].setUranium(left - (inputNum - tempAmount));
+                    resources[j].setUranium(left - (inputNum - tempAmount));
                     break;
                 } else if (left < inputNum - tempAmount) {
                     tempAmount += left;
-                    resources[i].setUranium(0);
+                    resources[j].setUranium(0);
                 }
             }
             //get resources
@@ -1674,6 +1681,7 @@ void Game::buyResources(int i) {
 
             std::cout << "[SUCCESS]" << inputNum << " uranium cost " << cost << " Elektro. You have "
                       << players[i].getMoney() << " Elektro now." << std::endl;
+            notify();
             break;
         }
         break;
@@ -1690,7 +1698,7 @@ bool Game::adjustMarket(int &step) {
         std::cout << "[INFO] STEP 3 starts in phase 5!!" << std::endl;
         powerPlants.erase(powerPlants.begin());
         PowerPlant::shuffle(powerPlants);
-        bool goToStep3 = true;
+        goToStep3 = true;
     }
     else {
         market.push_back(powerPlants[0]);
@@ -1708,7 +1716,7 @@ bool Game::adjustMarket(int &step) {
 
 //phase 5 methods
 //every player earns cash based on the number of cities he powers as shown on the payment table
-void Game::earnCash() {
+void Game::earnCash(Resources recycle) {
     int payment[21] = {10, 22, 33, 44, 54, 64, 73, 82, 90, 98, 105, 112, 118, 124, 129, 134, 138, 142, 145, 148,
                        150};     //payment corresponding to the number of powered cities
     string yesInput;
@@ -1724,7 +1732,7 @@ void Game::earnCash() {
             do {
                 cin >> yesInput;
                 if (yesInput == "Y" || yesInput == "y") {
-                    if (validUsingPowerPlant(i, currentPlant)) {
+                    if (validUsingPowerPlant(i, currentPlant, recycle)) {
                         totalNumInput += currentPlant.getSupplyCity();
                         break;
                     }
@@ -1745,13 +1753,12 @@ void Game::earnCash() {
         cout << "[INFO] You have earned " << earnedCash << " this round." << endl;
         cout << "[INFO] Now you have " << players[i].getNumOfPoweredCities() << " city/cities that have been powered.\n"
              << endl;
-
-        recycle.toString();
+		notify();
     }
 }
 
 //return true if the input is valid for the number of cities the player wants to power
-bool Game::validUsingPowerPlant(int i, PowerPlant currentPlant) {
+bool Game::validUsingPowerPlant(int i, PowerPlant currentPlant, Resources recycle) {
     PowerPlant::Type type = currentPlant.getType();
     int needNum = currentPlant.getNeed();
     if (type == PowerPlant::hybrid) {
@@ -1825,7 +1832,7 @@ bool Game::validUsingPowerPlant(int i, PowerPlant currentPlant) {
 }
 
 //Based on the number of players and the step of the game, the players re-supply the resource market from the supply of resources.
-void Game::reSupplyResource() {
+void Game::reSupplyResource(Resources recycle) {
 
     //Based on the number of players and the step of the game, the players re-supply the resource market (see table at the back of the rules) from the supply of resources
     Resources table;
@@ -2089,3 +2096,17 @@ void Game::updateMarket() {
     }
 }
 
+
+//
+//void Game::notify(){
+//
+//    std::list<Observer *>::iterator i = _observers->begin();
+//    for (; i != _observers->end(); i++) {
+//        (*i)->update();
+//    }
+//}
+
+Game::~Game() {
+    delete players;
+    delete graph;
+}

@@ -10,9 +10,10 @@ private:
     Resources * resourcesMarket;
     static ResourceMarket *s_instance;
     ResourceMarket();
-
+    ~ResourceMarket();
 
 public:
+
     static ResourceMarket *instance();
     Resources* getResourcesMarket(){return resourcesMarket;};
 };

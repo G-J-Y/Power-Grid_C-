@@ -19,7 +19,10 @@ ResourceMarket::ResourceMarket(){
     resourcesMarket[11] = Resources(0, 0, 0, 1, 16);
 };
 
-
+ResourceMarket::~ResourceMarket() {
+    delete resourcesMarket;
+    //delete s_instance;
+}
 
 ResourceMarket*  ResourceMarket:: instance(){
     if(!s_instance)
