@@ -14,7 +14,8 @@ int main() {
 		myGame->phase5();
 	}
 	
-
+	delete gameObserver;
+	delete myGame;
 	system("pause");
 	return 0;
 }
