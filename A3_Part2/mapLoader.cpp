@@ -216,7 +216,7 @@ int Graph::lowestPathPrice(int cityID, string pName) {
 	//will store the shortest path distances from city #cityID to cities owned by pName
 
 	
-	for (int i = 0; i < pathsToAll.size(); i++) {
+	for (size_t i = 0; i < pathsToAll.size(); i++) {
 		vector<string> v(arr[i].base->owners); //stores owners' names of city#i
 		if (std::find(v.begin(), v.end(), pName) != v.end()) //if we find city#i is owned by pName
 		{
@@ -231,7 +231,7 @@ int Graph::lowestPathPrice(int cityID, string pName) {
 		return 0;
 
 	int min = pathsToOwned[0];
-	for (int i = 1; i < pathsToOwned.size(); i++) {
+	for (size_t i = 1; i < pathsToOwned.size(); i++) {
 		if (pathsToOwned[i] < min)
 			min = pathsToOwned[i];
 	}
@@ -319,7 +319,7 @@ void printGraph(Graph* graph) {
 			<< " (" << base->region
 			<< ") Owned by :";
 			
-		for (int j = 0; j < graph->arr[i].base->owners.size(); j++) {
+		for (size_t j = 0; j < graph->arr[i].base->owners.size(); j++) {
 			cout << graph->arr[i].base->owners[j] << "  ";
 		}
 		cout << endl;
@@ -474,146 +474,3 @@ void removeArea(Graph* graph, int areaNo) {
 		removeEdge2(graph, i); // remove this city from all other cities' Adjlist
 	}
 }
-
-
-/*
-void mapLoader::Load(Graph* copy, int numOfplayer) {
-	cout << "Please input the name of the map file: \n";
-	string fileName;
-	cin >> fileName;
-	ifstream inputStream;
-	inputStream.open(fileName);
-
-	if (inputStream.fail())
-	{
-		if (inputStream.fail())
-		{
-			cout << "Wrong format of map file!";
-			exit(1);
-		}
-	}
-
-	map<string, int> cityNameIDPair;
-	int cityID = 0;
-	string next;
-
-	inputStream >> next; //read the first string in the file
-	if (next != "[City]") //a map file should start with "[City]"
-	{
-		cout << "This is not a valid map file text!";
-		exit(1);
-	}
-
-	//read the first part of the file (city name list)
-	//stores them into map<string, int>
-	while (!inputStream.eof()) {
-		inputStream >> next;
-		if (next == "[Edge]")
-			break;
-		//cout << next << endl;
-		cityNameIDPair.insert(pair<string, int>(next, cityID));
-		cityID++;  //after storing the last city, the city size still increment once
-	}
-
-	//read the second part of the text
-	string firstCity;
-	string secondCity;
-	string distance;
-	int intDistance;
-	int size = cityID; //if there is 10 city, the cityID will be 10 now
-	Graph gameMap(size);
-	//gameMap = Graph(size);	
-	createBaseCity(&gameMap, cityNameIDPair);
-	printGraph(&gameMap);
-	cout << "2222\n";
-	
-	while (!inputStream.eof()) {
-		inputStream >> firstCity >> secondCity >> distance;
-		//cout << firstCity << " " << secondCity << " " << distance << endl;
-		intDistance = std::stoi(distance); //cast string to int
-		addEdge(&gameMap, firstCity, secondCity, intDistance, cityNameIDPair);
-	}
-
-	
-	printGraph(&gameMap);
-
-	if (isConnected(&gameMap))
-		cout << "The original map is a connected graph.\n";
-	else
-		cout << "The original map is not a connected graph.\n";
-
-	//Now will create a map for certain number of players
-	//2 players -- 3 regions
-	//3 players -- 3 regions
-	//4 players -- 4 regions
-	//5 players -- 5 regions
-	//6 players -- 6 regions //in game rule it's 6 players -- 5 regions	
-	//int numOfplayer;
-	int numToRemove; //how many areas to be removed
-	int areaToRemove; // which area to be removed
-	//cout << "\nEnter the number of players (2-6): ";
-	//cin >> numOfplayer;
-	while (numOfplayer < 2 || numOfplayer > 6) {
-		cout << "Must be a number from 2-6. Enter again: ";
-		cin >> numOfplayer;
-	}
-
-	switch (numOfplayer) {	
-		case 2:
-		case 3:
-			numToRemove = 3;
-			break;		
-		case 4:
-			numToRemove = 2;
-			break;
-		case 5:
-			numToRemove = 1;
-			break;
-		case 6:
-			numToRemove = 0;
-			break;
-	}
-	cout << "In this game, there will be " << numOfplayer << " players.\n" 
-		<< "You need to choose " << numToRemove << " area(s) you don't want (1 - 6).\n";
-	
-	Graph* copy;
-	
-	while (true) {
-		copy = new Graph(gameMap);
-		for (int i = 0; i < numToRemove; i++) {
-			cout << "\nEnter the " << i << "th area you don't want: ";
-			cin >> areaToRemove;
-			removeArea(copy, areaToRemove);
-		}
-				
-		cout << "\n----------------Map After Choosing Areas--------------------\n";
-		printGraph(copy);
-
-		int test = 0;
-		for (int i = 0; i < copy->getSize(); i++) {
-			if (copy->getArr()[i].getHead() == NULL)
-				test++;
-			else break;
-		}
-		
-		
-
-		cout << "The number of cities left in the map: " << copy->numOfCities() << endl;
-		if (isConnected2(copy, test)) {
-			cout << "\nAll areas in the map is connected. Game starts. Good Luck!!\n\n";
-			break;
-		}
-			
-		else {
-			cout << "\nNot all areas in the map is connected!! \nPlease choose the area you don't want again. \n";
-			delete copy;
-		}		
-	}
-
-
-	
-	cout << "---------------Map Loading completed---------------\n\n\n";
-	//return numOfplayer;
-	
-}  //end of Load() function
-/**/

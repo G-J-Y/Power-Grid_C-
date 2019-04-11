@@ -1,7 +1,6 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 #include <string>
-#include "House.h"
 #include "PowerPlant.h"
 #include "Resources.h"
 #include "mapLoader.h"
@@ -33,7 +32,6 @@ private:
     bool bought;
     int auctionPrice;
 
-	House house;
 
 
 public:
@@ -54,9 +52,7 @@ public:
     void setRoundStatus(bool);
     void setBought(bool);
     void setPowerPlant(PowerPlant,int);
-	void setHouse(House h) {
-		house = h;
-	}
+
 
 	//get methods
 	int getMoney();

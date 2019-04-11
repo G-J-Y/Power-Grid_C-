@@ -16,7 +16,6 @@ private:
     int numOfPlayer;
     Player *players;
     Resources resources[12];
-    House house[132];
     vector<PowerPlant> powerPlants;
     vector<PowerPlant> market;
     Graph *graph;

@@ -152,13 +152,6 @@ private:
 
 };
 
-class mapLoader {
-public:
-	//void Load(Graph* copy, int numOfplayer);
-	//load map from text file 
-	//returns number of players
-};
-
 void createBaseCity(Graph*, map<string, int>);
 //creates a bunch of city nodes according to given city names
 //each name correspond a city ID
