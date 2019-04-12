@@ -73,6 +73,8 @@ public:
 
     Game(int numOfPlayer);
 
+	~Game() {};
+
     void loader();
 
     void phase1();

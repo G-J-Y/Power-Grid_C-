@@ -16,6 +16,9 @@ Game::Game(int numOfPlayer) {
     //graph = new Graph(42); //if not initialize here, there's no address for graph
     // myLoader.Load(graph, numOfPlayer) calls graph by reference, but graph has no address
 }
+Game::~Game() {
+	delete[] players;
+}
 
 int Game::getStep() {
 	return step;
