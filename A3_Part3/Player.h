@@ -5,8 +5,6 @@
 #include "PowerPlant.h"
 #include <string>
 
-//#include "Moderate.h"
-//#include "Environmentalist.h"
 using namespace std;
 
 class Strategy;
@@ -102,6 +100,7 @@ public:
 		, vector<PowerPlant> market, int& numOfPlayerPass,
 		int& playerLeft, int& indexOfCard, Player &p, int turn);
 
+	~Player();
 
 };
 

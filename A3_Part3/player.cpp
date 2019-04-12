@@ -222,3 +222,7 @@ void Player::executeStrategy(PowerPlant& currentPowerPlant, int& currentAuctionP
 		playerLeft, indexOfCard, p, turn);
 }
 
+Player::~Player() {
+	delete myStrategy;
+}
+

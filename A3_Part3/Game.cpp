@@ -2287,3 +2287,8 @@ void Game::updateMarket() {
         powerPlants.erase(powerPlants.begin());
     }
 }
+
+Game::~Game() {
+	delete graph;
+	delete[] players;
+}

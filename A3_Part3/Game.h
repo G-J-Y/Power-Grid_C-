@@ -82,5 +82,6 @@ public:
 
     void phase5();
 
+	~Game();
 
 };
