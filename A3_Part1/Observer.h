@@ -1,5 +1,5 @@
 #pragma once
-#include"player.h"
+#include"Player.h"
 class Observer
 {	
 protected:

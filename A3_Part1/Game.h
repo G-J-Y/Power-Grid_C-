@@ -73,7 +73,7 @@ public:
 
     Game(int numOfPlayer);
 
-	~Game() {};
+	~Game();
 
     void loader();
 
